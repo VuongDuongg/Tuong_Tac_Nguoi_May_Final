@@ -16,7 +16,7 @@
         .sidebar-active { background: linear-gradient(90deg, #2ae09a 0%, #3bf0b0 100%); color: #0d4834; font-weight: 600; }
     </style>
 </head>
-<body class="bg-[#f0f4f9] text-gray-800 min-h-screen flex flex-col justify-between select-none">
+<body class="bg-[#f0f4f9] text-gray-800 min-h-screen flex select-none">
 
     <!-- MAIN APP WRAPPER -->
     <div class="flex flex-1">
@@ -75,7 +75,7 @@
         <div class="flex-1 flex flex-col min-w-0">
             
             <!-- TOP APP BAR -->
-            <header class="bg-white h-16 border-b border-gray-200 px-6 flex items-center justify-between sticky top-0 z-10">
+            <header class="bg-white h-16 border-b border-gray-200 px-6 flex items-center justify-between sticky top-0 z-10 shadow-sm">
                 <div>
                     <span class="text-lg font-black tracking-tight text-gray-900">Bệnh viện ÔII</span>
                 </div>
@@ -93,35 +93,36 @@
             </header>
 
             <!-- VIEW CONTAINER WITH ROUTING DYNAMIC STATES -->
-            <main class="flex-1 p-6 overflow-y-auto">
+            <main class="flex-1 py-6 px-8 overflow-y-auto bg-[#f5f8fc]">
+                <div class="max-w-7xl mx-auto space-y-6">
 
                 <!-- 1. VIEW MAIN: DASHBOARD WITH PATIENT SUMMARY -->
-                <div id="view-main" class="grid grid-cols-3 gap-6 animate-fadeIn">
-                    <div class="col-span-2 space-y-6">
-                        <div class="bg-white rounded-xl border border-gray-200 shadow-sm p-6">
-                            <div class="flex items-center justify-between mb-4">
+                <div id="view-main" class="grid grid-cols-1 xl:grid-cols-[1.8fr_1fr] gap-6 animate-fadeIn">
+                    <div class="space-y-6">
+                        <div class="bg-white rounded-3xl border border-gray-200 shadow-sm p-6">
+                            <div class="flex flex-col md:flex-row md:items-center md:justify-between gap-4 mb-4">
                                 <div>
-                                    <h2 class="text-xl font-bold text-gray-900">Trang chính</h2>
-                                    <p class="text-xs text-gray-500">Tổng quan hồ sơ bệnh nhân và dữ liệu bản mẫu.</p>
+                                    <h2 class="text-2xl font-bold text-gray-900">Trang chính</h2>
+                                    <p class="text-sm text-gray-500">Tổng quan hồ sơ bệnh nhân và dữ liệu bản mẫu.</p>
                                 </div>
-                                <button onclick="showPatientManagement()" class="bg-blue-600 text-white text-xs font-semibold px-4 py-2 rounded-lg hover:bg-blue-700">Xem đầy đủ hồ sơ</button>
+                                <button onclick="showPatientManagement()" class="bg-blue-600 text-white text-sm font-semibold px-5 py-3 rounded-2xl hover:bg-blue-700">Xem đầy đủ hồ sơ</button>
                             </div>
-                            <div class="grid grid-cols-3 gap-4">
-                                <div class="rounded-2xl bg-slate-50 p-4 border border-slate-200">
+                            <div class="grid grid-cols-1 sm:grid-cols-3 gap-4">
+                                <div class="rounded-3xl bg-slate-50 p-6 border border-slate-200 min-h-[150px]">
                                     <p class="text-xs uppercase tracking-[0.2em] text-slate-500 mb-3">Tổng hồ sơ</p>
-                                    <div id="dashboard-count-total" class="text-3xl font-bold text-slate-900">0</div>
+                                    <div id="dashboard-count-total" class="text-4xl font-bold text-slate-900">0</div>
                                 </div>
-                                <div class="rounded-2xl bg-slate-50 p-4 border border-slate-200">
+                                <div class="rounded-3xl bg-slate-50 p-6 border border-slate-200 min-h-[150px]">
                                     <p class="text-xs uppercase tracking-[0.2em] text-slate-500 mb-3">BHYT hết hạn</p>
-                                    <div id="dashboard-count-expired" class="text-3xl font-bold text-rose-600">0</div>
+                                    <div id="dashboard-count-expired" class="text-4xl font-bold text-rose-600">0</div>
                                 </div>
-                                <div class="rounded-2xl bg-slate-50 p-4 border border-slate-200">
+                                <div class="rounded-3xl bg-slate-50 p-6 border border-slate-200 min-h-[150px]">
                                     <p class="text-xs uppercase tracking-[0.2em] text-slate-500 mb-3">Hồ sơ mới</p>
-                                    <div id="dashboard-count-new" class="text-3xl font-bold text-emerald-600">0</div>
+                                    <div id="dashboard-count-new" class="text-4xl font-bold text-emerald-600">0</div>
                                 </div>
                             </div>
                         </div>
-                        <div class="bg-white rounded-xl border border-gray-200 shadow-sm p-6">
+                        <div class="bg-white rounded-3xl border border-gray-200 shadow-sm p-6">
                             <div class="flex items-center justify-between mb-4">
                                 <h3 class="text-sm font-semibold text-gray-900">Hồ sơ bệnh nhân gần đây</h3>
                                 <span class="text-xs text-slate-500">Hiển thị 3 hồ sơ mới nhất</span>
@@ -129,8 +130,8 @@
                             <div id="dashboard-recent-list" class="space-y-3"></div>
                         </div>
                     </div>
-                    <div class="bg-white rounded-xl border border-gray-200 shadow-sm flex flex-col overflow-hidden">
-                        <div class="bg-[#f0f4f9] px-4 py-3 border-b flex justify-between items-center">
+                    <div class="bg-white rounded-3xl border border-gray-200 shadow-sm flex flex-col overflow-hidden min-h-[360px]">
+                        <div class="bg-slate-50 px-5 py-4 border-b flex justify-between items-center">
                             <span class="text-xs font-bold text-gray-700 tracking-wide uppercase">Lịch sử bệnh án</span>
                             <i class="fa-solid fa-clock-rotate-left text-gray-500"></i>
                         </div>
@@ -154,8 +155,8 @@
                 </div>
 
                 <!-- 2. VIEW PATIENT MANAGEMENT: full add/edit/delete list -->
-                <div id="view-patients" class="hidden max-w-6xl mx-auto animate-fadeIn">
-                    <div class="flex flex-col md:flex-row md:items-center md:justify-between gap-4 mb-6">
+                <div id="view-patients" class="hidden max-w-7xl mx-auto animate-fadeIn bg-white rounded-3xl border border-gray-200 shadow-sm p-6">
+                    <div class="flex flex-col md:flex-row md:items-center md:justify-between gap-6 mb-6">
                         <div>
                             <h2 class="text-xl font-bold text-gray-900">Quản lý hồ sơ bệnh nhân</h2>
                             <p class="text-xs text-gray-500">Tạo mới, sửa, xóa và xem chi tiết hồ sơ bệnh nhân.</p>
@@ -165,7 +166,7 @@
                             <button onclick="switchView('view-create')" class="bg-emerald-700 text-white text-xs font-semibold px-4 py-2 rounded-lg hover:bg-emerald-800">Thêm hồ sơ mới</button>
                         </div>
                     </div>
-                    <div id="patients-management-list" class="space-y-3"></div>
+                    <div id="patients-management-list" class="space-y-3 min-h-[220px]"></div>
                 </div>
 
                 <!-- 3. VIEW EDIT: PATIENT PROFILE EDIT MODE (image_4a17e6.png) -->
@@ -352,12 +353,26 @@
                         </div>
 
                         <div class="border border-gray-200 rounded-xl p-5 bg-white">
-                            <div class="flex items-center justify-between mb-4">
+                            <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3 mb-4">
                                 <div>
                                     <h3 class="text-sm font-semibold text-gray-900">Lịch sử bệnh án</h3>
                                     <p class="text-xs text-gray-500">Xem lịch sử khám bệnh và ghi chú chi tiết.</p>
                                 </div>
-                                <span id="detail-history-status" class="text-[11px] text-slate-500">Danh sách mới nhất</span>
+                                <div class="flex items-center gap-2">
+                                    <span id="detail-history-status" class="text-[11px] text-slate-500">Danh sách mới nhất</span>
+                                    <button onclick="toggleHistoryForm(true)" class="text-xs bg-slate-100 text-slate-700 px-3 py-2 rounded hover:bg-slate-200">Thêm ghi chú</button>
+                                </div>
+                            </div>
+                            <div id="history-entry-form" class="hidden space-y-3 mb-4 p-4 border border-slate-200 rounded-3xl bg-slate-50">
+                                <div class="grid grid-cols-1 sm:grid-cols-3 gap-3">
+                                    <input id="input-history-date" type="text" placeholder="Ngày (dd/mm/yyyy)" class="col-span-1 border border-gray-300 rounded p-2 text-xs text-gray-800 outline-none">
+                                    <input id="input-history-title" type="text" placeholder="Tiêu đề" class="col-span-2 border border-gray-300 rounded p-2 text-xs text-gray-800 outline-none">
+                                </div>
+                                <textarea id="input-history-note" placeholder="Mô tả chi tiết lịch sử bệnh án..." class="w-full border border-gray-300 rounded p-2 text-xs text-gray-800 outline-none min-h-[90px] resize-none"></textarea>
+                                <div class="flex justify-end gap-3">
+                                    <button onclick="toggleHistoryForm(false)" class="text-xs px-3 py-2 rounded border border-slate-300 text-slate-700 hover:bg-slate-100">Hủy</button>
+                                    <button onclick="saveHistoryRecord()" class="text-xs px-3 py-2 rounded bg-emerald-600 text-white hover:bg-emerald-700">Lưu lịch sử</button>
+                                </div>
                             </div>
                             <div id="detail-history-list" class="space-y-3"></div>
                         </div>
@@ -452,13 +467,19 @@
                     </div>
 
                     <!-- Right Empty Placeholder Dashboard Widget State (image_4a1841.png Style) -->
-                    <div class="bg-[#f8fafc] border border-dashed border-gray-300 rounded-xl flex flex-col items-center justify-center p-8 text-center">
-                        <div class="w-16 h-16 bg-white border shadow-sm rounded-full flex items-center justify-center text-gray-400 mb-4 relative">
-                            <i class="fa-regular fa-folder-open text-2xl"></i>
-                            <span class="absolute -top-1 -right-1 bg-gray-100 border text-gray-500 rounded px-1 text-[9px] font-bold"><i class="fa-solid fa-hourglass"></i></span>
+                    <div class="bg-white border border-gray-200 rounded-3xl p-6 shadow-sm">
+                        <div class="flex items-center justify-between mb-4">
+                            <div>
+                                <h4 class="text-base font-semibold text-slate-900">Hướng dẫn tạo hồ sơ</h4>
+                                <p class="text-xs text-slate-500">Cung cấp thông tin chính xác để hồ sơ bệnh nhân hiển thị đầy đủ và dễ quản lý.</p>
+                            </div>
+                            <span class="text-xs uppercase tracking-[0.2em] text-emerald-600">Mẹo</span>
                         </div>
-                        <h4 class="font-bold text-gray-900 text-sm mb-1">Chưa có dữ liệu lịch sử</h4>
-                        <p class="text-xs text-gray-400 max-w-xs leading-relaxed">Không có dữ liệu lịch sử - Hồ sơ mới đang được tạo. Lịch sử khám bệnh sẽ xuất hiện tại đây sau phiên làm việc đầu tiên.</p>
+                        <ul class="space-y-3 text-sm text-slate-600">
+                            <li class="flex items-start gap-2"><span class="mt-1 text-emerald-600"><i class="fa-solid fa-circle-check"></i></span> Điền đủ họ tên, CCCD và số điện thoại.</li>
+                            <li class="flex items-start gap-2"><span class="mt-1 text-emerald-600"><i class="fa-solid fa-circle-check"></i></span> Địa chỉ rõ ràng giúp tìm hồ sơ nhanh hơn.</li>
+                            <li class="flex items-start gap-2"><span class="mt-1 text-emerald-600"><i class="fa-solid fa-circle-check"></i></span> Sử dụng phần ghi chú để quản lý tiền sử dị ứng và bệnh nền.</li>
+                        </ul>
                     </div>
                 </div>
 
@@ -471,9 +492,6 @@
                 </div>
                 <!-- Dynamic Quick Navigation Action Triggers for Testing -->
                 <div class="flex items-center space-x-4">
-                    <button onclick="switchView('view-create')" class="bg-white hover:bg-emerald-50 text-emerald-700 font-bold px-3 py-1 rounded border border-emerald-300 flex items-center space-x-1 shadow-sm cursor-pointer">
-                        <i class="fa-solid fa-plus"></i> <span>TẠO MỚI (F2)</span>
-                    </button>
                     <div class="flex space-x-4 text-gray-500">
                         <a href="#" class="hover:underline">Hướng dẫn sử dụng (F1)</a>
                         <a href="#" class="hover:underline">Hỗ trợ kỹ thuật</a>
@@ -866,9 +884,13 @@
         }
 
         // Open detail view and populate
+        let currentDetailPatientId = null;
+
         function openDetail(id){
             const p = loadPatients().find(x=>x.id===id);
             if(!p) return;
+            currentDetailPatientId = id;
+            toggleHistoryForm(false);
             const detail = document.getElementById('view-detail');
             if(!detail) return;
             detail.querySelector('h2') && (detail.querySelector('h2').textContent = 'Chi tiết Hồ sơ Bệnh nhân');
@@ -882,19 +904,86 @@
             detail.querySelector('#detail-bhyt') && (detail.querySelector('#detail-bhyt').textContent = p.bhyt || 'Không có');
             detail.querySelector('#detail-bhyt-period') && (detail.querySelector('#detail-bhyt-period').textContent = `${p.bhytFrom || '-'} — ${p.bhytUntil || '-'}`);
             detail.querySelector('#detail-history-count') && (detail.querySelector('#detail-history-count').textContent = `${(p.history||[]).length} mục`);
-            const historyList = detail.querySelector('#detail-history-list');
-            if (historyList) {
-                historyList.innerHTML = (p.history || []).map(item => `
-                    <div class="rounded-2xl border border-slate-200 bg-slate-50 p-4">
-                        <div class="flex items-center justify-between mb-2">
-                            <span class="text-sm font-semibold text-slate-900">${escapeHtml(item.title)}</span>
-                            <span class="text-[11px] text-slate-500">${escapeHtml(item.date)}</span>
-                        </div>
-                        <p class="text-xs text-slate-600 leading-relaxed">${escapeHtml(item.note)}</p>
-                    </div>
-                `).join('') || '<div class="text-xs text-slate-500">Chưa có lịch sử bệnh án.</div>';
-            }
+            renderDetailHistory(p);
             switchView('view-detail');
+        }
+
+        function renderDetailHistory(p) {
+            const historyList = document.getElementById('detail-history-list');
+            if (!historyList) return;
+            const items = p.history || [];
+            if (!items.length) {
+                historyList.innerHTML = '<div class="text-sm text-slate-500">Chưa có lịch sử bệnh án.</div>';
+                return;
+            }
+            historyList.innerHTML = items.map((item, index) => `
+                <div class="rounded-3xl border border-slate-200 bg-slate-50 p-4">
+                    <div class="flex flex-col sm:flex-row sm:items-start sm:justify-between gap-3 mb-3">
+                        <div>
+                            <div class="text-sm font-semibold text-slate-900">${escapeHtml(item.title)}</div>
+                            <div class="text-[11px] text-slate-500">${escapeHtml(item.date)}</div>
+                        </div>
+                        <button onclick="deleteHistoryRecord('${p.id}', ${index})" class="text-[11px] text-rose-600 hover:underline">Xóa</button>
+                    </div>
+                    <p class="text-sm text-slate-600 leading-relaxed">${escapeHtml(item.note)}</p>
+                </div>
+            `).join('');
+        }
+
+        function toggleHistoryForm(show) {
+            const form = document.getElementById('history-entry-form');
+            if (!form) return;
+            const shouldShow = show === undefined ? form.classList.contains('hidden') : show;
+            if (shouldShow) {
+                form.classList.remove('hidden');
+                document.getElementById('input-history-date') && (document.getElementById('input-history-date').value = '');
+                document.getElementById('input-history-title') && (document.getElementById('input-history-title').value = '');
+                document.getElementById('input-history-note') && (document.getElementById('input-history-note').value = '');
+            } else {
+                form.classList.add('hidden');
+            }
+        }
+
+        function saveHistoryRecord() {
+            if (!currentDetailPatientId) return;
+            const dateField = document.getElementById('input-history-date');
+            const titleField = document.getElementById('input-history-title');
+            const noteField = document.getElementById('input-history-note');
+            if (!dateField || !titleField || !noteField) return;
+            const date = dateField.value.trim();
+            const title = titleField.value.trim();
+            const note = noteField.value.trim();
+            if (!date || !title || !note) {
+                alert('Vui lòng nhập đầy đủ ngày, tiêu đề và nội dung lịch sử bệnh án.');
+                return;
+            }
+            const patients = loadPatients();
+            const patient = patients.find(p => p.id === currentDetailPatientId);
+            if (!patient) return;
+            patient.history = patient.history || [];
+            patient.history.unshift({ date, title, note });
+            savePatients(patients);
+            renderDetailHistory(patient);
+            document.getElementById('detail-history-count') && (document.getElementById('detail-history-count').textContent = `${patient.history.length} mục`);
+            renderPatientManagementList();
+            renderDashboardOverview();
+            toggleHistoryForm(false);
+            triggerSuccessToast();
+        }
+
+        function deleteHistoryRecord(patientId, historyIndex) {
+            if (!confirm('Bạn có chắc chắn muốn xóa mục này khỏi lịch sử bệnh án?')) return;
+            const patients = loadPatients();
+            const patient = patients.find(p => p.id === patientId);
+            if (!patient || !patient.history) return;
+            patient.history.splice(historyIndex, 1);
+            savePatients(patients);
+            if (currentDetailPatientId === patientId) {
+                renderDetailHistory(patient);
+                document.getElementById('detail-history-count') && (document.getElementById('detail-history-count').textContent = `${patient.history.length} mục`);
+            }
+            renderPatientManagementList();
+            renderDashboardOverview();
         }
 
         // Open edit view and populate fields
