@@ -245,45 +245,62 @@
                                 <th>Mã định danh</th>
                                 <th>Tên đăng nhập</th>
                                 <th>Email</th>
+                                <th>Số điện thoại</th>
                                 <th>Vai trò hệ thống</th>
                                 <th>Trạng thái</th>
                                 <th>Tác vụ</th>
                             </tr>
                         </thead>
                         <tbody>
-                            <tr>
+                            <tr data-account-code="ACC-001" data-is-root-admin="true" data-phone="0901111111" data-has-active-session="true">
+                                <td><input type="checkbox" class="form-check-input"></td>
+                                <td><strong>ACC-001</strong></td>
+                                <td>admin.super</td>
+                                <td>admin.super@oii.hospital.vn</td>
+                                <td>0901111111</td>
+                                <td>Root Admin</td>
+                                <td><span class="status-active">Hoạt động</span></td>
+                                <td>
+                                    <button class="btn-edit me-2" data-code="ACC-001" data-username="admin.super" data-email="admin.super@oii.hospital.vn" data-phone="0901111111" data-role="admin" data-status="active" data-is-root-admin="true"><i class="bi bi-pencil"></i> Chỉnh sửa</button>
+                                    <button class="btn-action"><i class="bi bi-three-dots"></i></button>
+                                </td>
+                            </tr>
+                            <tr data-account-code="ACC-002" data-is-current-user="true" data-phone="0902222222" data-has-active-session="true">
                                 <td><input type="checkbox" class="form-check-input"></td>
                                 <td><strong>ACC-002</strong></td>
                                 <td>nguyenvanb.oii</td>
                                 <td>vanb.nguyen@oii.hospital.vn</td>
+                                <td>0902222222</td>
                                 <td>Bác sĩ trưởng</td>
                                 <td><span class="status-active">Hoạt động</span></td>
                                 <td>
-                                    <button class="btn-edit me-2" data-code="ACC-002" data-username="nguyenvanb.oii" data-email="vanb.nguyen@oii.hospital.vn" data-role="doctor_head" data-status="active"><i class="bi bi-pencil"></i> Chỉnh sửa</button>
+                                    <button class="btn-edit me-2" data-code="ACC-002" data-username="nguyenvanb.oii" data-email="vanb.nguyen@oii.hospital.vn" data-phone="0902222222" data-role="doctor_head" data-status="active" data-is-current-user="true"><i class="bi bi-pencil"></i> Chỉnh sửa</button>
                                     <button class="btn-action"><i class="bi bi-three-dots"></i></button>
                                 </td>
                             </tr>
-                            <tr>
+                            <tr data-account-code="ACC-003" data-phone="0903333333">
                                 <td><input type="checkbox" class="form-check-input"></td>
                                 <td><strong>ACC-003</strong></td>
                                 <td>tranthic.oii</td>
                                 <td>thic.tran@oii.hospital.vn</td>
+                                <td>0903333333</td>
                                 <td>Bác sĩ</td>
                                 <td><span class="status-active">Hoạt động</span></td>
                                 <td>
-                                    <button class="btn-edit me-2" data-code="ACC-003" data-username="tranthic.oii" data-email="thic.tran@oii.hospital.vn" data-role="doctor" data-status="active"><i class="bi bi-pencil"></i> Chỉnh sửa</button>
+                                    <button class="btn-edit me-2" data-code="ACC-003" data-username="tranthic.oii" data-email="thic.tran@oii.hospital.vn" data-phone="0903333333" data-role="doctor" data-status="active"><i class="bi bi-pencil"></i> Chỉnh sửa</button>
                                     <button class="btn-action"><i class="bi bi-three-dots"></i></button>
                                 </td>
                             </tr>
-                            <tr>
+                            <tr data-account-code="ACC-006" data-phone="0904444444">
                                 <td><input type="checkbox" class="form-check-input"></td>
                                 <td><strong>ACC-006</strong></td>
                                 <td>levant.oii</td>
                                 <td>levant@oii.hospital.vn</td>
+                                <td>0904444444</td>
                                 <td>Kỹ thuật viên</td>
                                 <td><span class="status-blocked">Tạm khóa</span></td>
                                 <td>
-                                    <button class="btn-edit me-2" data-code="ACC-006" data-username="levant.oii" data-email="levant@oii.hospital.vn" data-role="technician" data-status="blocked"><i class="bi bi-pencil"></i> Chỉnh sửa</button>
+                                    <button class="btn-edit me-2" data-code="ACC-006" data-username="levant.oii" data-email="levant@oii.hospital.vn" data-phone="0904444444" data-role="technician" data-status="blocked"><i class="bi bi-pencil"></i> Chỉnh sửa</button>
                                     <button class="btn-action"><i class="bi bi-three-dots"></i></button>
                                 </td>
                             </tr>
@@ -301,6 +318,87 @@
                     <button type="button" class="action-popup-item action-popup-item-delete" data-action="delete">
                         <i class="bi bi-trash"></i> Xóa tài khoản
                     </button>
+                </div>
+
+                <!-- Modal Xác nhận vô hiệu hóa tài khoản có phiên làm việc (E-4.1.2) -->
+                <div class="modal fade" id="disableActiveSessionModal" tabindex="-1" aria-hidden="true" style="background:rgba(0,0,0,0.5)">
+                    <div class="modal-dialog modal-dialog-centered" style="max-width:480px;">
+                        <div class="modal-content" style="border:0; border-radius:16px;">
+                            <div class="modal-header-custom">
+                                <div class="modal-title-icon">
+                                    <span class="icon-box delete"><i class="bi bi-exclamation-circle-fill"></i></span>
+                                    <h5>Xác nhận vô hiệu hóa tài khoản</h5>
+                                </div>
+                            </div>
+                            <div class="modal-body-custom">
+                                <p class="confirm-text">Tài khoản <strong id="disableAccountName">nguyenvanb.oii</strong> đang hoạt động. Bạn có chắc chắn muốn vô hiệu hóa và kết thúc phiên làm việc của họ?</p>
+                                <div style="background:#fee2e2; border:1px solid #fca5a5; border-radius:8px; padding:12px; margin-top:12px;">
+                                    <p style="margin:0; font-size:13px; color:#7f1d1d;">
+                                        <i class="bi bi-exclamation-circle-fill" style="margin-right:6px;"></i>
+                                        <strong>Lưu ý:</strong> Phiên làm việc hiện tại sẽ bị kết thúc ngay lập tức.
+                                    </p>
+                                </div>
+                            </div>
+                            <div class="modal-footer-custom">
+                                <button type="button" class="btn-cancel" data-bs-dismiss="modal">Hủy bỏ</button>
+                                <button type="button" class="btn-submit btn-delete-confirm" id="confirmDisableBtn">Vô hiệu hóa tài khoản</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Modal Thông báo trùng lặp thông tin (E-4.1.1) -->
+                <div class="modal fade" id="duplicateInfoModal" tabindex="-1" aria-hidden="true" style="background:rgba(0,0,0,0.5)">
+                    <div class="modal-dialog modal-dialog-centered" style="max-width:420px;">
+                        <div class="modal-content" style="border:0; border-radius:16px;">
+                            <div class="modal-header-custom">
+                                <div class="modal-title-icon">
+                                    <span class="icon-box delete"><i class="bi bi-exclamation-circle-fill"></i></span>
+                                    <h5>Thông tin đã tồn tại</h5>
+                                </div>
+                            </div>
+                            <div class="modal-body-custom">
+                                <p class="confirm-text">
+                                    <i class="bi bi-exclamation-circle-fill" style="color:#991b1b; margin-right:6px;"></i>
+                                    Thông tin <strong id="duplicateFieldName">Email</strong> đã tồn tại. Vui lòng kiểm tra lại.
+                                </p>
+                                <div style="background:#f3f4f6; border-radius:8px; padding:12px; margin-top:12px; font-size:13px;">
+                                    <strong style="color:#374151;">Thông tin trùng lặp:</strong>
+                                    <p style="margin:6px 0 0 0; color:#6b7280;" id="duplicateValueInfo"></p>
+                                </div>
+                            </div>
+                            <div class="modal-footer-custom">
+                                <button type="button" class="btn-submit" data-bs-dismiss="modal">Đóng</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Modal Xác nhận vô hiệu hóa tài khoản (Step 2) -->
+                <div class="modal fade" id="disableConfirmModal" tabindex="-1" aria-hidden="true" style="background:rgba(0,0,0,0.5)">
+                    <div class="modal-dialog modal-dialog-centered" style="max-width:480px;">
+                        <div class="modal-content" style="border:0; border-radius:16px;">
+                            <div class="modal-header-custom">
+                                <div class="modal-title-icon">
+                                    <span class="icon-box delete"><i class="bi bi-exclamation-circle-fill"></i></span>
+                                    <h5>Xác nhận lần thứ 2</h5>
+                                </div>
+                            </div>
+                            <div class="modal-body-custom">
+                                <p class="confirm-text">Bạn đang chuẩn bị vô hiệu hóa tài khoản <strong id="disableConfirmName">nguyenvanb.oii</strong>. Điều này sẽ:</p>
+                                <ul style="margin-top:12px; padding-left:20px; font-size:13px; color:#475569;">
+                                    <li>Kết thúc phiên làm việc ngay lập tức</li>
+                                    <li>Cấm mọi quyền truy cập</li>
+                                    <li>Hành động này có thể hoàn tác sau</li>
+                                </ul>
+                                <p class="confirm-warning" style="margin-top:16px;">Vui lòng xác nhận lần nữa.</p>
+                            </div>
+                            <div class="modal-footer-custom">
+                                <button type="button" class="btn-cancel" data-bs-dismiss="modal">Hủy bỏ</button>
+                                <button type="button" class="btn-submit btn-delete-confirm" id="confirmDisable2Btn">Xác nhận vô hiệu hóa</button>
+                            </div>
+                        </div>
+                    </div>
                 </div>
 
                 <div class="modal fade" id="bulkDeleteModal" tabindex="-1" aria-hidden="true" style="background:rgba(0,0,0,0.5)">
@@ -367,6 +465,12 @@
                     </div>
 
                     <div class="form-group">
+                        <label>Số điện thoại <span class="required">*</span></label>
+                        <input type="tel" id="phone" placeholder="Ví dụ: 0901234567" required>
+                        <div class="form-error" id="phoneError">Số điện thoại không hợp lệ</div>
+                    </div>
+
+                    <div class="form-group">
                         <label>Mật khẩu khởi tạo <span class="required">*</span></label>
                         <div class="password-group">
                             <input type="password" id="password" placeholder="Nhập mật khẩu bạn đầu" required>
@@ -422,6 +526,12 @@
                         <label>Email hệ thống <span class="required">*</span></label>
                         <input type="email" id="editEmail" required>
                         <div class="form-error" id="editEmailError">Email không hợp lệ</div>
+                    </div>
+
+                    <div class="form-group">
+                        <label>Số điện thoại <span class="required">*</span></label>
+                        <input type="tel" id="editPhone" placeholder="Ví dụ: 0901234567" required>
+                        <div class="form-error" id="editPhoneError">Số điện thoại không hợp lệ</div>
                     </div>
 
                     <div class="form-group">
@@ -578,8 +688,57 @@
     </div>
 </div>
 
+<!-- Modal Không thể xóa tài khoản -->
+<div class="modal fade" id="deleteBlockedModal" tabindex="-1" aria-hidden="true" style="background:rgba(0,0,0,0.5)">
+    <div class="modal-dialog modal-dialog-centered" style="max-width:480px;">
+        <div class="modal-content" style="border:0; border-radius:16px;">
+            <div class="modal-header-custom">
+                <div class="modal-title-icon">
+                    <span class="icon-box delete" style="background:#fee2e2;"><i class="bi bi-info-circle-fill"></i></span>
+                    <h5 id="blockReasonTitle">Không thể xóa tài khoản</h5>
+                </div>
+            </div>
+            <div class="modal-body-custom">
+                <p class="confirm-text" id="blockReasonMessage" style="margin:0;">Tài khoản không thể xóa vì lý do sau.</p>
+            </div>
+            <div class="modal-footer-custom">
+                <button type="button" class="btn-submit" data-bs-dismiss="modal">Đã hiểu</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Modal Xóa hàng loạt với danh sách từ chối -->
+<div class="modal fade" id="bulkDeleteResultModal" tabindex="-1" aria-hidden="true" style="background:rgba(0,0,0,0.5)">
+    <div class="modal-dialog modal-dialog-centered" style="max-width:520px;">
+        <div class="modal-content" style="border:0; border-radius:16px;">
+            <div class="modal-header-custom">
+                <div class="modal-title-icon">
+                    <span class="icon-box delete"><i class="bi bi-exclamation-circle-fill"></i></span>
+                    <h5>Kết quả xóa hàng loạt</h5>
+                </div>
+            </div>
+            <div class="modal-body-custom">
+                <div id="bulkDeleteResultContent"></div>
+            </div>
+            <div class="modal-footer-custom">
+                <button type="button" class="btn-submit" data-bs-dismiss="modal">Đóng</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
 <script>
+    // Lấy thông tin người dùng hiện tại từ header
+    const CURRENT_USER = {
+        name: 'Nguyễn Văn A',
+        username: 'nguyenvanb.oii',
+        accountCode: 'ACC-002',
+        role: 'Admin'
+    };
+
     // Tính năng checkbox select all
     const selectAllCheckbox = document.querySelector('thead .form-check-input');
     const bulkDeleteBtn = document.querySelector('.btn-delete-bulk');
@@ -601,27 +760,112 @@
         cb.addEventListener('change', updateBulkDeleteButton);
     });
 
+    // Kiểm tra xem tài khoản có phải là hiện tại hoặc Root Admin không
+    function getDeleteRestriction(row) {
+        const isCurrentUser = row.dataset.isCurrentUser === 'true';
+        const isRootAdmin = row.dataset.isRootAdmin === 'true';
+
+        if (isCurrentUser) {
+            return {
+                restricted: true,
+                reason: 'Không thể xóa tài khoản Quản trị viên đang điều hành hệ thống.'
+            };
+        }
+        if (isRootAdmin) {
+            return {
+                restricted: true,
+                reason: 'Không thể xóa tài khoản Root Admin.'
+            };
+        }
+        return { restricted: false };
+    }
+
     bulkDeleteBtn.addEventListener('click', function() {
         if (bulkDeleteBtn.disabled) return;
-        const selectedCount = Array.from(document.querySelectorAll('tbody .form-check-input')).filter(cb => cb.checked).length;
-        document.getElementById('bulkDeleteCount').textContent = selectedCount;
-        const modal = new bootstrap.Modal(document.getElementById('bulkDeleteModal'));
-        modal.show();
-    });
-
-    document.getElementById('confirmBulkDeleteBtn').addEventListener('click', function() {
-        const rows = Array.from(document.querySelectorAll('tbody tr'));
-        rows.forEach(row => {
-            const checkbox = row.querySelector('.form-check-input');
-            if (checkbox && checkbox.checked) {
-                row.remove();
+        
+        const selectedRows = Array.from(document.querySelectorAll('tbody tr')).filter(row => {
+            return row.querySelector('.form-check-input').checked;
+        });
+        
+        const rejectedAccounts = [];
+        const approvedRows = [];
+        
+        selectedRows.forEach(row => {
+            const restriction = getDeleteRestriction(row);
+            if (restriction.restricted) {
+                const code = row.querySelector('td:nth-child(2)').textContent.trim();
+                const username = row.querySelector('td:nth-child(3)').textContent.trim();
+                rejectedAccounts.push({
+                    code: code,
+                    username: username,
+                    reason: restriction.reason
+                });
+            } else {
+                approvedRows.push(row);
             }
         });
+
+        if (rejectedAccounts.length > 0) {
+            // Có tài khoản bị từ chối
+            showBulkDeleteResult(approvedRows, rejectedAccounts);
+        } else {
+            // Tất cả được phép xóa - hiển thị modal xác nhận
+            document.getElementById('bulkDeleteCount').textContent = approvedRows.length;
+            const modal = new bootstrap.Modal(document.getElementById('bulkDeleteModal'));
+            modal.show();
+        }
+    });
+
+    function showBulkDeleteResult(approvedRows, rejectedAccounts) {
+        let html = '';
+        
+        if (approvedRows.length > 0) {
+            html += `<p class="confirm-text"><strong>${approvedRows.length}</strong> tài khoản sẽ được xóa.</p>`;
+        }
+        
+        if (rejectedAccounts.length > 0) {
+            html += `<p class="confirm-text" style="color:#b91c1c; font-weight:600; margin-top:16px;">
+                <i class="bi bi-exclamation-circle-fill" style="margin-right:6px;"></i>
+                <strong>${rejectedAccounts.length}</strong> tài khoản không thể xóa:
+            </p>`;
+            html += '<div style="background:#fee2e2; border:1px solid #fca5a5; border-radius:8px; padding:12px; margin-top:12px;">';
+            
+            rejectedAccounts.forEach(account => {
+                html += `<div style="margin-bottom:10px; font-size:13px;">
+                    <strong style="color:#991b1b;">${account.code} (${account.username})</strong>
+                    <br><span style="color:#7f1d1d;">⊘ ${account.reason}</span>
+                </div>`;
+            });
+            
+            html += '</div>';
+        }
+        
+        document.getElementById('bulkDeleteResultContent').innerHTML = html;
+        const modal = new bootstrap.Modal(document.getElementById('bulkDeleteResultModal'));
+        modal.show();
+        
+        // Sau khi đóng modal, nếu có tài khoản được phê duyệt thì xóa chúng
+        document.getElementById('bulkDeleteResultModal').addEventListener('hidden.bs.modal', function() {
+            if (approvedRows.length > 0) {
+                approvedRows.forEach(row => row.remove());
+                updateBulkDeleteButton();
+                selectAllCheckbox.checked = false;
+                showSuccessNotification(`Xóa thành công ${approvedRows.length} tài khoản.`);
+            }
+        }, { once: true });
+    }
+
+    document.getElementById('confirmBulkDeleteBtn').addEventListener('click', function() {
+        const selectedRows = Array.from(document.querySelectorAll('tbody tr')).filter(row => {
+            return row.querySelector('.form-check-input').checked;
+        });
+        
+        selectedRows.forEach(row => row.remove());
         const modal = bootstrap.Modal.getInstance(document.getElementById('bulkDeleteModal'));
         modal.hide();
         updateBulkDeleteButton();
         selectAllCheckbox.checked = false;
-        showSuccessNotification('Xóa hàng loạt thành công!');
+        showSuccessNotification(`Xóa hàng loạt thành công!`);
     });
 
     // Tính năng nút action
@@ -672,6 +916,7 @@
             const code = this.getAttribute('data-code');
             const username = this.getAttribute('data-username');
             const email = this.getAttribute('data-email');
+            const phone = this.getAttribute('data-phone');
             const role = this.getAttribute('data-role');
             const status = this.getAttribute('data-status');
 
@@ -679,6 +924,7 @@
             document.getElementById('editAccountCode').value = code;
             document.getElementById('editUsername').value = username;
             document.getElementById('editEmail').value = email;
+            document.getElementById('editPhone').value = phone;
             document.getElementById('editRole').value = role;
             document.getElementById('editStatus').value = status;
 
@@ -687,6 +933,7 @@
 
             // Clear previous errors
             hideError('editEmailError');
+            hideError('editPhoneError');
             hideError('editRoleError');
             hideError('editStatusError');
 
@@ -779,11 +1026,27 @@
     function openDeleteModal(row) {
         const code = row.querySelectorAll('td')[1]?.textContent.trim() || '';
         const username = row.querySelectorAll('td')[2]?.textContent.trim() || '';
-        document.getElementById('deleteAccountCode').textContent = code;
-        document.getElementById('deleteAccountUsername').textContent = username;
-        currentActionRow = row;
-        const modal = new bootstrap.Modal(document.getElementById('deleteAccountModal'));
-        modal.show();
+        
+        // Kiểm tra xem tài khoản có bị hạn chế không
+        const restriction = getDeleteRestriction(row);
+        
+        if (restriction.restricted) {
+            // Hiển thị modal không thể xóa
+            document.getElementById('blockReasonMessage').innerHTML = `
+                <strong style="color:#991b1b;">${code} (${username})</strong><br><br>
+                <i class="bi bi-exclamation-circle-fill" style="color:#991b1b; margin-right:6px;"></i>
+                ${restriction.reason}
+            `;
+            const modal = new bootstrap.Modal(document.getElementById('deleteBlockedModal'));
+            modal.show();
+        } else {
+            // Hiển thị modal xác nhận xóa bình thường
+            document.getElementById('deleteAccountCode').textContent = code;
+            document.getElementById('deleteAccountUsername').textContent = username;
+            currentActionRow = row;
+            const modal = new bootstrap.Modal(document.getElementById('deleteAccountModal'));
+            modal.show();
+        }
     }
 
     document.getElementById('confirmPasswordBtn').addEventListener('click', function() {
@@ -856,6 +1119,19 @@
             hideError('emailError');
         }
 
+        // Validate số điện thoại
+        const phone = document.getElementById('phone').value.trim();
+        const phoneRegex = /^(\+84|0)[0-9]{9}$/;
+        if (!phone) {
+            showError('phoneError', 'Số điện thoại không được để trống');
+            isValid = false;
+        } else if (!phoneRegex.test(phone)) {
+            showError('phoneError', 'Số điện thoại không hợp lệ (ví dụ: 0901234567)');
+            isValid = false;
+        } else {
+            hideError('phoneError');
+        }
+
         // Validate mật khẩu
         const password = document.getElementById('password').value;
         if (!password) {
@@ -877,12 +1153,38 @@
             hideError('roleError');
         }
 
-        if (isValid) {
-            // Tất cả validation thành công
-            const modal = bootstrap.Modal.getInstance(document.getElementById('addAccountModal'));
-            modal.hide();
-            showSuccessNotification('Thêm tài khoản thành công!');
+        if (!isValid) return;
+
+        // E-4.1.1: Kiểm tra trùng lặp email và số điện thoại
+        const rows = document.querySelectorAll('table.account-table tbody tr');
+        for (const row of rows) {
+            const editBtn = row.querySelector('.btn-edit');
+            if (editBtn) {
+                const existingEmail = editBtn.dataset.email;
+                const existingPhone = editBtn.dataset.phone;
+                
+                if (email === existingEmail) {
+                    document.getElementById('duplicateFieldName').textContent = 'Email';
+                    document.getElementById('duplicateValueInfo').textContent = email;
+                    const modal = new bootstrap.Modal(document.getElementById('duplicateInfoModal'));
+                    modal.show();
+                    return;
+                }
+                
+                if (phone === existingPhone) {
+                    document.getElementById('duplicateFieldName').textContent = 'Số điện thoại';
+                    document.getElementById('duplicateValueInfo').textContent = phone;
+                    const modal = new bootstrap.Modal(document.getElementById('duplicateInfoModal'));
+                    modal.show();
+                    return;
+                }
+            }
         }
+
+        // Tất cả validation thành công
+        const modal = bootstrap.Modal.getInstance(document.getElementById('addAccountModal'));
+        modal.hide();
+        showSuccessNotification('Thêm tài khoản thành công!');
     }
 
     // Hàm hiển thị lỗi
@@ -959,7 +1261,7 @@
                     if (rowRole !== roleFilter) visible = false;
                 } else {
                     // so sánh text
-                    const map = { 'bác sĩ': 'doctor', 'bác sĩ trưởng': 'doctor_head', 'kỹ thuật viên': 'technician', 'admin': 'admin' };
+                    const map = { 'bác sĩ': 'doctor', 'bác sĩ trưởng': 'doctor_head', 'kỹ thuật viên': 'technician', 'admin': 'admin', 'root admin': 'admin' };
                     const mapped = map[roleText] || '';
                     if (mapped !== roleFilter) visible = false;
                 }
@@ -983,11 +1285,15 @@
     // Validate và cập nhật thông tin từ modal chỉnh sửa
     document.getElementById('updateBtn').addEventListener('click', function() {
         let valid = true;
+        const code = document.getElementById('editAccountCode').value;
         const email = document.getElementById('editEmail').value.trim();
+        const phone = document.getElementById('editPhone').value.trim();
         const role = document.getElementById('editRole').value;
         const status = document.getElementById('editStatus').value;
         const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+        const phoneRegex = /^(\+84|0)[0-9]{9}$/;
 
+        // Validate email
         if (!email) {
             showError('editEmailError', 'Email không được để trống');
             valid = false;
@@ -996,6 +1302,17 @@
             valid = false;
         } else {
             hideError('editEmailError');
+        }
+
+        // Validate số điện thoại
+        if (!phone) {
+            showError('editPhoneError', 'Số điện thoại không được để trống');
+            valid = false;
+        } else if (!phoneRegex.test(phone)) {
+            showError('editPhoneError', 'Số điện thoại không hợp lệ');
+            valid = false;
+        } else {
+            hideError('editPhoneError');
         }
 
         if (!role) {
@@ -1014,19 +1331,78 @@
 
         if (!valid) return;
 
-        // Tìm dòng tương ứng theo mã
-        const code = document.getElementById('editAccountCode').value;
+        // E-4.1.1: Kiểm tra trùng lặp email và số điện thoại
+        const rows = document.querySelectorAll('table.account-table tbody tr');
+        hideError('editEmailError');
+        hideError('editPhoneError');
+        for (const row of rows) {
+            const rowCode = row.dataset.accountCode;
+            if (rowCode !== code) {
+                const rowEmail = row.querySelector('.btn-edit').dataset.email;
+                const rowPhone = row.querySelector('.btn-edit').dataset.phone;
+                
+                if (email === rowEmail) {
+                    showError(
+                        'editEmailError',
+                        `Email "${email}" đã tồn tại trong hệ thống`
+                    );
+
+                    document.getElementById('editEmail').focus();
+                    return;
+                }
+
+
+                if (phone === rowPhone) {
+                    showError(
+                        'editPhoneError',
+                        `Số điện thoại "${phone}" đã tồn tại trong hệ thống`
+                    );
+
+                    document.getElementById('editPhone').focus();
+                    return;
+                }
+            }
+        }
+
+        // E-4.1.2: Kiểm tra vô hiệu hóa tài khoản có active session
+        if (status === 'blocked') {
+            const targetRow = Array.from(rows).find(row => row.dataset.accountCode === code);
+            if (targetRow && targetRow.dataset.hasActiveSession === 'true') {
+                const username = targetRow.querySelector('.btn-edit').dataset.username;
+                document.getElementById('disableAccountName').textContent = username;
+                document.getElementById('disableConfirmName').textContent = username;
+                const modal = new bootstrap.Modal(document.getElementById('disableActiveSessionModal'));
+                modal.show();
+                
+                // Lưu thông tin tài khoản cần cập nhật
+                document.getElementById('disableActiveSessionModal').dataset.accountCode = code;
+                document.getElementById('disableActiveSessionModal').dataset.email = email;
+                document.getElementById('disableActiveSessionModal').dataset.phone = phone;
+                document.getElementById('disableActiveSessionModal').dataset.role = role;
+                
+                return;
+            }
+        }
+
+        // Thực hiện cập nhật bình thường
+        updateAccountInfo(code, email, phone, role, status);
+    });
+
+    // Hàm cập nhật thông tin tài khoản
+    function updateAccountInfo(code, email, phone, role, status) {
         const rows = document.querySelectorAll('table.account-table tbody tr');
         for (const row of rows) {
             const codeCell = row.querySelectorAll('td')[1];
             if (codeCell && codeCell.textContent.trim() === code) {
                 // Cập nhật email
                 row.querySelectorAll('td')[3].textContent = email;
+                // Cập nhật số điện thoại
+                row.querySelectorAll('td')[4].textContent = phone;
                 // Cập nhật vai trò (hiển thị text)
                 const roleTextMap = { doctor: 'Bác sĩ', doctor_head: 'Bác sĩ trưởng', technician: 'Kỹ thuật viên', admin: 'Admin' };
-                row.querySelectorAll('td')[4].textContent = roleTextMap[role] || role;
+                row.querySelectorAll('td')[5].textContent = roleTextMap[role] || role;
                 // Cập nhật trạng thái badge
-                const statusCell = row.querySelectorAll('td')[5];
+                const statusCell = row.querySelectorAll('td')[6];
                 if (status === 'active') {
                     statusCell.innerHTML = '<span class="status-active">Hoạt động</span>';
                 } else {
@@ -1037,6 +1413,7 @@
                 const editBtn = row.querySelector('.btn-edit');
                 if (editBtn) {
                     editBtn.setAttribute('data-email', email);
+                    editBtn.setAttribute('data-phone', phone);
                     editBtn.setAttribute('data-role', role);
                     editBtn.setAttribute('data-status', status);
                 }
@@ -1049,7 +1426,34 @@
         const modal = bootstrap.Modal.getInstance(document.getElementById('editAccountModal'));
         modal.hide();
         showSuccessNotification('Chỉnh sửa tài khoản thành công!');
+    }
+
+    // E-4.1.2: Xác nhận vô hiệu hóa tài khoản (Step 1)
+    document.getElementById('confirmDisableBtn').addEventListener('click', function() {
+        const modal = bootstrap.Modal.getInstance(document.getElementById('disableActiveSessionModal'));
+        modal.hide();
+        
+        // Hiển thị modal xác nhận lần thứ 2
+        const confirmModal = new bootstrap.Modal(document.getElementById('disableConfirmModal'));
+        confirmModal.show();
     });
+
+    // E-4.1.2: Xác nhận vô hiệu hóa tài khoản (Step 2)
+    document.getElementById('confirmDisable2Btn').addEventListener('click', function() {
+        const disableModal = document.getElementById('disableActiveSessionModal');
+        const code = disableModal.dataset.accountCode;
+        const email = disableModal.dataset.email;
+        const phone = disableModal.dataset.phone;
+        const role = disableModal.dataset.role;
+        
+        const modal = bootstrap.Modal.getInstance(document.getElementById('disableConfirmModal'));
+        modal.hide();
+        
+        // Cập nhật thông tin với trạng thái "blocked"
+        updateAccountInfo(code, email, phone, role, 'blocked');
+        showSuccessNotification('Tài khoản đã được vô hiệu hóa và phiên làm việc đã kết thúc!');
+    });
+
 
     // Hàm hiển thị thông báo thành công
     function showSuccessNotification(message) {
