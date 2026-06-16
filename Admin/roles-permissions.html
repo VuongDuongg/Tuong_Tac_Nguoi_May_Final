@@ -1,0 +1,848 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css" rel="stylesheet">
+    <style>
+        :root{ --primary:#2b7cff; --muted:#f6f8fb; --accent:#ff7a00; }
+        body{ background:#f1f5f9; font-family: 'Segoe UI', Roboto, Arial, sans-serif; }
+        .action-buttons-fixed{ position:fixed; bottom:32px; right:32px; display:flex; gap:12px; z-index:100; }
+        .action-buttons-fixed .btn-cancel{ min-width:120px; padding:12px 24px; font-size:14px; font-weight:600; }
+        .action-buttons-fixed .btn-save-permission{ min-width:160px; padding:12px 28px; font-size:14px; font-weight:600; }
+        .action-buttons-fixed .btn-cancel{ min-width:120px; }
+        .action-buttons-fixed .btn-save-permission{ min-width:160px; }
+        .sidebar{ min-height:100vh; background:#ffffff; border-right:1px solid #e6eef8; padding:28px 20px; width:230px; }
+        .brand{ font-weight:700; color:var(--primary); letter-spacing:0.5px; }
+        .menu .nav-link{ color:#4b5563; padding:12px 10px; border-radius:8px; display:flex; align-items:center; gap:12px; }
+        .menu .nav-link.active{ background:#eef6ff; color:var(--primary); font-weight:600; }
+        .menu .bi{ font-size:18px; color:#8b95a6; }
+        .search-box{ background:#fff; padding:12px 18px; border-radius:999px; border:1px solid #e6eef8; box-shadow:inset 0 1px 0 rgba(0,0,0,0.02); }
+        header .user { text-align:right; font-size:14px; color:#374151; }
+        header .avatar{ width:48px; height:48px; border-radius:50%; background:linear-gradient(135deg,#cfe9ff,#9cc5ff); }
+        .page-title{ font-size:20px; font-weight:700; color:#111827; margin-bottom:24px; }
+        .btn-add-role{ background:#10b981; border:0; color:white; padding:10px 16px; border-radius:8px; font-weight:600; }
+        .btn-add-role:hover{ background:#059669; }
+        .role-section{ background:#fff; border-radius:12px; padding:20px; box-shadow:0 2px 8px rgba(16,24,40,0.04); margin-bottom:24px; }
+        .role-section-title{ font-size:15px; font-weight:600; color:#111827; margin-bottom:16px; }
+        .role-list{ display:flex; flex-direction:column; gap:12px; }
+        .role-item{ background:#f8fafc; border:1px solid #e2e8f0; border-radius:12px; padding:14px 16px; display:flex; align-items:center; gap:12px; cursor:pointer; transition:all 0.2s ease; }
+        .role-item:hover{ background:#eef6ff; border-color:#d0e8ff; }
+        .role-item.selected{ background:#eef6ff; border-color:#2b7cff; }
+        .role-item-name{ flex:1; font-weight:600; color:#111827; }
+        .role-item-status{ font-size:12px; color:#6b7280; }
+        .role-item-actions{ display:flex; gap:8px; }
+        .role-item-btn{ background:#fff; border:1px solid #d1d5db; color:#374151; padding:6px 10px; border-radius:6px; font-size:12px; cursor:pointer; }
+        .role-item-btn:hover{ background:#f3f4f6; }
+        .role-item-btn-delete{ border-color:#fca5a5; color:#b91c1c; }
+        .role-item-btn-delete:hover{ background:#fee2e2; }
+        .permission-section{ background:#fff; border-radius:12px; padding:20px; box-shadow:0 2px 8px rgba(16,24,40,0.04); }
+        .permission-section-title{ font-size:15px; font-weight:600; color:#111827; margin-bottom:16px; }
+        .permission-table-wrapper{ overflow-x:auto; }
+        .permission-table{ font-size:13px; border-collapse:collapse; }
+        .permission-table th{ background:#f3f4f6; color:#6b7280; font-weight:600; padding:12px; text-align:left; border:1px solid #e5e7eb; }
+        .permission-table td{ padding:12px; color:#374151; border:1px solid #e5e7eb; }
+        .permission-table tr:nth-child(even){ background:#f9fafb; }
+        .permission-item-name{ font-weight:500; color:#111827; min-width:180px; }
+        .permission-checkbox{ width:20px; height:20px; cursor:pointer; }
+        .permission-checkbox-cell{ text-align:center; }
+        .permission-header-cell{ min-width:70px; text-align:center; }
+        .btn-save-permission{ background:#2b7cff; border:0; color:white; border-radius:8px; font-weight:600; cursor:pointer; }
+        .btn-save-permission:hover{ background:#1e5dbf; }
+        .btn-cancel{ background:#eef6ff; border:1px solid #d0e8ff; color:#0f1724; border-radius:8px; font-weight:600; cursor:pointer; }
+        .btn-cancel:hover{ background:#d1e7f7; }
+        .action-buttons-fixed .btn-save-permission:hover{ background:#1e5dbf; }
+        .modal-header-custom{ border-bottom:1px solid #e5e7eb; padding:18px; display:flex; flex-direction:column; align-items:center; justify-content:center; text-align:center; gap:10px; }
+        .modal-header-custom h5{ font-size:16px; font-weight:700; color:#111827; margin:0; }
+        .modal-title-icon{ display:flex; align-items:center; justify-content:center; gap:12px; }
+        .modal-body-custom{ padding:24px; }
+        .modal-footer-custom{ border-top:1px solid #e5e7eb; padding:16px 24px; display:flex; gap:12px; justify-content:flex-end; }
+        .modal-title-icon .icon-box{ width:42px; height:42px; border-radius:12px; display:flex; align-items:center; justify-content:center; font-size:18px; }
+        .icon-box.add{ background:#d1fae5; color:#059669; }
+        .icon-box.delete{ background:#fee2e2; color:#b91c1c; }
+        .form-group{ margin-bottom:18px; }
+        .form-group label{ display:block; font-weight:600; color:#111827; margin-bottom:6px; font-size:13px; }
+        .form-group label .required{ color:#dc2626; }
+        .form-group input, .form-group select, .form-group textarea{ width:100%; border:1px solid #d1d5db; border-radius:8px; padding:10px 12px; font-size:13px; }
+        .form-group input:focus, .form-group select:focus, .form-group textarea:focus{ outline:none; border-color:#2b7cff; box-shadow:0 0 0 3px rgba(43,124,255,0.1); }
+        .form-group input::placeholder, .form-group textarea::placeholder{ color:#9ca3af; }
+        .form-error{ color:#dc2626; font-size:12px; margin-top:4px; display:none; }
+        .form-error.show{ display:block; }
+        .toast-success{ position:fixed; top:20px; right:20px; background:#10b981; color:white; padding:14px 20px; border-radius:8px; box-shadow:0 4px 12px rgba(0,0,0,0.15); z-index:9999; animation:slideIn 0.3s ease-out; display:flex; align-items:center; gap:10px; font-weight:500; }
+        .toast-success::before{ content:'✓'; font-size:20px; font-weight:bold; }
+        .toast-error{ position:fixed; top:20px; right:20px; background:#ef4444; color:white; padding:14px 20px; border-radius:8px; box-shadow:0 4px 12px rgba(0,0,0,0.15); z-index:9999; animation:slideIn 0.3s ease-out; display:flex; align-items:center; gap:10px; font-weight:500; }
+        @keyframes slideIn{ from{ transform:translateX(400px); opacity:0; } to{ transform:translateX(0); opacity:1; } }
+        .no-permission{ text-align:center; color:#9ca3af; padding:40px 20px; }
+        .no-permission-icon{ font-size:48px; margin-bottom:10px; }
+    
+        /* Unified admin shell - matched to incident-management.html */
+        :root{ --primary-dark:#0b4ed1; --bg:#f5f7fb; --border:#e5edf7; --text:#111827; --muted:#667085; }
+        *{ box-sizing:border-box; }
+        body{ margin:0; background:var(--bg); color:var(--text); }
+        .container-fluid{ max-width:none; padding:0; }
+        .container-fluid > .row{ margin:0; display:flex; min-height:100vh; }
+        .sidebar{ width:262px!important; flex:0 0 262px; max-width:262px; min-height:100vh; background:#fff; border-right:1px solid var(--border); padding:22px 18px!important; }
+        .sidebar > .px-3{ padding:0!important; }
+        .sidebar .d-flex.align-items-center.mb-4{ display:block!important; padding:0 22px 54px; margin:0!important; }
+        .sidebar .d-flex.align-items-center.mb-4 > div:first-child{ display:none!important; }
+        .sidebar .brand{ color:#0b45a0; font-size:24px; line-height:1; font-weight:800; letter-spacing:-0.3px; }
+        .sidebar .brand + .text-muted{ margin-top:8px; color:#64748b!important; font-weight:700; font-size:13px!important; }
+        .menu{ display:flex; flex-direction:column; gap:8px; }
+        .menu .nav-item{ margin-bottom:0!important; }
+        .menu .nav-link{ min-height:52px; padding:0 12px; border-radius:10px; color:#475569; display:flex; align-items:center; gap:18px; font-size:14px; font-weight:700; text-decoration:none; }
+        .menu .nav-link:hover{ background:#f1f5f9; color:#0f3f91; }
+        .menu .nav-link.active{ background:#e9eef6; color:#0d3f91; font-weight:800; }
+        .menu .bi{ width:28px; font-size:27px; color:#8ba0bd; text-align:center; }
+        .menu .nav-link.active .bi{ color:#9aabc3; }
+        .menu ul.nav{ padding-left:46px!important; margin-top:8px!important; gap:4px; }
+        .menu ul.nav .nav-link{ min-height:34px; padding:0 8px; font-size:13px!important; gap:8px; border-radius:8px; }
+        main.col-md-10{ flex:1; width:auto; max-width:none; min-width:0; padding:0!important; }
+        main > header{ height:78px; background:#fff; border-bottom:1px solid var(--border); display:flex; align-items:center; justify-content:space-between; padding:0 42px 0 34px; margin:0!important; }
+        .page-heading{ margin:0; color:#0b0b0b; font-size:31px; font-weight:500; letter-spacing:-0.5px; }
+        .user-profile{ display:flex; align-items:center; gap:20px; }
+        .user-profile .avatar, header .avatar{ width:64px; height:64px; border-radius:50%; background:#e1e7f0; display:grid; place-items:center; color:#8da0ba; font-size:42px; }
+        .user-name{ margin:0; font-size:13px; font-weight:800; }
+        .user-role{ margin-top:5px; color:#006fe8; font-size:12px; font-weight:800; }
+        .page-title{ display:none; }
+        main > header + *{ margin-top:0; }
+        main{ background:var(--bg); }
+        main > .row, main > .large-panel, main > .filter-bar, main > .table-container, main > .role-section, main > .alert-conflict, main > .role-tools{ margin-left:42px; margin-right:34px; }
+        main > .row:first-of-type, main > .filter-bar:first-of-type, main > .role-tools:first-of-type{ margin-top:30px; }
+        .filter-bar, .role-tools{ background:#fff; border:1px solid #dfe7f2; border-radius:10px; padding:16px 20px; margin-bottom:18px; display:flex; gap:12px; align-items:center; flex-wrap:wrap; box-shadow:none; }
+        .filter-bar input, .filter-bar select, .role-tools .form-control{ height:40px; border-color:#d7dfec; border-radius:8px; font-size:13px; }
+        .table-container, .role-section, .permission-section, .large-panel{ background:#fff; border:1px solid #dfe7f2; border-radius:11px; box-shadow:none; }
+        .table-container{ padding:22px; }
+        .role-section{ padding:22px; }
+        .account-table th, .permission-table th, .audit-table th{ background:#f8fafc!important; color:#111827!important; font-weight:800!important; }
+        .account-table td, .permission-table td, .audit-table td{ color:#475569; }
+        .pagination-container button{ min-width:26px; height:26px; border:1px solid #111827; border-radius:0; padding:0 8px; font-size:12px; }
+        .pagination-container button.active{ background:#050505; color:#fff; border-color:#050505; }
+        .btn-add-account, .btn-add-role, .btn-submit, .btn-save-permission{ background:var(--primary); border:0; border-radius:8px; color:#fff; font-weight:800; }
+        .btn-add-account:hover, .btn-add-role:hover, .btn-submit:hover, .btn-save-permission:hover{ background:var(--primary-dark); color:#fff; }
+        @media(max-width:992px){
+            .container-fluid > .row{ display:block; }
+            .sidebar{ display:block!important; width:100%!important; max-width:none; min-height:auto; border-right:0; border-bottom:1px solid var(--border); }
+            .sidebar .d-flex.align-items-center.mb-4{ padding-bottom:22px; }
+            main > header{ padding:14px 18px; height:auto; }
+            main > .row, main > .large-panel, main > .filter-bar, main > .table-container, main > .role-section, main > .alert-conflict, main > .role-tools{ margin-left:16px; margin-right:16px; }
+        }
+    </style>
+</head>
+<body>
+
+<div class="container-fluid">
+    <div class="row">
+        <!-- Sidebar -->
+        <nav class="col-md-2 sidebar p-0">
+            <div class="px-3">
+                <div class="d-flex align-items-center mb-4">
+                    <div style="width:44px;height:44px;border-radius:8px;background:linear-gradient(135deg,#e6f2ff,#d0e8ff);display:flex;align-items:center;justify-content:center;color:var(--primary);font-weight:800;margin-right:10px">H</div>
+                    <div>
+                        <div class="brand">HOSPITAL-ÔII</div>
+                        <div class="text-muted" style="font-size:12px">HỆ THỐNG Y TẾ TÍCH HỢP</div>
+                    </div>
+                </div>
+
+                <ul class="nav flex-column menu">
+                    <li class="nav-item mb-1"><a class="nav-link" href="dashboard.html"><i class="bi bi-house-door"></i> Tổng quan</a></li>
+                    <li class="nav-item mb-1">
+                        <a class="nav-link active" href="#">
+                            <i class="bi bi-shield-lock"></i> Phân quyền người dùng
+                        </a>
+                        <ul class="nav flex-column" style="padding-left:40px; margin-top:8px;">
+                            <li class="nav-item mb-1"><a class="nav-link" href="account-management.html" style="font-size:13px">• Tài khoản</a></li>
+                            <li class="nav-item mb-1"><a class="nav-link" href="roles-permissions.html" style="font-size:13px; color:var(--primary); font-weight:600;">• Vai trò & Phân quyền</a></li>
+                        </ul>
+                    </li>
+                    <li class="nav-item mb-1"><a class="nav-link" href="incident-management.html"><i class="bi bi-exclamation-triangle"></i> Xử lý sự cố</a></li>
+                    <li class="nav-item"><a class="nav-link" href="#"><i class="bi bi-gear"></i> Cài đặt</a></li>
+                </ul>
+            </div>
+        </nav>
+
+        <!-- Main Content -->
+        <main class="col-md-10 p-4">
+            <!-- Header -->
+            <header>
+                <h1 class="page-heading">Vai trò và phân quyền</h1>
+                <div class="user-profile">
+                    <div class="avatar"><i class="bi bi-person-fill"></i></div>
+                    <div>
+                        <p class="user-name">Nguyễn Văn A</p>
+                        <div class="user-role">Admin</div>
+                    </div>
+                </div>
+            </header>
+
+            <!-- Page Title -->
+            <div class="page-title">Vai trò và phân quyền</div>
+
+                        <div class="role-tools">
+                <input id="roleSearchInput" type="text" class="form-control" style="flex:1; max-width:360px;" placeholder="Tìm kiếm theo tên vai trò...">
+                <button class="btn-add-role" data-bs-toggle="modal" data-bs-target="#addRoleModal"><i class="bi bi-plus"></i> Thêm vai trò mới</button>
+            </div>
+            <!-- Roles Section -->
+            <div class="role-section">
+                <div class="d-flex justify-content-between align-items:center mb-3">
+                    <div class="role-section-title">Vai trò để thông</div>
+                    
+                </div>
+                
+                <div class="row">
+                    <div class="col-md-5">
+                        <div class="role-list">
+                            <div class="role-item selected" data-role="doctor">
+                                <div>
+                                    <div class="role-item-name">Bác sĩ</div>
+                                    <div class="role-item-status">Đang hoạt động</div>
+                                </div>
+                                <div class="role-item-actions">
+                                    <button class="role-item-btn" data-action="edit" data-role="doctor"><i class="bi bi-pencil"></i></button>
+                                    <button class="role-item-btn role-item-btn-delete" data-action="delete" data-role="doctor"><i class="bi bi-trash"></i></button>
+                                </div>
+                            </div>
+
+                            <div class="role-item" data-role="department_head">
+                                <div>
+                                    <div class="role-item-name">Trưởng khoa</div>
+                                    <div class="role-item-status">Đang hoạt động</div>
+                                </div>
+                                <div class="role-item-actions">
+                                    <button class="role-item-btn" data-action="edit" data-role="department_head"><i class="bi bi-pencil"></i></button>
+                                    <button class="role-item-btn role-item-btn-delete" data-action="delete" data-role="department_head"><i class="bi bi-trash"></i></button>
+                                </div>
+                            </div>
+
+                            <div class="role-item" data-role="nurse">
+                                <div>
+                                    <div class="role-item-name">Điều dưỡng</div>
+                                    <div class="role-item-status">Đang hoạt động</div>
+                                </div>
+                                <div class="role-item-actions">
+                                    <button class="role-item-btn" data-action="edit" data-role="nurse"><i class="bi bi-pencil"></i></button>
+                                    <button class="role-item-btn role-item-btn-delete" data-action="delete" data-role="nurse"><i class="bi bi-trash"></i></button>
+                                </div>
+                            </div>
+
+                            <div class="role-item" data-role="receptionist">
+                                <div>
+                                    <div class="role-item-name">Lễ tân</div>
+                                    <div class="role-item-status">Đang hoạt động</div>
+                                </div>
+                                <div class="role-item-actions">
+                                    <button class="role-item-btn" data-action="edit" data-role="receptionist"><i class="bi bi-pencil"></i></button>
+                                    <button class="role-item-btn role-item-btn-delete" data-action="delete" data-role="receptionist"><i class="bi bi-trash"></i></button>
+                                </div>
+                            </div>
+
+                            <div class="role-item" data-role="cashier">
+                                <div>
+                                    <div class="role-item-name">Thu ngân</div>
+                                    <div class="role-item-status">Đang hoạt động</div>
+                                </div>
+                                <div class="role-item-actions">
+                                    <button class="role-item-btn" data-action="edit" data-role="cashier"><i class="bi bi-pencil"></i></button>
+                                    <button class="role-item-btn role-item-btn-delete" data-action="delete" data-role="cashier"><i class="bi bi-trash"></i></button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Permission Section for Selected Role -->
+                    <div class="col-md-7">
+                        <div class="permission-section">
+                            <div class="permission-section-title" id="selectedRoleTitle">Phân quyền chi tiết - Bác sĩ</div>
+                            
+                            <div class="permission-table-wrapper">
+                                <table class="permission-table" style="width:100%; min-width:550px;">
+                                    <thead>
+                                        <tr>
+                                            <th>DANH MỤC</th>
+                                            <th class="permission-header-cell">XEM</th>
+                                            <th class="permission-header-cell">THÊM</th>
+                                            <th class="permission-header-cell">SỬA</th>
+                                            <th class="permission-header-cell">XOÁ</th>
+                                            <th class="permission-header-cell">XUẤT</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody id="permissionTableBody">
+                                        <tr>
+                                            <td class="permission-item-name">I. Quản lý Bệnh nhân</td>
+                                            <td class="permission-checkbox-cell"><input type="checkbox" class="permission-checkbox" checked></td>
+                                            <td class="permission-checkbox-cell"><input type="checkbox" class="permission-checkbox" checked></td>
+                                            <td class="permission-checkbox-cell"><input type="checkbox" class="permission-checkbox"></td>
+                                            <td class="permission-checkbox-cell"><input type="checkbox" class="permission-checkbox"></td>
+                                            <td class="permission-checkbox-cell"><input type="checkbox" class="permission-checkbox"></td>
+                                        </tr>
+                                        <tr>
+                                            <td class="permission-item-name">Danh sách bệnh nhân</td>
+                                            <td class="permission-checkbox-cell"><input type="checkbox" class="permission-checkbox" checked></td>
+                                            <td class="permission-checkbox-cell"><input type="checkbox" class="permission-checkbox" checked></td>
+                                            <td class="permission-checkbox-cell"><input type="checkbox" class="permission-checkbox" checked></td>
+                                            <td class="permission-checkbox-cell"><input type="checkbox" class="permission-checkbox"></td>
+                                            <td class="permission-checkbox-cell"><input type="checkbox" class="permission-checkbox"></td>
+                                        </tr>
+                                        <tr>
+                                            <td class="permission-item-name">II. Quản lý Lịch khám</td>
+                                            <td class="permission-checkbox-cell"><input type="checkbox" class="permission-checkbox" checked></td>
+                                            <td class="permission-checkbox-cell"><input type="checkbox" class="permission-checkbox" checked></td>
+                                            <td class="permission-checkbox-cell"><input type="checkbox" class="permission-checkbox" checked></td>
+                                            <td class="permission-checkbox-cell"><input type="checkbox" class="permission-checkbox" checked></td>
+                                            <td class="permission-checkbox-cell"><input type="checkbox" class="permission-checkbox"></td>
+                                        </tr>
+                                        <tr>
+                                            <td class="permission-item-name">Danh sách lịch hẹn</td>
+                                            <td class="permission-checkbox-cell"><input type="checkbox" class="permission-checkbox" checked></td>
+                                            <td class="permission-checkbox-cell"><input type="checkbox" class="permission-checkbox" checked></td>
+                                            <td class="permission-checkbox-cell"><input type="checkbox" class="permission-checkbox" checked></td>
+                                            <td class="permission-checkbox-cell"><input type="checkbox" class="permission-checkbox" checked></td>
+                                            <td class="permission-checkbox-cell"><input type="checkbox" class="permission-checkbox"></td>
+                                        </tr>
+                                        <tr>
+                                            <td class="permission-item-name">III. Quản lý Kế thuốc & Chỉ định</td>
+                                            <td class="permission-checkbox-cell"><input type="checkbox" class="permission-checkbox" checked></td>
+                                            <td class="permission-checkbox-cell"><input type="checkbox" class="permission-checkbox" checked></td>
+                                            <td class="permission-checkbox-cell"><input type="checkbox" class="permission-checkbox" checked></td>
+                                            <td class="permission-checkbox-cell"><input type="checkbox" class="permission-checkbox" checked></td>
+                                            <td class="permission-checkbox-cell"><input type="checkbox" class="permission-checkbox"></td>
+                                        </tr>
+                                        <tr>
+                                            <td class="permission-item-name">Đơn thuốc ngoài trú</td>
+                                            <td class="permission-checkbox-cell"><input type="checkbox" class="permission-checkbox" checked></td>
+                                            <td class="permission-checkbox-cell"><input type="checkbox" class="permission-checkbox" checked></td>
+                                            <td class="permission-checkbox-cell"><input type="checkbox" class="permission-checkbox" checked></td>
+                                            <td class="permission-checkbox-cell"><input type="checkbox" class="permission-checkbox" checked></td>
+                                            <td class="permission-checkbox-cell"><input type="checkbox" class="permission-checkbox"></td>
+                                        </tr>
+                                        <tr>
+                                            <td class="permission-item-name">Chỉ định xét nghiệm</td>
+                                            <td class="permission-checkbox-cell"><input type="checkbox" class="permission-checkbox" checked></td>
+                                            <td class="permission-checkbox-cell"><input type="checkbox" class="permission-checkbox" checked></td>
+                                            <td class="permission-checkbox-cell"><input type="checkbox" class="permission-checkbox" checked></td>
+                                            <td class="permission-checkbox-cell"><input type="checkbox" class="permission-checkbox" checked></td>
+                                            <td class="permission-checkbox-cell"><input type="checkbox" class="permission-checkbox"></td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+
+
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </main>
+    </div>
+</div>
+
+<!-- Action Buttons Fixed -->
+<div class="action-buttons-fixed">
+    <button class="btn-cancel">Hủy bỏ</button>
+    <button class="btn-save-permission">Lưu thay đổi</button>
+</div>
+
+<!-- Modal Thêm Vai Trò -->
+<div class="modal fade" id="addRoleModal" tabindex="-1" aria-hidden="true" style="background:rgba(0,0,0,0.5)">
+    <div class="modal-dialog modal-dialog-centered" style="max-width:420px;">
+        <div class="modal-content" style="border:0; border-radius:12px;">
+            <div class="modal-header-custom">
+                <div class="modal-title-icon">
+                    <span class="icon-box add"><i class="bi bi-person-badge-fill"></i></span>
+                    <h5>Thêm vai trò mới</h5>
+                </div>
+            </div>
+            <div class="modal-body-custom">
+                <form id="addRoleForm">
+                    <div class="form-group">
+                        <label>Tên vai trò <span class="required">*</span></label>
+                        <input type="text" id="roleName" placeholder="Ví dụ: Bác sĩ chuyên khoa" required>
+                        <div class="form-error" id="roleNameError">Tên vai trò không được để trống</div>
+                    </div>
+
+                    <div class="form-group">
+                        <label>Mô tả vai trò</label>
+                        <textarea id="roleDescription" placeholder="Mô tả chi tiết về vai trò này" style="resize:vertical; min-height:80px;"></textarea>
+                    </div>
+
+                    <div class="form-group">
+                        <label>Trạng thái <span class="required">*</span></label>
+                        <select id="roleStatus" required>
+                            <option value="">-- Chọn trạng thái --</option>
+                            <option value="active" selected>Hoạt động</option>
+                            <option value="inactive">Không hoạt động</option>
+                        </select>
+                        <div class="form-error" id="roleStatusError">Vui lòng chọn trạng thái</div>
+                    </div>
+                </form>
+            </div>
+            <div class="modal-footer-custom">
+                <button type="button" class="btn-cancel" data-bs-dismiss="modal">Hủy bỏ</button>
+                <button type="button" class="btn-submit" id="submitRoleBtn" style="background:#2b7cff; border:0; color:white; padding:10px 20px; border-radius:8px; font-weight:600; cursor:pointer;">Thêm vai trò</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Modal Chỉnh sửa Vai Trò -->
+<div class="modal fade" id="editRoleModal" tabindex="-1" aria-hidden="true" style="background:rgba(0,0,0,0.5)">
+    <div class="modal-dialog modal-dialog-centered" style="max-width:420px;">
+        <div class="modal-content" style="border:0; border-radius:12px;">
+            <div class="modal-header-custom">
+                <div class="modal-title-icon">
+                    <span class="icon-box add"><i class="bi bi-pencil-square"></i></span>
+                    <h5>Chỉnh sửa vai trò</h5>
+                </div>
+            </div>
+            <div class="modal-body-custom">
+                <form id="editRoleForm">
+                    <div class="form-group">
+                        <label>Tên vai trò <span class="required">*</span></label>
+                        <input type="text" id="editRoleName" placeholder="Ví dụ: Bác sĩ chuyên khoa" required>
+                        <div class="form-error" id="editRoleNameError">Tên vai trò không được để trống</div>
+                    </div>
+
+                    <div class="form-group">
+                        <label>Mô tả vai trò</label>
+                        <textarea id="editRoleDescription" placeholder="Mô tả chi tiết về vai trò này" style="resize:vertical; min-height:80px;"></textarea>
+                    </div>
+
+                    <div class="form-group">
+                        <label>Trạng thái <span class="required">*</span></label>
+                        <select id="editRoleStatus" required>
+                            <option value="">-- Chọn trạng thái --</option>
+                            <option value="active">Hoạt động</option>
+                            <option value="inactive">Không hoạt động</option>
+                        </select>
+                        <div class="form-error" id="editRoleStatusError">Vui lòng chọn trạng thái</div>
+                    </div>
+                </form>
+            </div>
+            <div class="modal-footer-custom">
+                <button type="button" class="btn-cancel" data-bs-dismiss="modal">Hủy bỏ</button>
+                <button type="button" class="btn-submit" id="updateRoleBtn" style="background:#2b7cff; border:0; color:white; padding:10px 20px; border-radius:8px; font-weight:600; cursor:pointer;">Cập nhật</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Modal Xóa Vai Trò -->
+<div class="modal fade" id="deleteRoleModal" tabindex="-1" aria-hidden="true" style="background:rgba(0,0,0,0.5)">
+    <div class="modal-dialog modal-dialog-centered" style="max-width:420px;">
+        <div class="modal-content" style="border:0; border-radius:12px;">
+            <div class="modal-header-custom">
+                <div class="modal-title-icon">
+                    <span class="icon-box delete"><i class="bi bi-exclamation-circle-fill"></i></span>
+                    <h5>Xóa vai trò?</h5>
+                </div>
+            </div>
+            <div class="modal-body-custom">
+                <p style="margin-bottom:8px; color:#334155; font-size:14px;">Bạn có chắc chắn muốn xóa vai trò <strong id="deleteRoleName">Bác sĩ</strong>? Toàn bộ quyền truy cập liên quan sẽ bị gỡ bỏ.</p>
+                <p style="color:#b91c1c; font-size:13px; margin:0;">Hành động này không thể hoàn tác.</p>
+            </div>
+            <div class="modal-footer-custom">
+                <button type="button" class="btn-cancel" data-bs-dismiss="modal">Hủy thao tác</button>
+                <button type="button" class="btn-submit" id="confirmDeleteRoleBtn" style="background:#ef4444; border:0; color:white; padding:10px 20px; border-radius:8px; font-weight:600; cursor:pointer;">Xác nhận xóa</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+<script>
+    // Lưu trữ vai trò được chọn
+    let selectedRole = 'doctor';
+    let currentRoleToDelete = null;
+    let currentRoleToEdit = null;
+
+    // Khởi tạo roleData
+    const roleData = {
+        doctor: {
+            name: 'Bác sĩ',
+            description: 'Bác sĩ lâm sàng',
+            status: 'active',
+            permissions: {
+                'I. Quản lý Bệnh nhân': { view: true, add: true, edit: false, delete: false, export: false },
+                'Danh sách bệnh nhân': { view: true, add: true, edit: true, delete: false, export: false },
+                'II. Quản lý Lịch khám': { view: true, add: true, edit: true, delete: true, export: false },
+                'Danh sách lịch hẹn': { view: true, add: true, edit: true, delete: true, export: false },
+                'III. Quản lý Kế thuốc & Chỉ định': { view: true, add: true, edit: true, delete: true, export: false },
+                'Đơn thuốc ngoài trú': { view: true, add: true, edit: true, delete: true, export: false },
+                'Chỉ định xét nghiệm': { view: true, add: true, edit: true, delete: true, export: false }
+            }
+        },
+        department_head: {
+            name: 'Trưởng khoa',
+            description: 'Quản lý khoa phòng',
+            status: 'active',
+            permissions: {
+                'I. Quản lý Bệnh nhân': { view: true, add: true, edit: true, delete: true, export: true },
+                'Danh sách bệnh nhân': { view: true, add: true, edit: true, delete: true, export: true },
+                'II. Quản lý Lịch khám': { view: true, add: true, edit: true, delete: true, export: true },
+                'Danh sách lịch hẹn': { view: true, add: true, edit: true, delete: true, export: true },
+                'III. Quản lý Kế thuốc & Chỉ định': { view: true, add: true, edit: true, delete: true, export: true },
+                'Đơn thuốc ngoài trú': { view: true, add: true, edit: true, delete: true, export: true },
+                'Chỉ định xét nghiệm': { view: true, add: true, edit: true, delete: true, export: true }
+            }
+        },
+        nurse: {
+            name: 'Điều dưỡng',
+            description: 'Nhân viên điều dưỡng',
+            status: 'active',
+            permissions: {
+                'I. Quản lý Bệnh nhân': { view: true, add: false, edit: false, delete: false, export: false },
+                'Danh sách bệnh nhân': { view: true, add: false, edit: true, delete: false, export: false },
+                'II. Quản lý Lịch khám': { view: true, add: true, edit: true, delete: false, export: false },
+                'Danh sách lịch hẹn': { view: true, add: true, edit: true, delete: false, export: false },
+                'III. Quản lý Kế thuốc & Chỉ định': { view: true, add: false, edit: false, delete: false, export: false },
+                'Đơn thuốc ngoài trú': { view: true, add: false, edit: false, delete: false, export: false },
+                'Chỉ định xét nghiệm': { view: true, add: false, edit: false, delete: false, export: false }
+            }
+        },
+        receptionist: {
+            name: 'Lễ tân',
+            description: 'Nhân viên lễ tân',
+            status: 'active',
+            permissions: {
+                'I. Quản lý Bệnh nhân': { view: true, add: true, edit: false, delete: false, export: false },
+                'Danh sách bệnh nhân': { view: true, add: true, edit: false, delete: false, export: false },
+                'II. Quản lý Lịch khám': { view: true, add: true, edit: true, delete: false, export: false },
+                'Danh sách lịch hẹn': { view: true, add: true, edit: true, delete: false, export: false },
+                'III. Quản lý Kế thuốc & Chỉ định': { view: false, add: false, edit: false, delete: false, export: false },
+                'Đơn thuốc ngoài trú': { view: false, add: false, edit: false, delete: false, export: false },
+                'Chỉ định xét nghiệm': { view: false, add: false, edit: false, delete: false, export: false }
+            }
+        },
+        cashier: {
+            name: 'Thu ngân',
+            description: 'Nhân viên thu ngân',
+            status: 'active',
+            permissions: {
+                'I. Quản lý Bệnh nhân': { view: true, add: false, edit: false, delete: false, export: false },
+                'Danh sách bệnh nhân': { view: true, add: false, edit: false, delete: false, export: false },
+                'II. Quản lý Lịch khám': { view: true, add: false, edit: false, delete: false, export: false },
+                'Danh sách lịch hẹn': { view: true, add: false, edit: false, delete: false, export: false },
+                'III. Quản lý Kế thuốc & Chỉ định': { view: false, add: false, edit: false, delete: false, export: false },
+                'Đơn thuốc ngoài trú': { view: false, add: false, edit: false, delete: false, export: false },
+                'Chỉ định xét nghiệm': { view: false, add: false, edit: false, delete: false, export: false }
+            }
+        }
+    };
+
+    // Xử lý khi bấm vào item vai trò
+    document.querySelectorAll('.role-item').forEach(item => {
+        item.addEventListener('click', function(e) {
+            if (e.target.closest('.role-item-actions')) return;
+            
+            document.querySelectorAll('.role-item').forEach(el => el.classList.remove('selected'));
+            this.classList.add('selected');
+            selectedRole = this.getAttribute('data-role');
+            updatePermissionTable();
+        });
+    });
+
+    // Cập nhật bảng quyền
+    function updatePermissionTable() {
+        const roleInfo = roleData[selectedRole];
+        document.getElementById('selectedRoleTitle').textContent = `Phân quyền chi tiết - ${roleInfo.name}`;
+        
+        // Render bảng quyền dựa trên dữ liệu vai trò
+        const tbody = document.getElementById('permissionTableBody');
+        tbody.innerHTML = '';
+        
+        const permissions = roleInfo.permissions;
+        const permissionOrder = [
+            'I. Quản lý Bệnh nhân',
+            'Danh sách bệnh nhân',
+            'II. Quản lý Lịch khám',
+            'Danh sách lịch hẹn',
+            'III. Quản lý Kế thuốc & Chỉ định',
+            'Đơn thuốc ngoài trú',
+            'Chỉ định xét nghiệm'
+        ];
+        
+        permissionOrder.forEach(permName => {
+            if (permissions.hasOwnProperty(permName)) {
+                const perm = permissions[permName];
+                const tr = document.createElement('tr');
+                tr.innerHTML = `
+                    <td class="permission-item-name">${permName}</td>
+                    <td class="permission-checkbox-cell"><input type="checkbox" class="permission-checkbox" ${perm.view ? 'checked' : ''}></td>
+                    <td class="permission-checkbox-cell"><input type="checkbox" class="permission-checkbox" ${perm.add ? 'checked' : ''}></td>
+                    <td class="permission-checkbox-cell"><input type="checkbox" class="permission-checkbox" ${perm.edit ? 'checked' : ''}></td>
+                    <td class="permission-checkbox-cell"><input type="checkbox" class="permission-checkbox" ${perm.delete ? 'checked' : ''}></td>
+                    <td class="permission-checkbox-cell"><input type="checkbox" class="permission-checkbox" ${perm.export ? 'checked' : ''}></td>
+                `;
+                tbody.appendChild(tr);
+            }
+        });
+    }
+
+    // Thêm vai trò
+    document.getElementById('submitRoleBtn').addEventListener('click', function() {
+        const name = document.getElementById('roleName').value.trim();
+        const description = document.getElementById('roleDescription').value.trim();
+        const status = document.getElementById('roleStatus').value;
+
+        let valid = true;
+        if (!name) {
+            showError('roleNameError', 'Tên vai trò không được để trống');
+            valid = false;
+        } else {
+            hideError('roleNameError');
+        }
+
+        if (!status) {
+            showError('roleStatusError', 'Vui lòng chọn trạng thái');
+            valid = false;
+        } else {
+            hideError('roleStatusError');
+        }
+
+        if (!valid) return;
+
+        // Tạo ID cho vai trò mới
+        const newRoleId = name.toLowerCase().replace(/\s+/g, '_');
+        
+        // Thêm vào roleData
+        roleData[newRoleId] = {
+            name: name,
+            description: description,
+            status: status,
+            permissions: {}
+        };
+
+        // Tạo HTML cho role item mới
+        const roleItem = document.createElement('div');
+        roleItem.className = 'role-item';
+        roleItem.setAttribute('data-role', newRoleId);
+        roleItem.innerHTML = `
+            <div>
+                <div class="role-item-name">${name}</div>
+                <div class="role-item-status">${status === 'active' ? 'Đang hoạt động' : 'Không hoạt động'}</div>
+            </div>
+            <div class="role-item-actions">
+                <button class="role-item-btn" data-action="edit" data-role="${newRoleId}"><i class="bi bi-pencil"></i></button>
+                <button class="role-item-btn role-item-btn-delete" data-action="delete" data-role="${newRoleId}"><i class="bi bi-trash"></i></button>
+            </div>
+        `;
+
+        // Thêm event listeners
+        roleItem.addEventListener('click', function(e) {
+            if (e.target.closest('.role-item-actions')) return;
+            document.querySelectorAll('.role-item').forEach(el => el.classList.remove('selected'));
+            this.classList.add('selected');
+            selectedRole = this.getAttribute('data-role');
+            updatePermissionTable();
+        });
+
+        const editBtn = roleItem.querySelector('[data-action="edit"]');
+        editBtn.addEventListener('click', function(e) {
+            e.stopPropagation();
+            openEditRoleModal(newRoleId);
+        });
+
+        const deleteBtn = roleItem.querySelector('[data-action="delete"]');
+        deleteBtn.addEventListener('click', function(e) {
+            e.stopPropagation();
+            openDeleteRoleModal(newRoleId);
+        });
+
+        document.querySelector('.role-list').appendChild(roleItem);
+
+        // Đóng modal
+        const modal = bootstrap.Modal.getInstance(document.getElementById('addRoleModal'));
+        modal.hide();
+
+        // Reset form
+        document.getElementById('addRoleForm').reset();
+        hideError('roleNameError');
+        hideError('roleStatusError');
+
+        showSuccessNotification(`Thêm vai trò "${name}" thành công!`);
+    });
+
+    // Xử lý edit role
+    document.querySelectorAll('[data-action="edit"]').forEach(btn => {
+        btn.addEventListener('click', function(e) {
+            e.stopPropagation();
+            const roleId = this.getAttribute('data-role');
+            openEditRoleModal(roleId);
+        });
+    });
+
+    function openEditRoleModal(roleId) {
+        currentRoleToEdit = roleId;
+        const role = roleData[roleId];
+        
+        document.getElementById('editRoleName').value = role.name;
+        document.getElementById('editRoleDescription').value = role.description;
+        document.getElementById('editRoleStatus').value = role.status;
+
+        hideError('editRoleNameError');
+        hideError('editRoleStatusError');
+
+        const modal = new bootstrap.Modal(document.getElementById('editRoleModal'));
+        modal.show();
+    }
+
+    document.getElementById('updateRoleBtn').addEventListener('click', function() {
+        const name = document.getElementById('editRoleName').value.trim();
+        const description = document.getElementById('editRoleDescription').value.trim();
+        const status = document.getElementById('editRoleStatus').value;
+
+        let valid = true;
+        if (!name) {
+            showError('editRoleNameError', 'Tên vai trò không được để trống');
+            valid = false;
+        } else {
+            hideError('editRoleNameError');
+        }
+
+        if (!status) {
+            showError('editRoleStatusError', 'Vui lòng chọn trạng thái');
+            valid = false;
+        } else {
+            hideError('editRoleStatusError');
+        }
+
+        if (!valid) return;
+
+        // Cập nhật dữ liệu
+        roleData[currentRoleToEdit].name = name;
+        roleData[currentRoleToEdit].description = description;
+        roleData[currentRoleToEdit].status = status;
+
+        // Cập nhật HTML
+        const roleItem = document.querySelector(`[data-role="${currentRoleToEdit}"]`);
+        roleItem.querySelector('.role-item-name').textContent = name;
+        roleItem.querySelector('.role-item-status').textContent = status === 'active' ? 'Đang hoạt động' : 'Không hoạt động';
+
+        // Cập nhật tiêu đề nếu là vai trò được chọn
+        if (selectedRole === currentRoleToEdit) {
+            document.getElementById('selectedRoleTitle').textContent = `Phân quyền chi tiết - ${name}`;
+        }
+
+        const modal = bootstrap.Modal.getInstance(document.getElementById('editRoleModal'));
+        modal.hide();
+
+        showSuccessNotification(`Cập nhật vai trò "${name}" thành công!`);
+    });
+
+    // Xử lý delete role
+    document.querySelectorAll('[data-action="delete"]').forEach(btn => {
+        btn.addEventListener('click', function(e) {
+            e.stopPropagation();
+            const roleId = this.getAttribute('data-role');
+            openDeleteRoleModal(roleId);
+        });
+    });
+
+    function openDeleteRoleModal(roleId) {
+        currentRoleToDelete = roleId;
+        const role = roleData[roleId];
+        document.getElementById('deleteRoleName').textContent = role.name;
+
+        const modal = new bootstrap.Modal(document.getElementById('deleteRoleModal'));
+        modal.show();
+    }
+
+    document.getElementById('confirmDeleteRoleBtn').addEventListener('click', function() {
+        const roleItem = document.querySelector(`[data-role="${currentRoleToDelete}"]`);
+        const roleName = roleData[currentRoleToDelete].name;
+
+        // Xóa khỏi roleData
+        delete roleData[currentRoleToDelete];
+
+        // Xóa khỏi DOM
+        roleItem.remove();
+
+        // Nếu là vai trò được chọn, chọn vai trò khác
+        if (selectedRole === currentRoleToDelete) {
+            const firstRole = document.querySelector('.role-item');
+            if (firstRole) {
+                firstRole.click();
+            }
+        }
+
+        const modal = bootstrap.Modal.getInstance(document.getElementById('deleteRoleModal'));
+        modal.hide();
+
+        showSuccessNotification(`Xóa vai trò "${roleName}" thành công!`);
+    });
+
+    // Xử lý lưu quyền
+    document.querySelector('.btn-save-permission').addEventListener('click', function() {
+        const permissions = {};
+        document.querySelectorAll('#permissionTableBody tr').forEach(row => {
+            const name = row.querySelector('.permission-item-name').textContent.trim();
+            const checkboxes = row.querySelectorAll('.permission-checkbox');
+            permissions[name] = {
+                view: checkboxes[0].checked,
+                add: checkboxes[1].checked,
+                edit: checkboxes[2].checked,
+                delete: checkboxes[3].checked,
+                export: checkboxes[4].checked
+            };
+        });
+
+        roleData[selectedRole].permissions = permissions;
+        showSuccessNotification('Lưu thay đổi quyền "' + roleData[selectedRole].name + '" thành công!');
+    });
+
+    // Xử lý hủy bỏ
+    document.querySelectorAll('.btn-cancel').forEach(btn => {
+        if (btn.closest('.action-buttons-fixed')) {
+            btn.addEventListener('click', function() {
+                // Reload lại dữ liệu từ roleData
+                updatePermissionTable();
+                showSuccessNotification('Đã hủy các thay đổi');
+            });
+        }
+    });
+
+    // Hàm hiển thị lỗi
+    function showError(elementId, message) {
+        const errorEl = document.getElementById(elementId);
+        if (errorEl) {
+            errorEl.textContent = message;
+            errorEl.classList.add('show');
+        }
+    }
+
+    // Hàm ẩn lỗi
+    function hideError(elementId) {
+        const errorEl = document.getElementById(elementId);
+        if (errorEl) {
+            errorEl.classList.remove('show');
+        }
+    }
+
+    // Hàm hiển thị thông báo thành công
+    function showSuccessNotification(message) {
+        const notification = document.createElement('div');
+        notification.className = 'toast-success';
+        notification.textContent = message;
+        document.body.appendChild(notification);
+
+        setTimeout(function() {
+            notification.remove();
+        }, 3000);
+    }
+
+    // Xử lý tìm kiếm vai trò
+    document.getElementById('roleSearchInput').addEventListener('input', function(e) {
+        const query = e.target.value.toLowerCase();
+        document.querySelectorAll('.role-item').forEach(item => {
+            const name = item.querySelector('.role-item-name').textContent.toLowerCase();
+            item.style.display = name.includes(query) ? '' : 'none';
+        });
+    });
+
+    // Khởi tạo bảng quyền khi trang load
+    window.addEventListener('load', function() {
+        updatePermissionTable();
+    });
+</script>
+</body>
+</html>
+

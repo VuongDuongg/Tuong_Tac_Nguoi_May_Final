@@ -1,0 +1,556 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Xử lý sự cố - HOSPITAL-ÔII</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css" rel="stylesheet">
+    <style>
+        :root{
+            --primary:#2b7cff;
+            --primary-dark:#0b4ed1;
+            --bg:#f5f7fb;
+            --border:#e5edf7;
+            --text:#111827;
+            --muted:#667085;
+            --warning:#d97706;
+            --danger:#ef4444;
+            --success:#10b981;
+        }
+        *{ box-sizing:border-box; }
+        body{ margin:0; background:var(--bg); color:var(--text); font-family:'Segoe UI',Roboto,Arial,sans-serif; }
+        .app-shell{ display:flex; min-height:100vh; }
+        .sidebar{ width:262px; flex:0 0 262px; background:#fff; border-right:1px solid var(--border); padding:22px 18px; }
+        .brand{ padding:0 22px 54px; }
+        .brand-name{ color:#0b45a0; font-size:24px; line-height:1; font-weight:800; letter-spacing:-0.3px; }
+        .brand-subtitle{ margin-top:8px; color:#64748b; font-weight:700; font-size:13px; }
+        .menu{ display:flex; flex-direction:column; gap:8px; }
+        .menu-link{ display:flex; align-items:center; gap:18px; min-height:52px; padding:0 12px; border-radius:10px; color:#475569; text-decoration:none; font-size:14px; font-weight:700; transition:.18s ease; }
+        .menu-link:hover{ background:#f1f5f9; color:#0f3f91; }
+        .menu-link.active{ background:#e9eef6; color:#0d3f91; }
+        .menu-link i{ width:28px; font-size:27px; color:#8ba0bd; text-align:center; }
+        .menu-link.active i{ color:#9aabc3; }
+        .menu-link .chevron{ margin-left:auto; width:auto; font-size:16px; color:#7c8da6; }
+        .main{ flex:1; min-width:0; }
+        .topbar{ height:78px; background:#fff; border-bottom:1px solid var(--border); display:flex; align-items:center; justify-content:space-between; padding:0 42px 0 34px; }
+        .page-heading{ margin:0; color:#0b0b0b; font-size:31px; font-weight:500; letter-spacing:-0.5px; }
+        .user-profile{ display:flex; align-items:center; gap:20px; }
+        .avatar{ width:64px; height:64px; border-radius:50%; background:#e1e7f0; display:grid; place-items:center; color:#8da0ba; font-size:42px; }
+        .user-name{ margin:0; font-size:13px; font-weight:800; }
+        .user-role{ margin-top:5px; color:#006fe8; font-size:12px; font-weight:800; }
+        .content{ padding:30px 34px 46px 42px; }
+        .metrics{ display:grid; grid-template-columns:1fr 1fr 1.05fr; gap:18px; max-width:872px; margin:0 auto 30px; }
+        .metric-card{ min-height:106px; background:#fff; border:1px solid #dfe7f2; border-radius:10px; padding:20px; box-shadow:0 1px 2px rgba(16,24,40,.02); }
+        .metric-card.warning{ border-color:#ffd966; background:#fff9e8; display:flex; align-items:center; justify-content:space-between; }
+        .metric-label{ margin:0 0 12px; color:#667085; font-size:12px; font-weight:800; text-transform:uppercase; }
+        .metric-card.warning .metric-label{ color:#91400e; }
+        .metric-value{ margin:0; font-size:22px; font-weight:800; }
+        .metric-card.warning .metric-value{ color:#d97706; }
+        .metric-icon{ width:40px; height:40px; border-radius:50%; background:#ffe7a3; color:#d97706; display:grid; place-items:center; font-size:20px; font-weight:900; }
+        .usage-row{ display:flex; align-items:center; gap:18px; }
+        .usage-value{ min-width:84px; font-size:23px; font-weight:800; }
+        .progress-track{ flex:1; height:12px; border-radius:999px; background:#e0e4eb; overflow:hidden; }
+        .progress-fill{ height:100%; border-radius:999px; background:#3b82f6; }
+        .toolbar{ background:#fff; border:1px solid #dfe7f2; border-radius:10px; padding:16px 20px; margin-bottom:18px; display:flex; gap:12px; align-items:center; flex-wrap:wrap; }
+        .toolbar .form-control,.toolbar .form-select{ height:40px; border-color:#d7dfec; font-size:13px; }
+        .toolbar .search-control{ flex:1 1 260px; max-width:420px; }
+        .btn-main{ height:40px; border:0; border-radius:8px; padding:0 14px; background:var(--primary); color:white; font-size:13px; font-weight:800; display:inline-flex; align-items:center; gap:8px; }
+        .btn-main:hover{ background:var(--primary-dark); color:white; }
+        .btn-soft{ height:40px; border:1px solid #d7dfec; border-radius:8px; padding:0 13px; background:#fff; color:#334155; font-size:13px; font-weight:800; display:inline-flex; align-items:center; gap:8px; }
+        .btn-soft:hover{ background:#f8fafc; }
+        .log-panel{ background:#fff; border:1px solid #dfe7f2; border-radius:11px; padding:22px 22px 12px; min-height:510px; }
+        .panel-title{ margin:0 0 26px; font-size:14px; font-weight:800; color:#1f2937; }
+        .incident-table{ width:100%; border-collapse:collapse; font-size:12px; }
+        .incident-table thead th{ height:48px; background:#f8fafc; color:#111827; font-weight:800; padding:0 18px; white-space:nowrap; }
+        .incident-table tbody td{ height:60px; padding:0 18px; border-bottom:1px solid #eef2f7; color:#475569; vertical-align:middle; }
+        .incident-desc{ max-width:330px; white-space:nowrap; overflow:hidden; text-overflow:ellipsis; }
+        .incident-desc.danger-text{ color:#ff2f2f; }
+        .badge-level,.badge-status{ min-width:104px; display:inline-flex; justify-content:center; align-items:center; height:30px; padding:0 14px; border-radius:7px; font-weight:800; font-size:12px; }
+        .level-warning{ background:#ffedb3; color:#d97706; }
+        .level-danger{ background:#ffd8d8; color:#dc2626; }
+        .level-info{ background:#dbeafe; color:#1d4ed8; }
+        .status-open{ background:#f4f6fa; color:#64748b; border:1px solid #d5dce8; }
+        .status-processing{ background:#dce4ff; color:#3844e8; border:1px solid #c6d2ff; }
+        .status-resolved{ background:#d1fae5; color:#047857; border:1px solid #a7f3d0; }
+        .action-btn{ width:34px; height:34px; border:0; border-radius:8px; background:transparent; color:#475569; display:grid; place-items:center; font-size:20px; }
+        .action-btn:hover{ background:#eef4ff; color:#0f60db; }
+        .action-menu{ position:absolute; z-index:1050; min-width:210px; background:#fff; border:1px solid #e5e7eb; border-radius:12px; box-shadow:0 16px 36px rgba(15,23,42,.16); overflow:hidden; display:none; }
+        .action-menu button{ width:100%; border:0; background:#fff; padding:12px 14px; display:flex; gap:10px; align-items:center; color:#111827; font-size:13px; font-weight:700; text-align:left; }
+        .action-menu button:hover{ background:#f8fafc; }
+        .action-menu .danger{ color:#b91c1c; }
+        .pagination-wrap{ display:flex; align-items:center; justify-content:center; gap:6px; padding-top:12px; }
+        .page-button{ min-width:26px; height:26px; border:1px solid #111827; background:#fff; font-size:12px; }
+        .page-button.active{ background:#050505; color:#fff; }
+        .page-arrow{ border:0; background:transparent; font-weight:800; }
+        .modal-header-custom{ border-bottom:1px solid #e5e7eb; padding:18px 22px; display:flex; align-items:center; gap:12px; }
+        .modal-header-custom h5{ margin:0; font-size:17px; font-weight:800; }
+        .modal-body-custom{ padding:22px; }
+        .modal-footer-custom{ border-top:1px solid #e5e7eb; padding:16px 22px; display:flex; justify-content:flex-end; gap:10px; }
+        .icon-box{ width:42px; height:42px; border-radius:12px; display:grid; place-items:center; font-size:18px; background:#e0f2fe; color:#0369a1; }
+        .form-label{ font-size:13px; font-weight:800; color:#111827; }
+        .detail-grid{ display:grid; grid-template-columns:1fr 1fr; gap:14px; }
+        .detail-item{ background:#f8fafc; border:1px solid #edf2f7; border-radius:10px; padding:12px; }
+        .detail-label{ display:block; color:#667085; font-size:12px; font-weight:700; margin-bottom:6px; }
+        .detail-value{ color:#111827; font-weight:800; font-size:14px; }
+        .toast-success{ position:fixed; top:20px; right:20px; z-index:9999; background:#10b981; color:white; border-radius:8px; padding:14px 18px; box-shadow:0 14px 30px rgba(15,23,42,.18); font-weight:800; animation:slideIn .25s ease-out; }
+        @keyframes slideIn{ from{ transform:translateX(380px); opacity:0; } to{ transform:translateX(0); opacity:1; } }
+        @media(max-width:992px){
+            .app-shell{ display:block; }
+            .sidebar{ width:100%; min-height:auto; border-right:0; border-bottom:1px solid var(--border); }
+            .brand{ padding-bottom:22px; }
+            .topbar{ padding:14px 18px; height:auto; }
+            .content{ padding:22px 16px; }
+            .metrics{ grid-template-columns:1fr; max-width:none; }
+            .detail-grid{ grid-template-columns:1fr; }
+        }
+    </style>
+</head>
+<body>
+<div class="app-shell">
+    <aside class="sidebar">
+        <div class="brand">
+            <div class="brand-name">HOSPITAL-ÔII</div>
+            <div class="brand-subtitle">HỆ THỐNG Y TẾ TÍCH HỢP</div>
+        </div>
+        <nav class="menu">
+            <a class="menu-link" href="dashboard.html"><i class="bi bi-house-door"></i><span>Tổng quan</span></a>
+            <a class="menu-link" href="account-management.html"><i class="bi bi-shield"></i><span>Phân quyền người dùng</span><i class="bi bi-chevron-down chevron"></i></a>
+            <a class="menu-link active" href="incident-management.html"><i class="bi bi-exclamation-triangle"></i><span>Xử lý sự cố</span></a>
+            <a class="menu-link" href="#"><i class="bi bi-gear"></i><span>Cài đặt</span></a>
+        </nav>
+    </aside>
+
+    <main class="main">
+        <header class="topbar">
+            <h1 class="page-heading">Xử lý sự cố</h1>
+            <div class="user-profile">
+                <div class="avatar"><i class="bi bi-person-fill"></i></div>
+                <div>
+                    <p class="user-name">Nguyễn Văn A</p>
+                    <div class="user-role">Admin</div>
+                </div>
+            </div>
+        </header>
+
+        <section class="content">
+            <div class="metrics">
+                <div class="metric-card warning">
+                    <div>
+                        <p class="metric-label">Log sự cố chưa xử lý</p>
+                        <p class="metric-value"><span id="openCount">2</span> Cảnh báo</p>
+                    </div>
+                    <div class="metric-icon">!</div>
+                </div>
+                <div class="metric-card">
+                    <p class="metric-label">Tải lượng CPU</p>
+                    <div class="usage-row">
+                        <div class="usage-value" id="cpuValue">65%</div>
+                        <div class="progress-track"><div class="progress-fill" id="cpuBar" style="width:65%"></div></div>
+                    </div>
+                </div>
+                <div class="metric-card">
+                    <p class="metric-label">Dung lượng RAM</p>
+                    <p class="metric-value"><span id="ramValue">4.2 GB</span> <span style="color:#667085;font-size:14px;">/ 8GB</span></p>
+                </div>
+            </div>
+
+            <div class="toolbar">
+                <input id="searchInput" class="form-control search-control" type="text" placeholder="Tìm mô tả, thành phần, mã sự cố...">
+                <select id="levelFilter" class="form-select" style="max-width:170px;">
+                    <option value="">Tất cả mức độ</option>
+                    <option value="warning">Cảnh báo</option>
+                    <option value="danger">Lỗi hệ thống</option>
+                    <option value="info">Thông tin</option>
+                </select>
+                <select id="statusFilter" class="form-select" style="max-width:170px;">
+                    <option value="">Tất cả trạng thái</option>
+                    <option value="open">Chưa xử lý</option>
+                    <option value="processing">Đang xử lý</option>
+                    <option value="resolved">Đã xử lý</option>
+                </select>
+                <button class="btn-soft" id="refreshBtn"><i class="bi bi-arrow-clockwise"></i>Làm mới</button>
+                <button class="btn-main" id="addIncidentBtn"><i class="bi bi-plus-lg"></i>Ghi nhận sự cố</button>
+                <button class="btn-soft" id="exportBtn"><i class="bi bi-download"></i>Xuất log</button>
+            </div>
+
+            <div class="log-panel">
+                <h2 class="panel-title">Log sự cố gần đây</h2>
+                <div class="table-responsive">
+                    <table class="incident-table">
+                        <thead>
+                            <tr>
+                                <th>Mức độ</th>
+                                <th>Thời gian</th>
+                                <th>Mô tả sự cố</th>
+                                <th>Thành phần</th>
+                                <th>Trạng thái</th>
+                                <th>Tác vụ</th>
+                            </tr>
+                        </thead>
+                        <tbody id="incidentBody"></tbody>
+                    </table>
+                </div>
+            </div>
+
+            <div class="pagination-wrap">
+                <button class="page-arrow" id="prevPage">&lt;</button>
+                <button class="page-button active" data-page="1">1</button>
+                <button class="page-button" data-page="2">2</button>
+                <button class="page-arrow" id="nextPage">&gt;</button>
+            </div>
+        </section>
+    </main>
+</div>
+
+<div id="actionMenu" class="action-menu">
+    <button data-action="view"><i class="bi bi-eye"></i>Xem chi tiết</button>
+    <button data-action="process"><i class="bi bi-play-circle"></i>Chuyển đang xử lý</button>
+    <button data-action="resolve"><i class="bi bi-check2-circle"></i>Đánh dấu đã xử lý</button>
+    <button data-action="assign"><i class="bi bi-person-plus"></i>Giao kỹ thuật viên</button>
+    <button data-action="note"><i class="bi bi-journal-text"></i>Thêm ghi chú</button>
+    <button class="danger" data-action="delete"><i class="bi bi-trash"></i>Xóa log</button>
+</div>
+
+<div class="modal fade" id="detailModal" tabindex="-1" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered modal-lg">
+        <div class="modal-content" style="border:0;border-radius:16px;">
+            <div class="modal-header-custom">
+                <span class="icon-box"><i class="bi bi-activity"></i></span>
+                <h5>Chi tiết sự cố</h5>
+            </div>
+            <div class="modal-body-custom">
+                <div class="detail-grid">
+                    <div class="detail-item"><span class="detail-label">Mã sự cố</span><span class="detail-value" id="detailCode"></span></div>
+                    <div class="detail-item"><span class="detail-label">Thời gian</span><span class="detail-value" id="detailTime"></span></div>
+                    <div class="detail-item"><span class="detail-label">Mức độ</span><span class="detail-value" id="detailLevel"></span></div>
+                    <div class="detail-item"><span class="detail-label">Thành phần</span><span class="detail-value" id="detailComponent"></span></div>
+                    <div class="detail-item"><span class="detail-label">Trạng thái</span><span class="detail-value" id="detailStatus"></span></div>
+                    <div class="detail-item"><span class="detail-label">Người phụ trách</span><span class="detail-value" id="detailOwner"></span></div>
+                </div>
+                <div class="detail-item mt-3">
+                    <span class="detail-label">Mô tả</span>
+                    <div class="detail-value" id="detailDescription"></div>
+                </div>
+                <div class="detail-item mt-3">
+                    <span class="detail-label">Ghi chú xử lý</span>
+                    <div class="detail-value" id="detailNote"></div>
+                </div>
+            </div>
+            <div class="modal-footer-custom">
+                <button type="button" class="btn-soft" data-bs-dismiss="modal">Đóng</button>
+                <button type="button" class="btn-main" id="detailResolveBtn"><i class="bi bi-check2"></i>Đánh dấu đã xử lý</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="modal fade" id="incidentModal" tabindex="-1" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content" style="border:0;border-radius:16px;">
+            <div class="modal-header-custom">
+                <span class="icon-box"><i class="bi bi-plus-circle"></i></span>
+                <h5 id="incidentModalTitle">Ghi nhận sự cố</h5>
+            </div>
+            <div class="modal-body-custom">
+                <form id="incidentForm">
+                    <div class="mb-3">
+                        <label class="form-label" for="incidentLevel">Mức độ</label>
+                        <select id="incidentLevel" class="form-select" required>
+                            <option value="warning">Cảnh báo</option>
+                            <option value="danger">Lỗi hệ thống</option>
+                            <option value="info">Thông tin</option>
+                        </select>
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label" for="incidentComponent">Thành phần</label>
+                        <select id="incidentComponent" class="form-select" required>
+                            <option>Bệnh phần</option>
+                            <option>Cấp dịch</option>
+                            <option>CSDL</option>
+                            <option>Đồng bộ dữ liệu</option>
+                            <option>Xác thực</option>
+                        </select>
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label" for="incidentDescription">Mô tả sự cố</label>
+                        <textarea id="incidentDescription" class="form-control" rows="4" placeholder="Nhập mô tả sự cố..." required></textarea>
+                    </div>
+                </form>
+            </div>
+            <div class="modal-footer-custom">
+                <button type="button" class="btn-soft" data-bs-dismiss="modal">Hủy</button>
+                <button type="button" class="btn-main" id="saveIncidentBtn">Lưu sự cố</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="modal fade" id="assignModal" tabindex="-1" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content" style="border:0;border-radius:16px;">
+            <div class="modal-header-custom">
+                <span class="icon-box"><i class="bi bi-person-gear"></i></span>
+                <h5>Giao kỹ thuật viên</h5>
+            </div>
+            <div class="modal-body-custom">
+                <label class="form-label" for="assigneeSelect">Người phụ trách</label>
+                <select id="assigneeSelect" class="form-select">
+                    <option>Trần Minh Khang</option>
+                    <option>Phạm Hoài An</option>
+                    <option>Lê Quốc Bảo</option>
+                </select>
+            </div>
+            <div class="modal-footer-custom">
+                <button type="button" class="btn-soft" data-bs-dismiss="modal">Hủy</button>
+                <button type="button" class="btn-main" id="saveAssignBtn">Giao việc</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="modal fade" id="noteModal" tabindex="-1" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content" style="border:0;border-radius:16px;">
+            <div class="modal-header-custom">
+                <span class="icon-box"><i class="bi bi-pencil-square"></i></span>
+                <h5>Ghi chú xử lý</h5>
+            </div>
+            <div class="modal-body-custom">
+                <textarea id="noteInput" class="form-control" rows="5" placeholder="Nhập ghi chú xử lý..."></textarea>
+            </div>
+            <div class="modal-footer-custom">
+                <button type="button" class="btn-soft" data-bs-dismiss="modal">Hủy</button>
+                <button type="button" class="btn-main" id="saveNoteBtn">Lưu ghi chú</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="modal fade" id="deleteModal" tabindex="-1" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content" style="border:0;border-radius:16px;">
+            <div class="modal-header-custom">
+                <span class="icon-box" style="background:#fee2e2;color:#b91c1c;"><i class="bi bi-exclamation-circle"></i></span>
+                <h5>Xóa log sự cố?</h5>
+            </div>
+            <div class="modal-body-custom">
+                <p class="mb-1">Log đã xóa sẽ không hiển thị trong danh sách xử lý.</p>
+                <p class="mb-0 text-danger fw-bold" id="deleteTarget"></p>
+            </div>
+            <div class="modal-footer-custom">
+                <button type="button" class="btn-soft" data-bs-dismiss="modal">Hủy</button>
+                <button type="button" class="btn-main" id="confirmDeleteBtn" style="background:#ef4444;">Xóa log</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+<script>
+    const levelMap = {
+        warning: { text:'Cảnh báo', className:'level-warning' },
+        danger: { text:'Lỗi hệ thống', className:'level-danger' },
+        info: { text:'Thông tin', className:'level-info' }
+    };
+    const statusMap = {
+        open: { text:'Chưa xử lý', className:'status-open' },
+        processing: { text:'Đang xử lý', className:'status-processing' },
+        resolved: { text:'Đã xử lý', className:'status-resolved' }
+    };
+    let incidents = [
+        { code:'INC-20240520-01', level:'warning', time:'2024-05-20 15:33', description:'Quản lý danh mục khoa danh mục bệnh viện cần đồng bộ lại dữ liệu.', component:'Bệnh phần', status:'open', owner:'Chưa giao', note:'Chờ kiểm tra bảng danh mục khoa.' },
+        { code:'INC-20240520-02', level:'danger', time:'2024-05-20 15:38', description:'Connectivity issue sub-domain redis.server.internal không phản hồi.', component:'Cấp dịch', status:'processing', owner:'Trần Minh Khang', note:'Đang kiểm tra kết nối Redis và health-check.' },
+        { code:'INC-20240520-03', level:'info', time:'2024-05-20 15:41', description:'Tác vụ sao lưu dữ liệu hoàn tất nhưng thời gian chạy cao hơn trung bình.', component:'CSDL', status:'resolved', owner:'Phạm Hoài An', note:'Đã tối ưu lịch backup sau giờ thấp điểm.' },
+        { code:'INC-20240520-04', level:'warning', time:'2024-05-20 15:49', description:'API đồng bộ hồ sơ bệnh án trả về nhiều phản hồi 429.', component:'Đồng bộ dữ liệu', status:'open', owner:'Chưa giao', note:'Cần giảm tần suất retry.' }
+    ];
+    let currentPage = 1;
+    let currentIncidentCode = null;
+    const rowsPerPage = 2;
+    const actionMenu = document.getElementById('actionMenu');
+
+    function getFilteredIncidents(){
+        const query = document.getElementById('searchInput').value.trim().toLowerCase();
+        const level = document.getElementById('levelFilter').value;
+        const status = document.getElementById('statusFilter').value;
+        return incidents.filter(item => {
+            const haystack = [item.code,item.description,item.component,item.owner,item.note].join(' ').toLowerCase();
+            return (!query || haystack.includes(query)) && (!level || item.level === level) && (!status || item.status === status);
+        });
+    }
+
+    function renderIncidents(){
+        const filtered = getFilteredIncidents();
+        const maxPage = Math.max(1, Math.ceil(filtered.length / rowsPerPage));
+        currentPage = Math.min(currentPage, maxPage);
+        const start = (currentPage - 1) * rowsPerPage;
+        const pageItems = filtered.slice(start, start + rowsPerPage);
+        const body = document.getElementById('incidentBody');
+        body.innerHTML = pageItems.map(item => `
+            <tr data-code="${item.code}">
+                <td><span class="badge-level ${levelMap[item.level].className}">${levelMap[item.level].text}</span></td>
+                <td>${item.time}</td>
+                <td><div class="incident-desc ${item.level === 'danger' ? 'danger-text' : ''}" title="${item.description}">${item.description}</div></td>
+                <td>${item.component}</td>
+                <td><span class="badge-status ${statusMap[item.status].className}">${statusMap[item.status].text}</span></td>
+                <td><button class="action-btn" data-code="${item.code}" aria-label="Mở tác vụ"><i class="bi bi-three-dots"></i></button></td>
+            </tr>
+        `).join('');
+        if (!pageItems.length) {
+            body.innerHTML = '<tr><td colspan="6" class="text-center py-5 text-muted">Không có sự cố phù hợp bộ lọc.</td></tr>';
+        }
+        document.querySelectorAll('.page-button').forEach(btn => btn.classList.toggle('active', Number(btn.dataset.page) === currentPage));
+        document.getElementById('openCount').textContent = incidents.filter(item => item.status !== 'resolved').length;
+    }
+
+    function findCurrent(){
+        return incidents.find(item => item.code === currentIncidentCode);
+    }
+
+    function openDetail(code){
+        currentIncidentCode = code;
+        const item = findCurrent();
+        if (!item) return;
+        document.getElementById('detailCode').textContent = item.code;
+        document.getElementById('detailTime').textContent = item.time;
+        document.getElementById('detailLevel').textContent = levelMap[item.level].text;
+        document.getElementById('detailComponent').textContent = item.component;
+        document.getElementById('detailStatus').textContent = statusMap[item.status].text;
+        document.getElementById('detailOwner').textContent = item.owner;
+        document.getElementById('detailDescription').textContent = item.description;
+        document.getElementById('detailNote').textContent = item.note || 'Chưa có ghi chú.';
+        new bootstrap.Modal(document.getElementById('detailModal')).show();
+    }
+
+    function updateStatus(status){
+        const item = findCurrent();
+        if (!item) return;
+        item.status = status;
+        if (status === 'processing' && item.owner === 'Chưa giao') item.owner = 'Trần Minh Khang';
+        renderIncidents();
+        showToast(status === 'resolved' ? 'Đã đánh dấu sự cố là đã xử lý.' : 'Đã chuyển sự cố sang trạng thái đang xử lý.');
+    }
+
+    function showToast(message){
+        const toast = document.createElement('div');
+        toast.className = 'toast-success';
+        toast.textContent = message;
+        document.body.appendChild(toast);
+        setTimeout(() => {
+            toast.style.animation = 'slideIn .25s ease-out reverse';
+            setTimeout(() => toast.remove(), 260);
+        }, 2400);
+    }
+
+    document.getElementById('incidentBody').addEventListener('click', event => {
+        const button = event.target.closest('.action-btn');
+        if (!button) return;
+        currentIncidentCode = button.dataset.code;
+        const rect = button.getBoundingClientRect();
+        actionMenu.style.top = `${rect.bottom + window.scrollY + 8}px`;
+        actionMenu.style.left = `${rect.left + window.scrollX - 176}px`;
+        actionMenu.style.display = 'block';
+    });
+
+    actionMenu.addEventListener('click', event => {
+        const button = event.target.closest('button[data-action]');
+        if (!button) return;
+        const action = button.dataset.action;
+        actionMenu.style.display = 'none';
+        if (action === 'view') openDetail(currentIncidentCode);
+        if (action === 'process') updateStatus('processing');
+        if (action === 'resolve') updateStatus('resolved');
+        if (action === 'assign') {
+            const item = findCurrent();
+            document.getElementById('assigneeSelect').value = item.owner === 'Chưa giao' ? 'Trần Minh Khang' : item.owner;
+            new bootstrap.Modal(document.getElementById('assignModal')).show();
+        }
+        if (action === 'note') {
+            document.getElementById('noteInput').value = findCurrent()?.note || '';
+            new bootstrap.Modal(document.getElementById('noteModal')).show();
+        }
+        if (action === 'delete') {
+            document.getElementById('deleteTarget').textContent = findCurrent()?.code || '';
+            new bootstrap.Modal(document.getElementById('deleteModal')).show();
+        }
+    });
+
+    document.addEventListener('click', event => {
+        if (!event.target.closest('#actionMenu') && !event.target.closest('.action-btn')) actionMenu.style.display = 'none';
+    });
+    ['searchInput','levelFilter','statusFilter'].forEach(id => {
+        document.getElementById(id).addEventListener('input', () => { currentPage = 1; renderIncidents(); });
+        document.getElementById(id).addEventListener('change', () => { currentPage = 1; renderIncidents(); });
+    });
+    document.querySelectorAll('.page-button').forEach(btn => btn.addEventListener('click', () => {
+        currentPage = Number(btn.dataset.page);
+        renderIncidents();
+    }));
+    document.getElementById('prevPage').addEventListener('click', () => { currentPage = Math.max(1, currentPage - 1); renderIncidents(); });
+    document.getElementById('nextPage').addEventListener('click', () => { currentPage = Math.min(2, currentPage + 1); renderIncidents(); });
+    document.getElementById('refreshBtn').addEventListener('click', () => {
+        const cpu = 58 + Math.floor(Math.random() * 20);
+        const ram = (3.8 + Math.random() * 1.2).toFixed(1);
+        document.getElementById('cpuValue').textContent = `${cpu}%`;
+        document.getElementById('cpuBar').style.width = `${cpu}%`;
+        document.getElementById('ramValue').textContent = `${ram} GB`;
+        showToast('Đã làm mới trạng thái hệ thống.');
+    });
+    document.getElementById('exportBtn').addEventListener('click', () => showToast('Đã xuất log sự cố mẫu.'));
+    document.getElementById('addIncidentBtn').addEventListener('click', () => {
+        document.getElementById('incidentForm').reset();
+        new bootstrap.Modal(document.getElementById('incidentModal')).show();
+    });
+    document.getElementById('saveIncidentBtn').addEventListener('click', () => {
+        const form = document.getElementById('incidentForm');
+        if (!form.reportValidity()) return;
+        const now = new Date();
+        const pad = value => String(value).padStart(2,'0');
+        incidents.unshift({
+            code:`INC-${now.getFullYear()}${pad(now.getMonth()+1)}${pad(now.getDate())}-${pad(incidents.length + 1)}`,
+            level:document.getElementById('incidentLevel').value,
+            time:`${now.getFullYear()}-${pad(now.getMonth()+1)}-${pad(now.getDate())} ${pad(now.getHours())}:${pad(now.getMinutes())}`,
+            description:document.getElementById('incidentDescription').value.trim(),
+            component:document.getElementById('incidentComponent').value,
+            status:'open',
+            owner:'Chưa giao',
+            note:'Sự cố mới được ghi nhận.'
+        });
+        bootstrap.Modal.getInstance(document.getElementById('incidentModal')).hide();
+        currentPage = 1;
+        renderIncidents();
+        showToast('Đã ghi nhận sự cố mới.');
+    });
+    document.getElementById('saveAssignBtn').addEventListener('click', () => {
+        const item = findCurrent();
+        if (!item) return;
+        item.owner = document.getElementById('assigneeSelect').value;
+        item.status = 'processing';
+        bootstrap.Modal.getInstance(document.getElementById('assignModal')).hide();
+        renderIncidents();
+        showToast('Đã giao kỹ thuật viên xử lý.');
+    });
+    document.getElementById('saveNoteBtn').addEventListener('click', () => {
+        const item = findCurrent();
+        if (!item) return;
+        item.note = document.getElementById('noteInput').value.trim() || 'Chưa có ghi chú.';
+        bootstrap.Modal.getInstance(document.getElementById('noteModal')).hide();
+        renderIncidents();
+        showToast('Đã lưu ghi chú xử lý.');
+    });
+    document.getElementById('confirmDeleteBtn').addEventListener('click', () => {
+        incidents = incidents.filter(item => item.code !== currentIncidentCode);
+        bootstrap.Modal.getInstance(document.getElementById('deleteModal')).hide();
+        renderIncidents();
+        showToast('Đã xóa log sự cố.');
+    });
+    document.getElementById('detailResolveBtn').addEventListener('click', () => {
+        updateStatus('resolved');
+        const modal = bootstrap.Modal.getInstance(document.getElementById('detailModal'));
+        if (modal) modal.hide();
+    });
+
+    renderIncidents();
+</script>
+</body>
+</html>

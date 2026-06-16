@@ -112,6 +112,58 @@
         .toast-success{ position:fixed; top:20px; right:20px; background:#10b981; color:white; padding:14px 20px; border-radius:8px; box-shadow:0 4px 12px rgba(0,0,0,0.15); z-index:9999; animation:slideIn 0.3s ease-out; display:flex; align-items:center; gap:10px; font-weight:500; }
         .toast-success::before{ content:'✓'; font-size:20px; font-weight:bold; }
         @keyframes slideIn{ from{ transform:translateX(400px); opacity:0; } to{ transform:translateX(0); opacity:1; } }
+    
+        /* Unified admin shell - matched to incident-management.html */
+        :root{ --primary-dark:#0b4ed1; --bg:#f5f7fb; --border:#e5edf7; --text:#111827; --muted:#667085; }
+        *{ box-sizing:border-box; }
+        body{ margin:0; background:var(--bg); color:var(--text); }
+        .container-fluid{ max-width:none; padding:0; }
+        .container-fluid > .row{ margin:0; display:flex; min-height:100vh; }
+        .sidebar{ width:262px!important; flex:0 0 262px; max-width:262px; min-height:100vh; background:#fff; border-right:1px solid var(--border); padding:22px 18px!important; }
+        .sidebar > .px-3{ padding:0!important; }
+        .sidebar .d-flex.align-items-center.mb-4{ display:block!important; padding:0 22px 54px; margin:0!important; }
+        .sidebar .d-flex.align-items-center.mb-4 > div:first-child{ display:none!important; }
+        .sidebar .brand{ color:#0b45a0; font-size:24px; line-height:1; font-weight:800; letter-spacing:-0.3px; }
+        .sidebar .brand + .text-muted{ margin-top:8px; color:#64748b!important; font-weight:700; font-size:13px!important; }
+        .menu{ display:flex; flex-direction:column; gap:8px; }
+        .menu .nav-item{ margin-bottom:0!important; }
+        .menu .nav-link{ min-height:52px; padding:0 12px; border-radius:10px; color:#475569; display:flex; align-items:center; gap:18px; font-size:14px; font-weight:700; text-decoration:none; }
+        .menu .nav-link:hover{ background:#f1f5f9; color:#0f3f91; }
+        .menu .nav-link.active{ background:#e9eef6; color:#0d3f91; font-weight:800; }
+        .menu .bi{ width:28px; font-size:27px; color:#8ba0bd; text-align:center; }
+        .menu .nav-link.active .bi{ color:#9aabc3; }
+        .menu ul.nav{ padding-left:46px!important; margin-top:8px!important; gap:4px; }
+        .menu ul.nav .nav-link{ min-height:34px; padding:0 8px; font-size:13px!important; gap:8px; border-radius:8px; }
+        main.col-md-10{ flex:1; width:auto; max-width:none; min-width:0; padding:0!important; }
+        main > header{ height:78px; background:#fff; border-bottom:1px solid var(--border); display:flex; align-items:center; justify-content:space-between; padding:0 42px 0 34px; margin:0!important; }
+        .page-heading{ margin:0; color:#0b0b0b; font-size:31px; font-weight:500; letter-spacing:-0.5px; }
+        .user-profile{ display:flex; align-items:center; gap:20px; }
+        .user-profile .avatar, header .avatar{ width:64px; height:64px; border-radius:50%; background:#e1e7f0; display:grid; place-items:center; color:#8da0ba; font-size:42px; }
+        .user-name{ margin:0; font-size:13px; font-weight:800; }
+        .user-role{ margin-top:5px; color:#006fe8; font-size:12px; font-weight:800; }
+        .page-title{ display:none; }
+        main > header + *{ margin-top:0; }
+        main{ background:var(--bg); }
+        main > .row, main > .large-panel, main > .filter-bar, main > .table-container, main > .role-section, main > .alert-conflict, main > .role-tools{ margin-left:42px; margin-right:34px; }
+        main > .row:first-of-type, main > .filter-bar:first-of-type, main > .role-tools:first-of-type{ margin-top:30px; }
+        .filter-bar, .role-tools{ background:#fff; border:1px solid #dfe7f2; border-radius:10px; padding:16px 20px; margin-bottom:18px; display:flex; gap:12px; align-items:center; flex-wrap:wrap; box-shadow:none; }
+        .filter-bar input, .filter-bar select, .role-tools .form-control{ height:40px; border-color:#d7dfec; border-radius:8px; font-size:13px; }
+        .table-container, .role-section, .permission-section, .large-panel{ background:#fff; border:1px solid #dfe7f2; border-radius:11px; box-shadow:none; }
+        .table-container{ padding:22px; }
+        .role-section{ padding:22px; }
+        .account-table th, .permission-table th, .audit-table th{ background:#f8fafc!important; color:#111827!important; font-weight:800!important; }
+        .account-table td, .permission-table td, .audit-table td{ color:#475569; }
+        .pagination-container button{ min-width:26px; height:26px; border:1px solid #111827; border-radius:0; padding:0 8px; font-size:12px; }
+        .pagination-container button.active{ background:#050505; color:#fff; border-color:#050505; }
+        .btn-add-account, .btn-add-role, .btn-submit, .btn-save-permission{ background:var(--primary); border:0; border-radius:8px; color:#fff; font-weight:800; }
+        .btn-add-account:hover, .btn-add-role:hover, .btn-submit:hover, .btn-save-permission:hover{ background:var(--primary-dark); color:#fff; }
+        @media(max-width:992px){
+            .container-fluid > .row{ display:block; }
+            .sidebar{ display:block!important; width:100%!important; max-width:none; min-height:auto; border-right:0; border-bottom:1px solid var(--border); }
+            .sidebar .d-flex.align-items-center.mb-4{ padding-bottom:22px; }
+            main > header{ padding:14px 18px; height:auto; }
+            main > .row, main > .large-panel, main > .filter-bar, main > .table-container, main > .role-section, main > .alert-conflict, main > .role-tools{ margin-left:16px; margin-right:16px; }
+        }
     </style>
 </head>
 <body>
@@ -131,17 +183,16 @@
 
                 <ul class="nav flex-column menu">
                     <li class="nav-item mb-1"><a class="nav-link" href="dashboard.html"><i class="bi bi-house-door"></i> Tổng quan</a></li>
-                    <li class="nav-item mb-1"><a class="nav-link" href="#"><i class="bi bi-list-ul"></i> Quản lý danh mục</a></li>
                     <li class="nav-item mb-1">
                         <a class="nav-link active" href="#">
                             <i class="bi bi-shield-lock"></i> Phân quyền người dùng
                         </a>
                         <ul class="nav flex-column" style="padding-left:40px; margin-top:8px;">
-                            <li class="nav-item mb-1"><a class="nav-link" href="#" style="font-size:13px">• Tài khoản</a></li>
-                            <li class="nav-item mb-1"><a class="nav-link" href="#" style="font-size:13px">• Vai trò & Phân quyền</a></li>
+                            <li class="nav-item mb-1"><a class="nav-link" href="account-management.html" style="font-size:13px; color:var(--primary); font-weight:600;">• Tài khoản</a></li>
+                            <li class="nav-item mb-1"><a class="nav-link" href="roles-permissions.html" style="font-size:13px">• Vai trò & Phân quyền</a></li>
                         </ul>
                     </li>
-                    <li class="nav-item mb-1"><a class="nav-link" href="#"><i class="bi bi-exclamation-triangle"></i> Xử lý sự cố</a></li>
+                    <li class="nav-item mb-1"><a class="nav-link" href="incident-management.html"><i class="bi bi-exclamation-triangle"></i> Xử lý sự cố</a></li>
                     <li class="nav-item"><a class="nav-link" href="#"><i class="bi bi-gear"></i> Cài đặt</a></li>
                 </ul>
             </div>
@@ -150,17 +201,14 @@
         <!-- Main Content -->
         <main class="col-md-10 p-4">
             <!-- Header -->
-            <header class="d-flex justify-content-between align-items-center mb-4">
-                <div class="search-box d-flex align-items-center" style="width:60%">
-                    <i class="bi bi-search me-2 text-muted"></i>
-                    <input type="text" class="form-control border-0" placeholder="Tìm kiếm theo mã bệnh nhân...">
-                </div>
-                <div class="d-flex align-items-center">
-                    <div class="me-3 text-end user">
-                        <div>Nguyễn Văn A</div>
-                        <small class="text-muted">Admin</small>
+            <header>
+                <h1 class="page-heading">Danh sách tài khoản hệ thống</h1>
+                <div class="user-profile">
+                    <div class="avatar"><i class="bi bi-person-fill"></i></div>
+                    <div>
+                        <p class="user-name">Nguyễn Văn A</p>
+                        <div class="user-role">Admin</div>
                     </div>
-                    <div class="avatar"></div>
                 </div>
             </header>
 
