@@ -12,6 +12,11 @@ body {
     min-height: 100vh;
 }
 
+/* Định nghĩa style cho class icon filled đồng bộ hệ thống */
+.material-symbols-outlined.icon-filled {
+    font-variation-settings: 'FILL' 1, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+}
+
 /* --- SIDEBAR LEFT --- */
 aside {
     width: 260px;
@@ -25,6 +30,7 @@ aside {
     height: 100vh;
     left: 0;
     top: 0;
+    z-index: 100;
 }
 
 .logo-area {
@@ -78,10 +84,20 @@ aside {
     margin-bottom: 10px;
 }
 
+.sub-menu li {
+    padding: 4px 0;
+}
+
 .sub-menu a {
-    padding: 6px 0;
     font-size: 13px;
     color: #8a99ad;
+    text-decoration: none;
+    transition: color 0.2s;
+}
+
+.sub-menu a:hover, .sub-menu a.active-sub {
+    color: #1e62d0;
+    font-weight: 500;
 }
 
 .btn-logout {
@@ -231,7 +247,7 @@ header {
     letter-spacing: 0.5px;
 }
 
-/* Department Grid (Đã sửa để bọc chữ an toàn) */
+/* Department Grid */
 .dept-grid {
     display: grid;
     grid-template-columns: repeat(4, 1fr);
@@ -247,7 +263,7 @@ header {
     display: flex;
     align-items: center;
     gap: 16px;
-    overflow: hidden; /* Ngăn chữ tràn ra ngoài box */
+    overflow: hidden;
 }
 
 .dept-icon {
@@ -257,7 +273,7 @@ header {
     display: flex;
     align-items: center;
     justify-content: center;
-    flex-shrink: 0; /* Giữ icon không bị bóp méo khi text dài */
+    flex-shrink: 0;
 }
 
 .dept-icon .material-symbols-outlined {
@@ -280,7 +296,7 @@ header {
     color: #1e293b;
     margin-bottom: 2px;
     font-weight: 600;
-    white-space: nowrap; /* Giữ tiêu đề khoa trên 1 dòng thẳng thớ */
+    white-space: nowrap;
 }
 
 .dept-info p {
@@ -312,10 +328,12 @@ header {
     border-radius: 6px;
     background-color: #e2e8f0;
     object-fit: cover;
+    flex-shrink: 0;
 }
 
 .doctor-details {
     flex-grow: 1;
+    overflow: hidden; /* Tránh text dài phá vỡ cấu trúc box card */
 }
 
 .doc-title {
@@ -358,12 +376,16 @@ header {
     margin-bottom: 15px;
 }
 
+/* Cập nhật class tag-status xử lý hoàn toàn lỗi co chữ và nhảy dòng */
 .tag-status {
-    display: inline-block;
+    display: inline-flex;
+    align-items: center;
     padding: 4px 12px;
     border-radius: 20px;
     font-size: 11px;
     font-weight: bold;
+    white-space: nowrap; /* Đảm bảo text và dấu chấm luôn trên một hàng */
+    max-width: max-content; /* Ngăn chặn việc co thắt không cần thiết */
 }
 .tag-heavy { background-color: #fef2f2; color: #ef4444; }
 .tag-medium { background-color: #fff7ed; color: #f97316; }

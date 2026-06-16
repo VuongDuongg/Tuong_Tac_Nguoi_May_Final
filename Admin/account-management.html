@@ -69,6 +69,7 @@
         .action-popup-item-delete:hover{
             background:rgba(248,113,113,0.12);
         }
+
         .pagination-container{ display:flex; justify-content:center; align-items:center; gap:8px; margin-top:24px; }
         .pagination-container button{ border:1px solid #d1d5db; background:#fff; color:#374151; padding:6px 10px; border-radius:6px; cursor:pointer; }
         .pagination-container button.active{ background:#2b7cff; color:white; border-color:#2b7cff; }
@@ -202,7 +203,7 @@
         <main class="col-md-10 p-4">
             <!-- Header -->
             <header>
-                <h1 class="page-heading">Danh sách tài khoản hệ thống</h1>
+                <h1 class="page-heading">DANH SÁCH TÀI KHOẢN HỆ THỐNG</h1>
                 <div class="user-profile">
                     <div class="avatar"><i class="bi bi-person-fill"></i></div>
                     <div>
@@ -231,8 +232,14 @@
                     <option value="ngoai">Khoa ngoại</option>
                     <option value="san">Khoa sản</option>
                 </select>
-                <button class="btn btn-add-account"><i class="bi bi-plus"></i> Thêm tài khoản</button>
-                <button class="btn btn-delete-bulk"><i class="bi bi-trash"></i> Xóa hàng loạt</button>
+                <div class="action-buttons" style="margin-left:auto; display:flex; gap:10px;">
+                    <button class="btn btn-add-account">
+                        <i class="bi bi-plus"></i> Thêm tài khoản
+                    </button>
+                    <button class="btn btn-delete-bulk">
+                        <i class="bi bi-trash"></i> Xóa hàng loạt
+                    </button>
+                </div>
             </div>
 
             <!-- Table Container -->
@@ -682,7 +689,7 @@
             </div>
             <div class="modal-footer-custom">
                 <button type="button" class="btn-cancel" data-bs-dismiss="modal">Hủy thao tác</button>
-                <button type="button" class="btn-submit btn-delete-confirm" id="confirmDeleteBtn">Xác nhận xóa</button>
+                <button type="button" class="btn-warning btn-delete-confirm" id="confirmDeleteBtn">Xác nhận xóa</button>
             </div>
         </div>
     </div>

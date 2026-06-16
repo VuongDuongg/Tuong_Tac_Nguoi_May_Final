@@ -419,15 +419,27 @@
             return num.toLocaleString('vi-VN');
         }
 
-        // Hàm tính toán tổng chi phí dựa trên các mục ĐƯỢC CHỌN THỰC TẾ
+        // Hàm tính toán tổng chi phí và cập nhật hiệu ứng mờ dòng thuốc
         function reCalculateTotals() {
             if (!currentData) return;
 
             globalMedicineAmt = 0;
             const checkboxes = document.querySelectorAll('.med-checkbox');
             checkboxes.forEach(cb => {
+                const trRow = cb.closest('tr');
                 if (cb.checked) {
                     globalMedicineAmt += parseInt(cb.getAttribute('data-price'), 10);
+                    // Khi chọn: loại bỏ class mờ, hiển thị rõ ràng 100%
+                    if (trRow) {
+                        trRow.classList.remove('opacity-50');
+                        trRow.classList.add('opacity-100');
+                    }
+                } else {
+                    // Khi bỏ chọn: thêm class mờ đi 50%
+                    if (trRow) {
+                        trRow.classList.remove('opacity-100');
+                        trRow.classList.add('opacity-50');
+                    }
                 }
             });
 
@@ -471,12 +483,12 @@
                     });
                     document.getElementById('serviceTotal').innerText = formatVND(globalServiceAmt);
 
-                    // Kết xuất bảng đơn thuốc - Mặc định để trống checkbox để người dùng tự tích
+                    // Kết xuất bảng đơn thuốc - Mặc định mờ đi (opacity-50) do chưa được tích chọn ban đầu
                     const medicineBody = document.getElementById('medicineTableBody');
                     medicineBody.innerHTML = "";
                     currentData.medicines.forEach(item => {
                         medicineBody.innerHTML += `
-                            <tr class="border-b border-slate-50">
+                            <tr class="border-b border-slate-50 opacity-50 transition-all duration-200">
                                 <td class="py-3 text-center">
                                     <input type="checkbox" id="${item.id}" data-price="${item.price}" data-name="${item.name}"
                                            class="med-checkbox w-4 h-4 text-blue-600 bg-gray-100 border-slate-300 rounded focus:ring-blue-500 cursor-pointer">
@@ -500,7 +512,7 @@
         });
 
         // =================================================================
-        // LOGIC MỚI: KIỂM TRA TRẠNG THÁI CHECKBOX KHI NHẤN TIẾN HÀNH THANH TOÁN
+        // LOGIC KIỂM TRA TRẠNG THÁI CHECKBOX KHI NHẤN TIẾN HÀNH THANH TOÁN
         // =================================================================
         document.getElementById('btn-proceed').addEventListener('click', function() {
             const checkboxes = document.querySelectorAll('.med-checkbox');
@@ -515,7 +527,6 @@
 
             // Nếu người dùng TÍCH KHÔNG HẾT ô checkbox -> Bật Modal cảnh báo ngay lập tức
             if (uncheckedMedicines.length > 0) {
-                // Lấy tên thuốc đầu tiên chưa được tích (hoặc nối chuỗi tên thuốc) để hiển thị lên modal sinh động
                 document.getElementById('missingMedicineName').innerText = uncheckedMedicines[0];
                 document.getElementById('warningModal').classList.remove('hidden');
             } else {
