@@ -1,0 +1,431 @@
+/* --- Quy định chung --- */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: 'Inter', sans-serif;
+}
+
+body {
+    background-color: #f4f6f9;
+    color: #333333;
+    height: 100vh;
+}
+
+.container {
+    display: flex;
+    height: 100vh;
+    width: 100%;
+}
+
+/* --- SIDEBAR BÊN TRÁI --- */
+.sidebar {
+    width: 260px;
+    background-color: #ffffff;
+    border-right: 1px solid #e2e8f0;
+    display: flex;
+    flex-direction: column;
+    padding: 24px 16px;
+    justify-content: space-between;
+}
+
+.logo-container {
+    margin-bottom: 30px;
+    padding-left: 10px;
+}
+
+.logo-title {
+    color: #0b3a9e;
+    font-size: 22px;
+    font-weight: 700;
+    letter-spacing: 0.5px;
+}
+
+.logo-subtitle {
+    color: #718096;
+    font-size: 12px;
+    margin-top: 2px;
+}
+
+.menu {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    flex-grow: 1;
+}
+
+.menu-item {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 12px 16px;
+    color: #64748b;
+    text-decoration: none;
+    font-weight: 500;
+    font-size: 14px;
+    border-radius: 8px;
+    transition: all 0.2s ease;
+}
+
+.menu-item i {
+    font-size: 16px;
+    width: 20px;
+}
+
+.menu-item:hover {
+    background-color: #f1f5f9;
+    color: #1e293b;
+}
+
+/* Cấu trúc group con của phần đặt lịch */
+.menu-group {
+    display: flex;
+    flex-direction: column;
+}
+
+.menu-group-title {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 12px 16px;
+    color: #1e293b;
+    font-weight: 600;
+    font-size: 14px;
+}
+
+.menu-group-title i {
+    color: #0b3a9e;
+}
+
+.sub-menu {
+    padding-left: 20px;
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+    margin-top: 2px;
+}
+
+.sub-menu-title {
+    font-size: 12px;
+    color: #94a3b8;
+    padding-left: 16px;
+    margin-bottom: 4px;
+}
+
+.menu-item.active {
+    background-color: #edf2ff;
+    color: #0b3a9e;
+    font-weight: 600;
+}
+
+.btn-logout {
+    background-color: #0033a0;
+    color: #ffffff;
+    border: none;
+    padding: 12px;
+    border-radius: 6px;
+    font-weight: 600;
+    font-size: 14px;
+    cursor: pointer;
+    transition: background-color 0.2s;
+    margin-top: auto;
+}
+
+.btn-logout:hover {
+    background-color: #002270;
+}
+
+/* --- KHU VỰC CHÍNH BÊN PHẢI --- */
+.main-content {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    overflow-y: auto;
+}
+
+/* Header */
+.header {
+    background-color: #ffffff;
+    height: 70px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 0 40px;
+    border-bottom: 1px solid #e2e8f0;
+}
+
+.search-box {
+    position: relative;
+    width: 300px;
+}
+
+.search-box i {
+    position: absolute;
+    left: 14px;
+    top: 50%;
+    transform: translateY(-50%);
+    color: #94a3b8;
+    font-size: 14px;
+}
+
+.search-box input {
+    width: 100%;
+    padding: 10px 10px 10px 40px;
+    border: 1px solid #e2e8f0;
+    border-radius: 20px;
+    background-color: #f8fafc;
+    font-size: 13px;
+    outline: none;
+}
+
+.user-name {
+    font-weight: 600;
+    font-size: 14px;
+    color: #1e293b;
+}
+
+/* Vùng nội dung Lịch Hẹn */
+.appointment-section {
+    padding: 40px;
+    max-width: 1200px;
+    width: 100%;
+    margin: 0 auto;
+}
+
+.section-title {
+    font-size: 22px;
+    font-weight: 700;
+    color: #1e293b;
+    margin-bottom: 24px;
+}
+
+/* Navigation Tabs */
+.tabs {
+    display: flex;
+    gap: 30px;
+    border-bottom: 1px solid #e2e8f0;
+    margin-bottom: 24px;
+}
+
+.tab-btn {
+    background: none;
+    border: none;
+    padding-bottom: 12px;
+    font-size: 14px;
+    font-weight: 500;
+    color: #64748b;
+    cursor: pointer;
+    position: relative;
+}
+
+.tab-btn.active {
+    color: #0b3a9e;
+    font-weight: 600;
+}
+
+.tab-btn.active::after {
+    content: '';
+    position: absolute;
+    bottom: -1px;
+    left: 0;
+    width: 100%;
+    height: 3px;
+    background-color: #0b3a9e;
+    border-radius: 3px 3px 0 0;
+}
+
+/* Thẻ thông tin lịch hẹn chi tiết */
+.appointment-card {
+    background-color: #ffffff;
+    border-radius: 12px;
+    border: 1px solid #e2e8f0;
+    padding: 24px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 24px;
+    box-shadow: 0 1px 3px rgba(0,0,0,0.02);
+}
+
+.label {
+    font-size: 11px;
+    color: #94a3b8;
+    font-weight: 600;
+    letter-spacing: 0.5px;
+    display: block;
+    margin-bottom: 8px;
+}
+
+/* Khối bên trái: Mã lịch hẹn & Trạng thái */
+.card-left {
+    flex: 1;
+    border-right: 1px dotted #cbd5e1;
+    padding-right: 20px;
+    max-width: 160px;
+}
+
+.appointment-id {
+    font-size: 20px;
+    font-weight: 700;
+    color: #0b3a9e;
+    display: block;
+    margin-bottom: 12px;
+}
+
+.status-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    background-color: #e0f2fe;
+    color: #0369a1;
+    padding: 6px 12px;
+    border-radius: 20px;
+    font-size: 12px;
+    font-weight: 600;
+}
+
+.status-badge .dot {
+    width: 6px;
+    height: 6px;
+    background-color: #0369a1;
+    border-radius: 50%;
+}
+
+/* Khối ở giữa: Thông tin bác sĩ */
+.card-center {
+    flex: 2;
+    display: flex;
+    gap: 20px;
+    align-items: center;
+    padding: 0 30px;
+}
+
+.doctor-avatar {
+    width: 80px;
+    height: 100px;
+    background-color: #f1f5f9;
+    border-radius: 8px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: #94a3b8;
+    font-size: 36px;
+    overflow: hidden;
+    border: 1px solid #e2e8f0;
+}
+
+.doctor-info h3 {
+    font-size: 16px;
+    font-weight: 700;
+    color: #1e293b;
+    margin-bottom: 8px;
+}
+
+.doctor-info p {
+    font-size: 13px;
+    color: #475569;
+    margin-bottom: 4px;
+}
+
+.doctor-info strong {
+    color: #64748b;
+    font-weight: 500;
+}
+
+/* Khối bên phải: Thời gian & Nút bấm */
+.card-right {
+    flex: 2;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    border-left: 1px dotted #cbd5e1;
+    padding-left: 30px;
+}
+
+.time-info p {
+    font-size: 14px;
+    color: #1e293b;
+    margin-bottom: 8px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.time-info p i {
+    color: #64748b;
+}
+
+.time-slot {
+    font-weight: 600;
+}
+
+.date-slot {
+    font-weight: 700;
+    color: #0b3a9e !important;
+}
+
+.action-buttons {
+    display: flex;
+    gap: 12px;
+}
+
+.btn-qr {
+    background-color: #0033a0;
+    color: #ffffff;
+    border: none;
+    padding: 10px 18px;
+    border-radius: 6px;
+    font-size: 13px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: background-color 0.2s;
+}
+
+.btn-qr:hover {
+    background-color: #002270;
+}
+
+.btn-cancel {
+    background-color: #ffffff;
+    color: #64748b;
+    border: 1px solid #cbd5e1;
+    padding: 10px 18px;
+    border-radius: 6px;
+    font-size: 13px;
+    font-weight: 500;
+    cursor: pointer;
+    transition: all 0.2s;
+}
+
+.btn-cancel:hover {
+    background-color: #f8fafc;
+    color: #ef4444;
+    border-color: #fca5a5;
+}
+
+/* Khối thông báo lưu ý dưới cùng */
+.notice-box {
+    background-color: #f8fafc;
+    border: 1px solid #e2e8f0;
+    border-radius: 8px;
+    padding: 16px 20px;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+}
+
+.notice-box i {
+    color: #64748b;
+    font-size: 16px;
+}
+
+.notice-box p {
+    font-size: 13px;
+    color: #475569;
+    line-height: 1.5;
+}
+
+.notice-box strong {
+    color: #0b3a9e;
+    font-weight: 700;
+}

@@ -1,0 +1,110 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>HOSPITAL-ÔII - Lịch hẹn của tôi</title>
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+    <div class="container">
+        <aside class="sidebar">
+            <div class="logo-container">
+                <h1 class="logo-title">HOSPITAL-ÔII</h1>
+                <p class="logo-subtitle">Hệ thống y tế tích hợp</p>
+            </div>
+
+            <nav class="menu">
+                <a href="#" class="menu-item">
+                    <i class="fa-solid fa-house"></i> Tổng quan
+                </a>
+                
+                <div class="menu-group">
+                    <span class="menu-group-title"><i class="fa-solid fa-calendar-check"></i> Quản lý đặt lịch</span>
+                    <div class="sub-menu">
+                        <span class="sub-menu-title">Đặt lịch khám</span>
+                        <a href="#" class="menu-item active">Lịch hẹn của tôi</a>
+                    </div>
+                </div>
+
+                <a href="#" class="menu-item">
+                    <i class="fa-solid fa-user-doctor"></i> Bác sĩ
+                </a>
+                <a href="#" class="menu-item">
+                    <i class="fa-solid fa-square-h"></i> Khoa phòng
+                </a>
+                <a href="#" class="menu-item">
+                    <i class="fa-solid fa-gear"></i> Cài đặt
+                </a>
+            </nav>
+
+            <button class="btn-logout">ĐĂNG XUẤT</button>
+        </aside>
+
+        <main class="main-content">
+            <header class="header">
+                <div class="search-box">
+                    <i class="fa-solid fa-magnifying-glass"></i>
+                    <input type="text" placeholder="Tìm kiếm mã lịch hẹn...">
+                </div>
+                <div class="user-profile">
+                    <span class="user-name">Nguyễn Văn C</span>
+                </div>
+            </header>
+
+            <section class="appointment-section">
+                <h2 class="section-title">Lịch hẹn của tôi</h2>
+
+                <div class="tabs">
+                    <button class="tab-btn active">Sắp diễn ra (1)</button>
+                    <button class="tab-btn">Đã hoàn thành</button>
+                    <button class="tab-btn">Đã hủy</button>
+                </div>
+
+                <div class="appointment-card">
+                    <div class="card-left">
+                        <div class="appointment-id-group">
+                            <span class="label">MÃ LỊCH HẸN</span>
+                            <span class="appointment-id">LH001</span>
+                            <span class="status-badge"><span class="dot"></span> Chờ khám</span>
+                        </div>
+                    </div>
+
+                    <div class="card-center">
+                        <div class="doctor-avatar">
+                            <i class="fa-solid fa-user-md"></i>
+                        </div>
+                        <div class="doctor-info">
+                            <h3 class="doctor-name">ThS.BS Nguyễn Văn A</h3>
+                            <p><strong>Chuyên khoa:</strong> Tiêu hóa</p>
+                            <p><strong>Bệnh nhân:</strong> Nguyễn Văn C</p>
+                            <p><strong>Địa điểm:</strong> Phòng khám 102 - Tầng 1 Khu Nội</p>
+                        </div>
+                    </div>
+
+                    <div class="card-right">
+                        <div class="time-info">
+                            <span class="label">THỜI GIAN HẸN</span>
+                            <p class="time-slot"><i class="fa-regular fa-clock"></i> Khung giờ: 09:00 - Sáng</p>
+                            <p class="date-slot"><i class="fa-regular fa-calendar"></i> Ngày khám: 01/06/2026</p>
+                        </div>
+                        <div class="action-buttons">
+                            <button class="btn-qr">Xem mã QR</button>
+                            <button class="btn-cancel">Hủy lịch hẹn</button>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="notice-box">
+                    <i class="fa-solid fa-circle-info"></i>
+                    <p>Để đảm bảo quyền lợi vận hành hệ thống, thao tác hủy lịch hẹn trực tuyến cần thực hiện trước giờ đăng ký tối thiểu là <strong>02 tiếng.</strong></p>
+                </div>
+            </section>
+        </main>
+    </div>
+
+</body>
+</html>

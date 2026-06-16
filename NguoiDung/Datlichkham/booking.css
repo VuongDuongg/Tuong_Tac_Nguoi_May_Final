@@ -119,30 +119,11 @@ header {
     justify-content: space-between;
     align-items: center;
     border-bottom: 1px solid #e0e6ed;
+    height: 65px;
 }
 
-.search-box {
-    position: relative;
-    width: 250px;
-}
-
-.search-box input {
-    width: 100%;
-    padding: 8px 12px 8px 36px;
-    border: 1px solid #e2e8f0;
-    border-radius: 20px;
-    background-color: #f8fafc;
-    font-size: 13px;
-    outline: none;
-}
-
-.search-box .material-symbols-outlined {
-    position: absolute;
-    left: 12px;
-    top: 50%;
-    transform: translateY(-50%);
-    color: #94a3b8;
-    font-size: 18px;
+.header-empty-space {
+    flex-grow: 1;
 }
 
 /* Khu vực góc phải Header */
@@ -321,9 +302,10 @@ header {
 /* Thao tác chọn Ngày tháng */
 .date-input-wrapper {
     position: relative;
+    width: 100%;
 }
 
-.date-input-wrapper input {
+.date-input-wrapper input[type="date"] {
     width: 100%;
     padding: 12px 16px;
     border: 1px solid #1e293b;
@@ -331,14 +313,37 @@ header {
     font-size: 14px;
     font-weight: 600;
     outline: none;
+    background-color: #ffffff;
+    cursor: pointer;
 }
 
+/* Tinh chỉnh ẩn nút gọi lịch mặc định lịch của trình duyệt web */
+.date-input-wrapper input[type="date"]::-webkit-calendar-picker-indicator {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    width: auto;
+    height: auto;
+    background: transparent;
+    color: transparent;
+    cursor: pointer;
+}
+
+/* Đã cập nhật: Cho phép click trực tiếp vào icon lịch */
 .date-input-wrapper .material-symbols-outlined {
     position: absolute;
     right: 16px;
     top: 50%;
     transform: translateY(-50%);
     color: #64748b;
+    pointer-events: auto; /* Chuyển thành auto để JS nhận được hành động Click */
+    cursor: pointer;      /* Biến đổi con trỏ thành hình bàn tay bấm */
+}
+
+.date-input-wrapper .material-symbols-outlined:hover {
+    color: #003da5;      /* Đổi màu nhẹ khi di chuột vào icon */
 }
 
 

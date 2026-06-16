@@ -44,10 +44,7 @@
 
     <main>
         <header>
-            <div class="search-box">
-                <span class="material-symbols-outlined">search</span>
-                <input type="text" placeholder="Tìm kiếm...">
-            </div>
+            <div class="header-empty-space"></div>
             <div class="header-right">
                 <div class="header-icons">
                     <span class="material-symbols-outlined">notifications</span>
@@ -109,8 +106,8 @@
                     <div class="form-group">
                         <label>Chọn ngày khám</label>
                         <div class="date-input-wrapper">
-                            <input type="text" value="01 / 06 / 2026">
-                            <span class="material-symbols-outlined">calendar_today</span>
+                            <input type="date" id="booking-date" value="2026-06-01">
+                            <span class="material-symbols-outlined" id="calendar-icon">calendar_today</span>
                         </div>
                     </div>
 
@@ -142,5 +139,18 @@
         </div>
     </main>
 
+    <script>
+        const dateInput = document.getElementById('booking-date');
+        const calendarIcon = document.getElementById('calendar-icon');
+
+        // Khi người dùng bấm vào icon lịch, kích hoạt mở trình chọn lịch mặc định
+        calendarIcon.addEventListener('click', () => {
+            try {
+                dateInput.showPicker(); // Hàm chuẩn của trình duyệt hiện đại để bật popup lịch công khai
+            } catch (error) {
+                dateInput.focus(); // Phương án dự phòng cho trình duyệt cũ
+            }
+        });
+    </script>
 </body>
 </html>
