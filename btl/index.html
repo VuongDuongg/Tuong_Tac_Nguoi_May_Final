@@ -1,0 +1,683 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>HOSPITAL-ÔII - Hệ Thống Tất Toán Tích Hợp</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #F1F5F9;
+        }
+        .custom-scroll::-webkit-scrollbar {
+            width: 5px;
+        }
+        .custom-scroll::-webkit-scrollbar-thumb {
+            background-color: #CBD5E1;
+            border-radius: 4px;
+        }
+    </style>
+</head>
+<body class="flex h-screen w-screen overflow-hidden text-[#1E293B]">
+
+    <aside class="w-64 bg-white flex flex-col justify-between border-r border-slate-200 flex-shrink-0 h-full">
+        <div>
+            <div class="p-6">
+                <h1 class="text-[#0A369D] font-bold text-xl tracking-wide">HOSPITAL-ÔII</h1>
+                <p class="text-[10px] text-slate-400 font-bold mt-0.5 tracking-wider">HỆ THỐNG Y TẾ TÍCH HỢP</p>
+            </div>
+            <nav class="mt-2 px-3 space-y-1">
+                <a href="#" class="flex items-center space-x-3 px-4 py-3 text-slate-500 hover:bg-slate-50 rounded-xl transition-colors">
+                    <i class="fa-regular fa-clipboard text-lg w-6"></i>
+                    <span class="font-medium text-sm">Danh sách chờ</span>
+                </a>
+                <a href="#" class="flex items-center space-x-3 px-4 py-3 text-slate-500 hover:bg-slate-50 rounded-xl transition-colors">
+                    <i class="fa-regular fa-square text-lg w-6"></i>
+                    <span class="font-medium text-sm">Quầy thuốc</span>
+                </a>
+                <a href="#" class="flex items-center space-x-3 px-4 py-3 bg-[#EEF2F6] text-[#0A369D] rounded-xl border-r-4 border-[#0A369D] font-semibold transition-colors">
+                    <i class="fa-solid fa-credit-card text-lg w-6"></i>
+                    <span class="text-sm">Tất toán viện phí</span>
+                </a>
+                <a href="#" class="flex items-center space-x-3 px-4 py-3 text-slate-500 hover:bg-slate-50 rounded-xl transition-colors">
+                    <i class="fa-regular fa-clock text-lg w-6"></i>
+                    <span class="font-medium text-sm">Lịch sử thanh toán</span>
+                </a>
+                <a href="#" class="flex items-center space-x-3 px-4 py-3 text-slate-500 hover:bg-slate-50 rounded-xl transition-colors">
+                    <i class="fa-solid fa-chart-simple text-lg w-6"></i>
+                    <span class="font-medium text-sm">Báo cáo</span>
+                </a>
+                <a href="#" class="flex items-center space-x-3 px-4 py-3 text-slate-500 hover:bg-slate-50 rounded-xl transition-colors">
+                    <i class="fa-regular fa-circle text-lg w-6"></i>
+                    <span class="font-medium text-sm">Cài đặt</span>
+                </a>
+            </nav>
+        </div>
+    </aside>
+
+    <main class="flex-1 flex flex-col h-full overflow-hidden bg-[#F1F5F9]">
+        
+        <header class="px-8 py-4 flex items-center justify-between flex-shrink-0 bg-white border-b border-slate-200">
+            <div class="relative w-96" id="topbar-search-wrapper">
+                <span class="absolute inset-y-0 left-0 flex items-center pl-4 pointer-events-none text-slate-400">
+                    <i class="fa-solid fa-magnifying-glass text-xs"></i>
+                </span>
+                <input type="text" id="searchInput" placeholder="Tìm kiếm theo mã bệnh nhân" 
+                       class="w-full pl-10 pr-4 py-2.5 bg-slate-50 border border-slate-200 rounded-xl text-sm placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-blue-500 text-slate-700 transition-all">
+            </div>
+            <div id="topbar-search-placeholder" class="hidden w-96"></div>
+
+            <div class="flex items-center space-x-6">
+                <div class="flex items-center space-x-4 text-slate-600">
+                    <button class="hover:text-slate-900 transition-colors"><i class="fa-regular fa-comment text-xl"></i></button>
+                    <button class="hover:text-slate-900 transition-colors pt-0.5"><i class="fa-regular fa-bell text-xl"></i></button>
+                </div>
+                <div class="flex items-center space-x-3">
+                    <div class="text-right">
+                        <h4 class="text-sm font-bold text-[#0F172A] leading-tight tracking-wide">Ngô Tuấn Anh</h4>
+                        <p class="text-xs text-[#748293] font-medium mt-0.5">Thu ngân</p>
+                    </div>
+                    <div class="w-10 h-10 bg-[#DBE4EE] rounded-full flex items-center justify-center text-[#95A5B5] flex-shrink-0">
+                        <i class="fa-solid fa-user text-xl mt-1"></i>
+                    </div>
+                </div>
+            </div>
+        </header>
+
+        <div id="screen-invoice" class="flex-1 px-8 pb-6 flex flex-col justify-between overflow-hidden mt-4">
+            <div class="space-y-4 flex flex-col flex-1 overflow-hidden">
+                
+                <section class="bg-white rounded-2xl p-5 border border-slate-100 flex-shrink-0 shadow-sm">
+                    <h3 class="text-xs font-bold uppercase tracking-wider text-slate-900 mb-4">Thông tin bệnh nhân</h3>
+                    <div class="flex items-start space-x-6">
+                        <div class="w-20 h-20 bg-[#E2E8F0] rounded-full flex items-center justify-center text-[#94A3B8] flex-shrink-0">
+                            <i class="fa-solid fa-user text-4xl"></i>
+                        </div>
+                        <div class="grid grid-cols-2 gap-x-12 gap-y-3 text-xs w-full pt-1">
+                            <div class="flex"><span class="text-slate-400 w-28 flex-shrink-0">Mã bệnh nhân:</span><span class="font-bold text-[#0F172A]" id="p-id">--</span></div>
+                            <div class="flex"><span class="text-slate-400 w-28 flex-shrink-0">Đối tượng:</span><span class="font-bold text-[#0F172A]" id="p-type">--</span></div>
+                            <div class="flex"><span class="text-slate-400 w-28 flex-shrink-0">Họ tên:</span><span class="font-bold text-[#0A369D]" id="p-name">--</span></div>
+                            <div class="flex"><span class="text-slate-400 w-28 flex-shrink-0">Mã thẻ BHYT:</span><span class="font-bold text-[#0F172A]" id="p-bhyt">--</span></div>
+                            <div class="flex"><span class="text-slate-400 w-28 flex-shrink-0">Ngày sinh:</span><span class="font-bold text-[#0F172A]" id="p-dob">--</span></div>
+                            <div class="flex"><span class="text-slate-400 w-28 flex-shrink-0">Phòng khám:</span><span class="font-bold text-[#0F172A]" id="p-room">--</span></div>
+                            <div class="flex"><span class="text-slate-400 w-28 flex-shrink-0">Số điện thoại:</span><span class="font-bold text-[#0F172A]" id="p-phone">--</span></div>
+                            <div class="flex"><span class="text-slate-400 w-28 flex-shrink-0">Trạng thái:</span><span class="font-bold text-[#EA580C]" id="p-status">--</span></div>
+                        </div>
+                    </div>
+                </section>
+
+                <div class="grid grid-cols-2 gap-4 flex-1 overflow-hidden min-h-0">
+                    
+                    <section class="bg-white rounded-2xl p-5 border border-slate-100 flex flex-col justify-between overflow-hidden shadow-sm">
+                        <div class="overflow-hidden flex flex-col h-full">
+                            <h3 class="text-xs font-bold uppercase tracking-wider text-slate-900 mb-3 flex-shrink-0">Chi phí dịch vụ cận lâm sàng và khám</h3>
+                            <div class="overflow-y-auto flex-1 custom-scroll">
+                                <table class="w-full text-left text-xs">
+                                    <thead class="sticky top-0 bg-white z-10">
+                                        <tr class="text-slate-400 border-b border-slate-100">
+                                            <th class="pb-3 font-bold">Tên dịch vụ</th>
+                                            <th class="pb-3 font-bold text-center">Chi tiết</th>
+                                            <th class="pb-3 font-bold text-right">Thành tiền (đ)</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody id="serviceTableBody" class="text-slate-700 font-medium">
+                                        <tr><td colspan="3" class="py-4 text-center text-slate-400"></td></tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                        <div class="border-t border-slate-200 pt-4 mt-2 flex-shrink-0">
+                            <div class="flex justify-between items-center"><span class="text-xs font-bold text-slate-900">Tổng tạm tính</span><span class="text-sm font-bold text-[#0A369D]" id="serviceTotal">0đ</span></div>
+                        </div>
+                    </section>
+                    
+                    <section class="bg-white rounded-2xl p-5 border border-slate-100 flex flex-col justify-between overflow-hidden shadow-sm">
+                        <div class="overflow-hidden flex flex-col h-full">
+                            <h3 class="text-xs font-bold uppercase tracking-wider text-slate-900 mb-3 flex-shrink-0">Danh sách đơn thuốc</h3>
+                            <div class="overflow-y-auto flex-1 custom-scroll">
+                                <table class="w-full text-left text-xs">
+                                    <thead class="sticky top-0 bg-white z-10">
+                                        <tr class="text-slate-400 border-b border-slate-100">
+                                            <th class="pb-3 font-bold w-16 text-center">Xác nhận</th>
+                                            <th class="pb-3 font-bold">Tên thuốc</th>
+                                            <th class="pb-3 font-bold text-center w-16">Số lượng</th>
+                                            <th class="pb-3 font-bold text-right w-24">Thành tiền (đ)</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody id="medicineTableBody" class="text-slate-700 font-medium">
+                                        <tr><td colspan="4" class="py-4 text-center text-slate-400"></td></tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                        <div class="border-t border-slate-200 pt-4 mt-2 flex-shrink-0">
+                            <div class="flex justify-between items-center"><span class="text-xs font-bold text-slate-900">Tổng tạm tính đơn thuốc</span><span class="text-sm font-bold text-[#0A369D]" id="medicineTotal">0đ</span></div>
+                        </div>
+                    </section>
+                </div>
+            </div>
+            
+            <div class="flex justify-end pt-3 flex-shrink-0">
+                <button id="btn-proceed" disabled class="bg-slate-400 text-white font-bold text-xs px-6 py-2.5 rounded-xl transition-all shadow-sm cursor-not-allowed opacity-60">
+                    Tiến hành thanh toán
+                </button>
+            </div>
+        </div>
+
+        <div id="screen-payment" class="hidden flex-1 px-8 pb-6 flex flex-col justify-between overflow-hidden mt-4">
+            <div class="grid grid-cols-2 gap-6 flex-1 overflow-hidden">
+                
+                <section class="bg-white rounded-2xl p-8 border border-slate-100 flex flex-col justify-between shadow-sm h-full">
+                    <div class="flex flex-col h-full justify-between">
+                        <div>
+                            <h3 class="text-base font-bold text-slate-900 mb-6">Chi tiết hóa đơn</h3>
+                            <div class="space-y-5 text-sm font-medium">
+                                <div class="flex justify-between text-slate-500"><span>Chi phí dịch vụ</span><span class="text-slate-900 font-bold" id="bill-service">0đ</span></div>
+                                <div class="flex justify-between text-slate-500"><span>Tổng tiền thuốc</span><span class="text-slate-900 font-bold" id="bill-medicine">0đ</span></div>
+                                <div class="border-t border-dashed border-slate-200 my-4"></div>
+                                <div class="flex justify-between text-slate-900 font-bold"><span>Tổng tiền</span><span id="bill-total">0đ</span></div>
+                                <div class="flex justify-between text-red-500 font-semibold">
+                                    <span id="bill-bhyt-label">BHYT thanh toán (80%)</span><span id="bill-bhyt-value">-0đ</span>
+                                </div>
+                                <div class="flex justify-between text-slate-500"><span>Phí khác</span><span class="text-slate-900 font-bold">0đ</span></div>
+                            </div>
+                        </div>
+                        <div class="border-t border-slate-200 pt-6 mt-auto flex justify-between items-center">
+                            <span class="text-base font-bold text-slate-900">Tổng thanh toán</span>
+                            <span class="text-2xl font-bold text-[#0A369D]" id="bill-final">0đ</span>
+                        </div>
+                    </div>
+                </section>
+
+                <section class="bg-white rounded-2xl p-8 border border-slate-100 flex flex-col justify-between shadow-sm h-full">
+                    <div class="flex flex-col h-full justify-between">
+                        <div class="space-y-6">
+                            <h3 class="text-base font-bold text-slate-900">Phương thức thanh toán</h3>
+                            <div class="space-y-3">
+                                <label class="flex items-center space-x-4 p-4 border border-slate-200 rounded-xl cursor-pointer hover:bg-slate-50 transition-colors w-full">
+                                    <input type="radio" name="payMethod" value="cash" checked class="w-4 h-4 text-blue-600 focus:ring-blue-500">
+                                    <span class="text-sm font-semibold text-slate-800">Tiền mặt</span>
+                                </label>
+                                <label class="flex items-center space-x-4 p-4 border border-slate-200 rounded-xl cursor-pointer hover:bg-slate-50 transition-colors w-full">
+                                    <input type="radio" name="payMethod" value="qr" class="w-4 h-4 text-blue-600 focus:ring-blue-500">
+                                    <span class="text-sm font-semibold text-slate-800">Mã QR / Chuyển khoản</span>
+                                </label>
+                            </div>
+
+                            <div class="pt-2 space-y-4">
+                                <div id="method-cash-box" class="space-y-4">
+                                    <div class="flex flex-col space-y-2">
+                                        <label class="text-xs font-bold text-slate-400 uppercase tracking-wide">Khách đưa</label>
+                                        <input type="text" id="input-guest-money" placeholder="Nhập số tiền khách đưa..." 
+                                               class="w-full px-4 py-3 border border-slate-200 rounded-xl text-sm font-medium text-slate-800 focus:outline-none focus:ring-2 focus:ring-blue-500 bg-white">
+                                    </div>
+                                    <div class="text-sm flex items-center space-x-2 pt-1">
+                                        <span class="text-slate-500 font-medium">Tiền thừa trả khách:</span>
+                                        <span class="font-bold text-[#10B981] text-base" id="txt-refund">0 đ</span>
+                                    </div>
+                                </div>
+
+                                <div id="method-qr-box" class="hidden flex flex-col items-center justify-center p-4 bg-slate-50 rounded-xl border border-slate-100 space-y-2">
+                                    <div class="p-3 border border-slate-200 rounded-xl bg-white shadow-sm">
+                                        <svg class="w-32 h-32" viewBox="0 0 100 100" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                            <rect width="100" height="100" fill="white"/>
+                                            <path d="M5 5H35V35H5V5ZM9 9V31H31V9H9Z" fill="#0F172A"/>
+                                            <path d="M14 14H26V26H14V14Z" fill="#0F172A"/>
+                                            <path d="M65 5H95V35H65V5ZM69 9V31H91V9H69ZM74 14H86V26H74V14Z" fill="#0F172A"/>
+                                            <path d="M5 65H35V95H5V65ZM9 69V91H31V69H9ZM14 74H26V86H14V74Z" fill="#0F172A"/>
+                                            <rect x="45" y="5" width="10" height="10" fill="#0F172A"/>
+                                            <rect x="45" y="20" width="15" height="5" fill="#0F172A"/>
+                                            <rect x="35" y="45" width="15" height="10" fill="#0F172A"/>
+                                            <rect x="65" y="45" width="20" height="5" fill="#0F172A"/>
+                                            <rect x="45" y="65" width="10" height="15" fill="#0F172A"/>
+                                        </svg>
+                                    </div>
+                                    <p class="text-[11px] text-slate-400 italic">Quét mã QR để chuyển khoản nhanh viện phí</p>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="flex space-x-3 justify-end pt-6 border-t border-slate-100 mt-auto">
+                            <button id="btn-back" class="border border-slate-200 hover:bg-slate-50 text-slate-600 font-bold text-sm px-6 py-2.5 rounded-xl transition-colors">Quay lại</button>
+                            <button id="btn-confirm-pay" class="bg-[#1A469D] hover:bg-blue-800 text-white font-bold text-sm px-6 py-2.5 rounded-xl transition-colors shadow-sm">Xác nhận thanh toán</button>
+                        </div>
+                    </div>
+                </section>
+            </div>
+        </div>
+
+        <div id="screen-success" class="hidden flex-1 flex items-center justify-center px-8 pb-6 overflow-hidden">
+            <div class="bg-white rounded-3xl p-12 border border-slate-100 w-[680px] shadow-md flex flex-col items-center">
+                <div class="w-20 h-20 bg-[#10B981] rounded-full flex items-center justify-center text-white text-4xl mb-5 shadow-sm">
+                    <i class="fa-solid fa-check"></i>
+                </div>
+                
+                <h2 class="text-2xl font-bold text-[#10B981] tracking-wide">Tất toán thành công!</h2>
+                <p class="text-sm text-slate-400 mt-1.5 font-medium">Mã hóa đơn: <span id="bill-success-code" class="font-bold text-slate-600">MHD1</span></p>
+                
+                <div class="w-full mt-10 space-y-5 border-b border-slate-100 pb-10 text-sm">
+                    <div class="flex justify-between items-center">
+                        <span class="text-slate-400 font-medium">Họ tên bệnh nhân</span>
+                        <span class="font-bold text-slate-800 text-right text-base" id="bill-success-name">--</span>
+                    </div>
+                    <div class="flex justify-between items-center">
+                        <span class="text-slate-400 font-medium">Số tiền thanh toán</span>
+                        <span class="font-extrabold text-[#0A369D] text-lg" id="bill-success-amount">0đ</span>
+                    </div>
+                    <div class="flex justify-between items-center">
+                        <span class="text-slate-400 font-medium">Phương thức thanh toán</span>
+                        <span class="font-bold text-slate-800" id="bill-success-method">Tiền mặt</span>
+                    </div>
+                    <div class="flex justify-between items-center">
+                        <span class="text-slate-400 font-medium">Thời gian</span>
+                        <span class="font-bold text-slate-800" id="bill-success-time">--</span>
+                    </div>
+                    <div class="flex justify-between items-center">
+                        <span class="text-slate-400 font-medium">Thu ngân</span>
+                        <span class="font-bold text-slate-800">Ngô Tuấn Anh</span>
+                    </div>
+                </div>
+
+                <div class="flex space-x-4 w-full mt-10">
+                    <button id="btn-show-invoice-modal" class="flex-1 py-3.5 border border-slate-200 text-slate-700 hover:bg-slate-50 font-bold text-sm rounded-xl transition-all tracking-wide shadow-sm">
+                        In hóa đơn
+                    </button>
+                    <button id="btn-done-complete" class="flex-1 py-3.5 bg-[#1A469D] hover:bg-blue-800 text-white font-bold text-sm rounded-xl transition-all tracking-wide shadow-sm">
+                        Hoàn thành
+                    </button>
+                </div>
+            </div>
+        </div>
+
+    </main>
+
+    <div id="warningModal" class="hidden fixed inset-0 bg-slate-900/60 backdrop-blur-sm z-50 flex items-center justify-center p-4">
+        <div class="bg-white rounded-[24px] shadow-2xl p-8 w-full max-w-[440px] flex flex-col items-center text-center">
+            
+            <div class="w-16 h-16 bg-red-50 text-red-500 rounded-full flex items-center justify-center mb-5 animate-pulse">
+                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.8" stroke="currentColor" class="w-8 h-8">
+                    <path stroke-linecap="round" stroke-linejoin="round" d="M12 9v3.75m-9.303 3.376c-.866 1.5.217 3.374 1.948 3.374h14.71c1.73 0 2.813-1.874 1.948-3.374L13.949 3.378c-.866-1.5-3.032-1.5-3.898 0L2.697 16.126zM12 15.75h.007v.008H12v-.008z" />
+                </svg>
+            </div>
+
+            <h2 class="text-[20px] font-bold text-slate-900 mb-2 leading-tight">Không đủ thuốc để xuất kho</h2>
+            <p class="text-sm text-slate-500 leading-relaxed mb-8" id="warningModalText">
+                Thuốc <span class="text-red-500 font-semibold" id="missingMedicineName">Vitamin B</span> hiện đang hết trong kho.<br>Bạn có muốn tiếp tục thanh toán?
+            </p>
+
+            <div class="flex gap-3 w-full">
+                <button id="btn-warning-back" class="flex-1 py-3 px-4 border border-slate-200 text-slate-700 font-semibold rounded-xl bg-white hover:bg-slate-50 text-sm transition-all">
+                    Quay lại
+                </button>
+                <button id="btn-warning-continue" class="flex-1 py-3 px-4 bg-[#1a43a7] text-white font-semibold rounded-xl hover:bg-blue-800 text-sm transition-all shadow-sm">
+                    Tiếp tục thanh toán
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <div id="invoice-preview-modal" class="hidden fixed inset-0 bg-slate-900/40 z-50 flex items-center justify-center p-6 backdrop-blur-sm">
+        <div class="bg-white rounded-2xl w-[900px] h-[580px] flex shadow-2xl overflow-hidden border border-slate-200">
+            
+            <div class="flex-1 p-8 overflow-y-auto custom-scroll border-r border-slate-100 bg-white">
+                <div class="flex justify-between border-b-2 border-slate-900 pb-5 mb-5">
+                    <div>
+                        <h2 class="text-base font-bold m-0 uppercase tracking-wide">Bệnh viện ÔII</h2>
+                        <p class="text-xs m-0 mt-1 text-slate-500">Địa chỉ: 175 Tây Sơn, Đống Đa, Hà Nội</p>
+                        <p class="text-xs m-0 mt-0.5 text-slate-500">Số điện thoại: 0111111111</p>
+                    </div>
+                    <div class="text-right">
+                        <h2 class="text-base font-bold m-0 uppercase tracking-wide">Hóa đơn thanh toán</h2>
+                        <p class="text-xs m-0 mt-1 text-slate-500">Mã hóa đơn: <span class="font-bold text-slate-800">MHD1</span></p>
+                        <p class="text-xs m-0 mt-0.5 text-slate-500">Ngày: <span id="print-time" class="font-bold text-slate-800">--</span></p>
+                    </div>
+                </div>
+
+                <div class="flex justify-between text-xs mb-6 leading-relaxed">
+                    <div>
+                        <p class="m-0">Họ tên bệnh nhân: <span class="font-bold text-slate-800" id="print-p-name">--</span></p>
+                        <p class="m-0 mt-1">Đối tượng: <span class="font-bold text-slate-800" id="print-p-type">--</span></p>
+                    </div>
+                    <div class="text-right">
+                        <p class="m-0">Mã bệnh nhân: <span class="font-bold text-slate-800" id="print-p-id">--</span></p>
+                        <p class="m-0 mt-1">Phòng khám: <span class="font-bold text-slate-800" id="print-p-room">--</span></p>
+                    </div>
+                </div>
+
+                <table class="w-full border-collapse text-xs mb-5">
+                    <thead>
+                        <tr class="bg-slate-50">
+                            <th class="border border-slate-400 p-2.5 text-center w-12 font-bold">STT</th>
+                            <th class="border border-slate-400 p-2.5 text-left font-bold">Nội dung</th>
+                            <th class="border border-slate-400 p-2.5 text-right w-36 font-bold">Thành tiền (đ)</th>
+                        </tr>
+                    </thead>
+                    <tbody id="print-table-items" class="text-slate-700">
+                        </tbody>
+                </table>
+
+                <div class="mt-6 text-left text-xs italic font-medium text-slate-500">
+                    Cảm ơn quý khách và hẹn gặp lại!
+                </div>
+            </div>
+
+            <div class="w-48 bg-slate-50 p-6 flex flex-col justify-between flex-shrink-0 border-l border-slate-100">
+                <div class="space-y-3">
+                    <button onclick="alert('Hệ thống: Đã thực hiện lệnh in hóa đơn thành công!')" class="w-full py-3 bg-white border border-slate-200 hover:bg-slate-100 font-bold text-xs rounded-xl shadow-sm text-slate-700 transition-all">
+                        <i class="fa-solid fa-print mr-1.5"></i> In hóa đơn
+                    </button>
+                    <button onclick="alert('Hệ thống: Xuất và tải tệp PDF thành công!')" class="w-full py-3 bg-white border border-slate-200 hover:bg-slate-100 font-bold text-xs rounded-xl shadow-sm text-slate-700 transition-all">
+                        <i class="fa-solid fa-download mr-1.5"></i> Tải PDF
+                    </button>
+                    <button onclick="alert('Hệ thống: Đã gửi bản sao điện tử qua Email bệnh nhân!')" class="w-full py-3 bg-white border border-slate-200 hover:bg-slate-100 font-bold text-xs rounded-xl shadow-sm text-slate-700 transition-all">
+                        <i class="fa-regular fa-envelope mr-1.5"></i> Gửi qua email
+                    </button>
+                </div>
+                <button id="btn-close-preview" class="w-full py-3 bg-white border border-slate-200 hover:bg-slate-100 font-bold text-xs rounded-xl shadow-sm text-slate-700 transition-all">
+                    Đóng
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Cơ sở dữ liệu mẫu bệnh nhân chuẩn chỉnh theo giao diện hình ảnh
+        const hospitalDatabase = {
+            "2351170570": {
+                patient: { id: "2351170570", name: "Nguyễn Văn A", dob: "01/01/2001", phone: "0123456789", type: "BHYT", bhyt: "Y1234567", room: "Phòng khám 1", status: "Chờ tất toán" },
+                services: [
+                    { name: "Công khám", detail: "01 lần", price: 150000 },
+                    { name: "Chuẩn đoán hình ảnh", detail: "X-quang ngực", price: 250000 },
+                    { name: "Xét nghiệm", detail: "Xét nghiệm máu", price: 100000 },
+                    { name: "Siêu âm", detail: "Siêu âm bụng", price: 200000 },
+                    { name: "Phòng VIP", detail: "10 ngày", price: 200000 }
+                ],
+                medicines: [
+                    { id: "m1", name: "Paradol 50mg", quantity: 1, price: 30000 },
+                    { id: "m2", name: "Paracetamol 20mg", quantity: 2, price: 60000 },
+                    { id: "m3", name: "Vitamin A", quantity: 3, price: 50000 },
+                    { id: "m4", name: "Vitamin B", quantity: 4, price: 70000 }, 
+                    { id: "m5", name: "Vitamin C", quantity: 5, price: 90000 }
+                ]
+            }
+        };
+
+        let currentData = null;
+        let globalServiceAmt = 0;
+        let globalMedicineAmt = 0;
+        let finalPayAmount = 0;
+
+        function formatVND(num) {
+            return num.toLocaleString('vi-VN') + " đ";
+        }
+
+        function formatVNDNoUnit(num) {
+            return num.toLocaleString('vi-VN');
+        }
+
+        // Hàm tính toán tổng chi phí dựa trên các mục ĐƯỢC CHỌN THỰC TẾ
+        function reCalculateTotals() {
+            if (!currentData) return;
+
+            globalMedicineAmt = 0;
+            const checkboxes = document.querySelectorAll('.med-checkbox');
+            checkboxes.forEach(cb => {
+                if (cb.checked) {
+                    globalMedicineAmt += parseInt(cb.getAttribute('data-price'), 10);
+                }
+            });
+
+            document.getElementById('medicineTotal').innerText = formatVND(globalMedicineAmt);
+            
+            // Kích hoạt nút bấm chuyển trang khi có dữ liệu bệnh nhân hợp lệ
+            const btnProceed = document.getElementById('btn-proceed');
+            btnProceed.disabled = false;
+            btnProceed.className = "bg-[#1A469D] hover:bg-blue-800 text-white font-bold text-xs px-6 py-2.5 rounded-xl transition-all shadow-sm cursor-pointer opacity-100";
+        }
+
+        // Xử lý sự kiện tìm kiếm Mã bệnh nhân
+        document.getElementById('searchInput').addEventListener('keypress', function (e) {
+            if (e.key === 'Enter') {
+                const searchValue = this.value.trim();
+                currentData = hospitalDatabase[searchValue];
+
+                if (currentData) {
+                    // Hiển thị thông tin hành chính
+                    document.getElementById('p-id').innerText = currentData.patient.id;
+                    document.getElementById('p-name').innerText = currentData.patient.name;
+                    document.getElementById('p-dob').innerText = currentData.patient.dob;
+                    document.getElementById('p-phone').innerText = currentData.patient.phone;
+                    document.getElementById('p-type').innerText = currentData.patient.type;
+                    document.getElementById('p-bhyt').innerText = currentData.patient.bhyt;
+                    document.getElementById('p-room').innerText = currentData.patient.room;
+                    document.getElementById('p-status').innerText = currentData.patient.status;
+
+                    // Kết xuất bảng chi phí dịch vụ CLS
+                    globalServiceAmt = 0;
+                    const serviceBody = document.getElementById('serviceTableBody');
+                    serviceBody.innerHTML = "";
+                    currentData.services.forEach(item => {
+                        globalServiceAmt += item.price;
+                        serviceBody.innerHTML += `
+                            <tr class="border-b border-slate-50">
+                                <td class="py-3">${item.name}</td>
+                                <td class="py-3 text-center text-slate-400">${item.detail}</td>
+                                <td class="py-3 text-right font-bold text-slate-900">${formatVND(item.price)}</td>
+                            </tr>`;
+                    });
+                    document.getElementById('serviceTotal').innerText = formatVND(globalServiceAmt);
+
+                    // Kết xuất bảng đơn thuốc - Mặc định để trống checkbox để người dùng tự tích
+                    const medicineBody = document.getElementById('medicineTableBody');
+                    medicineBody.innerHTML = "";
+                    currentData.medicines.forEach(item => {
+                        medicineBody.innerHTML += `
+                            <tr class="border-b border-slate-50">
+                                <td class="py-3 text-center">
+                                    <input type="checkbox" id="${item.id}" data-price="${item.price}" data-name="${item.name}"
+                                           class="med-checkbox w-4 h-4 text-blue-600 bg-gray-100 border-slate-300 rounded focus:ring-blue-500 cursor-pointer">
+                                </td>
+                                <td class="py-3 font-medium text-slate-700">${item.name}</td>
+                                <td class="py-3 text-center font-bold text-slate-900">${item.quantity}</td>
+                                <td class="py-3 text-right font-bold text-slate-900">${formatVND(item.price)}</td>
+                            </tr>`;
+                    });
+
+                    // Đăng ký sự kiện thay đổi giá trị cho toàn bộ checkbox thuốc
+                    document.querySelectorAll('.med-checkbox').forEach(cb => {
+                        cb.addEventListener('change', reCalculateTotals);
+                    });
+
+                    reCalculateTotals();
+                } else {
+                    alert("Hệ thống: Không tìm thấy dữ liệu hồ sơ bệnh nhân này!");
+                }
+            }
+        });
+
+        // =================================================================
+        // LOGIC MỚI: KIỂM TRA TRẠNG THÁI CHECKBOX KHI NHẤN TIẾN HÀNH THANH TOÁN
+        // =================================================================
+        document.getElementById('btn-proceed').addEventListener('click', function() {
+            const checkboxes = document.querySelectorAll('.med-checkbox');
+            let uncheckedMedicines = [];
+
+            // Duyệt qua tất cả các ô để xem có ô nào bị bỏ trống không
+            checkboxes.forEach(cb => {
+                if (!cb.checked) {
+                    uncheckedMedicines.push(cb.getAttribute('data-name'));
+                }
+            });
+
+            // Nếu người dùng TÍCH KHÔNG HẾT ô checkbox -> Bật Modal cảnh báo ngay lập tức
+            if (uncheckedMedicines.length > 0) {
+                // Lấy tên thuốc đầu tiên chưa được tích (hoặc nối chuỗi tên thuốc) để hiển thị lên modal sinh động
+                document.getElementById('missingMedicineName').innerText = uncheckedMedicines[0];
+                document.getElementById('warningModal').classList.remove('hidden');
+            } else {
+                // Nếu đã tích đủ hết toàn bộ ô -> Chuyển thẳng tới màn thanh toán
+                goToPaymentScreen();
+            }
+        });
+
+        // Nút quay lại từ Modal cảnh báo (Để người dùng chỉnh sửa hoặc tích thêm)
+        document.getElementById('btn-warning-back').addEventListener('click', function() {
+            document.getElementById('warningModal').classList.add('hidden');
+        });
+
+        // Nút tiếp tục thanh toán từ Modal cảnh báo (Chấp nhận bỏ qua loại thuốc thiếu kho)
+        document.getElementById('btn-warning-continue').addEventListener('click', function() {
+            document.getElementById('warningModal').classList.add('hidden');
+            goToPaymentScreen();
+        });
+
+        // Hàm chuyển tiếp cấu hình dữ liệu sang màn hình thanh toán số 2
+        function goToPaymentScreen() {
+            document.getElementById('screen-invoice').classList.add('hidden');
+            document.getElementById('screen-payment').classList.remove('hidden');
+            document.getElementById('topbar-search-wrapper').classList.add('hidden');
+            document.getElementById('topbar-search-placeholder').classList.remove('hidden');
+
+            const totalAmt = globalServiceAmt + globalMedicineAmt;
+            let bhytAmt = (currentData.patient.type === "BHYT") ? Math.round(totalAmt * 0.8) : 0;
+            finalPayAmount = totalAmt - bhytAmt;
+
+            document.getElementById('bill-service').innerText = formatVND(globalServiceAmt);
+            document.getElementById('bill-medicine').innerText = formatVND(globalMedicineAmt);
+            document.getElementById('bill-total').innerText = formatVND(totalAmt);
+            document.getElementById('bill-bhyt-value').innerText = "-" + formatVND(bhytAmt);
+            document.getElementById('bill-final').innerText = formatVND(finalPayAmount);
+            
+            // Khởi tạo lại ô tiền mặt
+            document.getElementById('input-guest-money').value = "";
+            document.getElementById('txt-refund').innerText = "0 đ";
+            document.getElementById('txt-refund').className = "font-bold text-[#10B981] text-base";
+        }
+
+        // Quay lại Màn hình 1 từ Màn hình 2
+        document.getElementById('btn-back').addEventListener('click', function() {
+            document.getElementById('screen-payment').classList.add('hidden');
+            document.getElementById('screen-invoice').classList.remove('hidden');
+            document.getElementById('topbar-search-wrapper').classList.remove('hidden');
+            document.getElementById('topbar-search-placeholder').classList.add('hidden');
+        });
+
+        // Chuyển đổi giao diện giữa Tiền mặt và mã QR hóa đơn
+        document.querySelectorAll('input[name="payMethod"]').forEach(radio => {
+            radio.addEventListener('change', function() {
+                if (this.value === 'cash') {
+                    document.getElementById('method-cash-box').classList.remove('hidden');
+                    document.getElementById('method-qr-box').classList.add('hidden');
+                } else {
+                    document.getElementById('method-cash-box').classList.add('hidden');
+                    document.getElementById('method-qr-box').classList.remove('hidden');
+                }
+            });
+        });
+
+        // Tính tiền thừa tự động cho thu ngân
+        document.getElementById('input-guest-money').addEventListener('input', function() {
+            const cleanValue = this.value.replace(/\D/g, '');
+            if (!cleanValue) {
+                document.getElementById('txt-refund').innerText = "0 đ";
+                return;
+            }
+            const guestMoney = parseInt(cleanValue, 10);
+            this.value = guestMoney.toLocaleString('vi-VN');
+
+            const refund = guestMoney - finalPayAmount;
+            if (refund >= 0) {
+                document.getElementById('txt-refund').innerText = formatVND(refund);
+                document.getElementById('txt-refund').className = "font-bold text-[#10B981] text-base";
+            } else {
+                document.getElementById('txt-refund').innerText = "Thiếu " + formatVND(Math.abs(refund));
+                document.getElementById('txt-refund').className = "font-bold text-red-500 text-sm";
+            }
+        });
+
+        // Xác nhận thanh toán thành công và cấu hình hóa đơn in ấn ảo
+        document.getElementById('btn-confirm-pay').addEventListener('click', function() {
+            if (!currentData) return;
+
+            document.getElementById('screen-payment').classList.add('hidden');
+            document.getElementById('screen-success').classList.remove('hidden');
+
+            document.getElementById('bill-success-name').innerText = currentData.patient.name;
+            document.getElementById('bill-success-amount').innerText = formatVND(finalPayAmount);
+            
+            const selectedMethod = document.querySelector('input[name="payMethod"]:checked').value;
+            document.getElementById('bill-success-method').innerText = (selectedMethod === 'cash') ? 'Tiền mặt' : 'Chuyển khoản';
+            
+            const now = new Date();
+            const timeString = `${String(now.getDate()).padStart(2, '0')}/${String(now.getMonth() + 1).padStart(2, '0')}/${now.getFullYear()} - ${String(now.getHours()).padStart(2, '0')}:${String(now.getMinutes()).padStart(2, '0')}:${String(now.getSeconds()).padStart(2, '0')}`;
+            document.getElementById('bill-success-time').innerText = timeString;
+
+            // NẠP DỮ LIỆU ĐỘNG VÀO HOÁ ĐƠN IN ẢO XEM TRƯỚC
+            document.getElementById('print-time').innerText = timeString;
+            document.getElementById('print-p-name').innerText = currentData.patient.name;
+            document.getElementById('print-p-id').innerText = currentData.patient.id;
+            document.getElementById('print-p-type').innerText = currentData.patient.type;
+            document.getElementById('print-p-room').innerText = currentData.patient.room;
+
+            const printTableItems = document.getElementById('print-table-items');
+            printTableItems.innerHTML = "";
+            let idx = 1;
+
+            // Đưa dịch vụ vào hóa đơn
+            currentData.services.forEach(item => {
+                printTableItems.innerHTML += `
+                    <tr>
+                        <td class="border border-slate-400 p-2.5 text-center font-bold">${idx++}</td>
+                        <td class="border border-slate-400 p-2.5">${item.name} (${item.detail})</td>
+                        <td class="border border-slate-400 p-2.5 text-right">${formatVNDNoUnit(item.price)}</td>
+                    </tr>`;
+            });
+
+            // Đưa phần thuốc đã tích chọn vào hóa đơn
+            if (globalMedicineAmt > 0) {
+                printTableItems.innerHTML += `
+                    <tr>
+                        <td class="border border-slate-400 p-2.5 text-center font-bold">${idx++}</td>
+                        <td class="border border-slate-400 p-2.5">Đơn thuốc (Các danh mục thuốc đã xuất kho thực tế)</td>
+                        <td class="border border-slate-400 p-2.5 text-right">${formatVNDNoUnit(globalMedicineAmt)}</td>
+                    </tr>`;
+            }
+
+            const totalAmt = globalServiceAmt + globalMedicineAmt;
+            let bhytAmt = (currentData.patient.type === "BHYT") ? Math.round(totalAmt * 0.8) : 0;
+
+            printTableItems.innerHTML += `
+                <tr>
+                    <td colspan="2" class="border border-slate-400 p-2.5 font-bold">Tổng tiền phát sinh</td>
+                    <td class="border border-slate-400 p-2.5 text-right font-bold">${formatVNDNoUnit(totalAmt)}</td>
+                </tr>
+                <tr>
+                    <td colspan="2" class="border border-slate-400 p-2.5 text-red-600 font-medium">BHYT thanh toán (80%)</td>
+                    <td class="border border-slate-400 p-2.5 text-right text-red-600 font-medium">- ${formatVNDNoUnit(bhytAmt)}</td>
+                </tr>
+                <tr class="bg-slate-50">
+                    <td colspan="2" class="border border-slate-400 p-2.5 font-extrabold text-sm uppercase">Tổng thanh toán (Bệnh nhân nộp)</td>
+                    <td class="border border-slate-400 p-2.5 text-right font-extrabold text-base text-blue-800">${formatVND(finalPayAmount)}</td>
+                </tr>`;
+        });
+
+        // Điều khiển Modal xem trước hóa đơn
+        document.getElementById('btn-show-invoice-modal').addEventListener('click', function() {
+            document.getElementById('invoice-preview-modal').classList.remove('hidden');
+        });
+
+        document.getElementById('btn-close-preview').addEventListener('click', function() {
+            document.getElementById('invoice-preview-modal').classList.add('hidden');
+        });
+
+        // Nhấn Hoàn thành để làm mới hệ thống
+        document.getElementById('btn-done-complete').addEventListener('click', function() {
+            location.reload(); 
+        });
+    </script>
+</body>
+</html>

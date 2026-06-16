@@ -1,0 +1,1023 @@
+ <!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css" rel="stylesheet">
+    <style>
+        :root{ --primary:#2b7cff; --muted:#f6f8fb; --accent:#ff7a00; }
+        body{ background:#f1f5f9; font-family: 'Segoe UI', Roboto, Arial, sans-serif; }
+        .sidebar{ min-height:100vh; background:#ffffff; border-right:1px solid #e6eef8; padding:28px 20px; width:230px; }
+        .brand{ font-weight:700; color:var(--primary); letter-spacing:0.5px; }
+        .menu .nav-link{ color:#4b5563; padding:12px 10px; border-radius:8px; display:flex; align-items:center; gap:12px; }
+        .menu .nav-link.active{ background:#eef6ff; color:var(--primary); font-weight:600; }
+        .menu .bi{ font-size:18px; color:#8b95a6; }
+        .search-box{ background:#fff; padding:12px 18px; border-radius:999px; border:1px solid #e6eef8; box-shadow:inset 0 1px 0 rgba(0,0,0,0.02); }
+        header .user { text-align:right; font-size:14px; color:#374151; }
+        header .avatar{ width:48px; height:48px; border-radius:50%; background:linear-gradient(135deg,#cfe9ff,#9cc5ff); }
+        .page-title{ font-size:20px; font-weight:700; color:#111827; margin-bottom:24px; }
+        .filter-bar{ background:#fff; border-radius:12px; padding:16px 18px; margin-bottom:24px; display:flex; gap:12px; align-items:center; box-shadow:0 2px 8px rgba(16,24,40,0.04); }
+        .filter-bar input, .filter-bar select{ border:1px solid #d1d5db; border-radius:8px; padding:8px 12px; font-size:13px; }
+        .filter-bar .btn{ padding:8px 14px; font-size:13px; }
+        .btn-add-account{ background:#10b981; border:0; color:white; padding:10px 16px; border-radius:8px; font-weight:600; }
+        .btn-add-account:hover{ background:#059669; }
+        .btn-delete-bulk{ background:#9ca3af; border:0; color:white; padding:10px 16px; border-radius:8px; font-weight:600; opacity:.55; cursor:not-allowed; transition:all .2s ease; }
+        .btn-delete-bulk.enabled{ background:#ef4444; opacity:1; cursor:pointer; }
+        .btn-delete-bulk.enabled:hover{ background:#dc2626; }
+        .btn-delete-confirm{ background:#ef4444; border:0; color:white; padding:10px 20px; border-radius:8px; font-weight:600; }
+        .btn-delete-confirm:hover{ background:#dc2626; }
+        .btn-delete-confirm:disabled{ background:#fca5a5; cursor:not-allowed; }
+        .table-container{ background:#fff; border-radius:12px; padding:18px; box-shadow:0 2px 8px rgba(16,24,40,0.04); }
+        .account-table{ font-size:14px; }
+        .account-table th{ background:#f3f4f6; color:#6b7280; font-weight:600; padding:12px; }
+        .account-table td{ padding:12px; color:#374151; }
+        .status-active{ background:#d1fae5; color:#065f46; padding:4px 12px; border-radius:6px; font-size:12px; font-weight:500; }
+        .status-blocked{ background:#fecaca; color:#991b1b; padding:4px 12px; border-radius:6px; font-size:12px; font-weight:500; }
+        .btn-edit{ background:#fff; border:1px solid #d1d5db; color:#374151; padding:6px 10px; border-radius:6px; font-size:12px; }
+        .btn-edit:hover{ background:#f3f4f6; }
+        .btn-action{ background:#fff; border:1px solid #d1d5db; color:#374151; padding:6px 8px; border-radius:6px; cursor:pointer; }
+        .btn-action:hover{ background:#f3f4f6; }
+        .action-popup{
+            position:absolute;
+            z-index:1050;
+            background:#ffffff;
+            border:1px solid #e5e7eb;
+            border-radius:12px;
+            box-shadow:0 12px 32px rgba(15,23,42,0.12);
+            min-width:180px;
+            overflow:hidden;
+        }
+        .action-popup-item{
+            width:100%;
+            padding:12px 14px;
+            border:none;
+            background:transparent;
+            text-align:left;
+            font-size:14px;
+            color:#111827;
+            display:flex;
+            align-items:center;
+            gap:10px;
+            cursor:pointer;
+        }
+        .action-popup-item:hover{
+            background:#f8fafc;
+        }
+        .action-popup-item-delete{
+            color:#b91c1c;
+        }
+        .action-popup-item-delete:hover{
+            background:rgba(248,113,113,0.12);
+        }
+        .pagination-container{ display:flex; justify-content:center; align-items:center; gap:8px; margin-top:24px; }
+        .pagination-container button{ border:1px solid #d1d5db; background:#fff; color:#374151; padding:6px 10px; border-radius:6px; cursor:pointer; }
+        .pagination-container button.active{ background:#2b7cff; color:white; border-color:#2b7cff; }
+        .form-group{ margin-bottom:18px; }
+        .form-group label{ display:block; font-weight:600; color:#111827; margin-bottom:6px; font-size:13px; }
+        .form-group label .required{ color:#dc2626; }
+        .form-group input, .form-group select{ width:100%; border:1px solid #d1d5db; border-radius:8px; padding:10px 12px; font-size:13px; }
+        .form-group input:focus, .form-group select:focus{ outline:none; border-color:#2b7cff; box-shadow:0 0 0 3px rgba(43,124,255,0.1); }
+        .form-group input::placeholder{ color:#9ca3af; }
+        .password-group{ position:relative; }
+        .password-group .toggle-password{ position:absolute; right:12px; top:50%; transform:translateY(-50%); cursor:pointer; color:#6b7280; }
+        .form-error{ color:#dc2626; font-size:12px; margin-top:4px; display:none; }
+        .form-error.show{ display:block; }
+        .modal-header-custom{ border-bottom:1px solid #e5e7eb; padding:18px; display:flex; flex-direction:column; align-items:center; justify-content:center; text-align:center; gap:10px; }
+        .modal-header-custom h5{ font-size:16px; font-weight:700; color:#111827; margin:0; }
+        .modal-title-icon{ display:flex; align-items:center; justify-content:center; gap:12px; }
+        .modal-body-custom{ padding:24px; }
+        .modal-footer-custom{ border-top:1px solid #e5e7eb; padding:16px 24px; display:flex; gap:12px; justify-content:flex-end; }
+        .detail-item{ margin-bottom:16px; }
+        .detail-label{ display:block; font-size:13px; color:#6b7280; margin-bottom:6px; }
+        .detail-value{ font-size:15px; color:#111827; font-weight:600; }
+        .badge-status{ display:inline-flex; align-items:center; padding:6px 12px; border-radius:999px; font-size:12px; font-weight:600; }
+        .badge-status-active{ background:#d1fae5; color:#065f46; }
+        .badge-status-blocked{ background:#fee2e2; color:#991b1b; }
+        .badge-role{ display:inline-flex; align-items:center; padding:6px 12px; border-radius:999px; background:#eff6ff; color:#1d4ed8; font-size:13px; font-weight:600; }
+        .detail-mini{ background:#f8fafc; border-radius:12px; padding:14px; }
+        .detail-mini-value{ font-size:13px; color:#475569; margin-top:4px; }
+        .modal-note{ color:#475569; font-size:13px; margin-top:10px; }
+        .confirm-text{ margin-bottom:8px; color:#334155; font-size:14px; }
+        .confirm-warning{ color:#b91c1c; font-size:13px; margin:0; }
+        .modal-title-icon{ display:flex; align-items:center; gap:12px; }
+        .modal-title-icon .icon-box{ width:42px; height:42px; border-radius:12px; display:flex; align-items:center; justify-content:center; font-size:18px; }
+        .icon-box.password{ background:#e0f2fe; color:#0369a1; }
+        .icon-box.delete{ background:#fee2e2; color:#b91c1c; }
+        .icon-box.view{ background:#d9f99d; color:#166534; }
+        .btn-cancel{ background:#eef6ff; border:1px solid #d0e8ff; color:#0f1724; padding:10px 20px; border-radius:8px; font-weight:600; cursor:pointer; }
+        .btn-cancel:hover{ background:#d1e7f7; }
+        .btn-submit{ background:#2b7cff; border:0; color:white; padding:10px 20px; border-radius:8px; font-weight:600; cursor:pointer; }
+        .btn-submit:hover{ background:#1e5dbf; }
+        .btn-submit:disabled{ background:#d1d5db; cursor:not-allowed; }
+        .toast-success{ position:fixed; top:20px; right:20px; background:#10b981; color:white; padding:14px 20px; border-radius:8px; box-shadow:0 4px 12px rgba(0,0,0,0.15); z-index:9999; animation:slideIn 0.3s ease-out; display:flex; align-items:center; gap:10px; font-weight:500; }
+        .toast-success::before{ content:'✓'; font-size:20px; font-weight:bold; }
+        @keyframes slideIn{ from{ transform:translateX(400px); opacity:0; } to{ transform:translateX(0); opacity:1; } }
+    </style>
+</head>
+<body>
+
+<div class="container-fluid">
+    <div class="row">
+        <!-- Sidebar -->
+        <nav class="col-md-2 sidebar p-0">
+            <div class="px-3">
+                <div class="d-flex align-items-center mb-4">
+                    <div style="width:44px;height:44px;border-radius:8px;background:linear-gradient(135deg,#e6f2ff,#d0e8ff);display:flex;align-items:center;justify-content:center;color:var(--primary);font-weight:800;margin-right:10px">H</div>
+                    <div>
+                        <div class="brand">HOSPITAL-ÔII</div>
+                        <div class="text-muted" style="font-size:12px">HỆ THỐNG Y TẾ TÍCH HỢP</div>
+                    </div>
+                </div>
+
+                <ul class="nav flex-column menu">
+                    <li class="nav-item mb-1"><a class="nav-link" href="dashboard.html"><i class="bi bi-house-door"></i> Tổng quan</a></li>
+                    <li class="nav-item mb-1"><a class="nav-link" href="#"><i class="bi bi-list-ul"></i> Quản lý danh mục</a></li>
+                    <li class="nav-item mb-1">
+                        <a class="nav-link active" href="#">
+                            <i class="bi bi-shield-lock"></i> Phân quyền người dùng
+                        </a>
+                        <ul class="nav flex-column" style="padding-left:40px; margin-top:8px;">
+                            <li class="nav-item mb-1"><a class="nav-link" href="#" style="font-size:13px">• Tài khoản</a></li>
+                            <li class="nav-item mb-1"><a class="nav-link" href="#" style="font-size:13px">• Vai trò & Phân quyền</a></li>
+                        </ul>
+                    </li>
+                    <li class="nav-item mb-1"><a class="nav-link" href="#"><i class="bi bi-exclamation-triangle"></i> Xử lý sự cố</a></li>
+                    <li class="nav-item"><a class="nav-link" href="#"><i class="bi bi-gear"></i> Cài đặt</a></li>
+                </ul>
+            </div>
+        </nav>
+
+        <!-- Main Content -->
+        <main class="col-md-10 p-4">
+            <!-- Header -->
+            <header class="d-flex justify-content-between align-items-center mb-4">
+                <div class="search-box d-flex align-items-center" style="width:60%">
+                    <i class="bi bi-search me-2 text-muted"></i>
+                    <input type="text" class="form-control border-0" placeholder="Tìm kiếm theo mã bệnh nhân...">
+                </div>
+                <div class="d-flex align-items-center">
+                    <div class="me-3 text-end user">
+                        <div>Nguyễn Văn A</div>
+                        <small class="text-muted">Admin</small>
+                    </div>
+                    <div class="avatar"></div>
+                </div>
+            </header>
+
+            <!-- Page Title -->
+            <div class="page-title">Danh sách tài khoản hệ thống</div>
+
+            <!-- Filter Bar -->
+            <div class="filter-bar">
+                <input id="searchInput" type="text" placeholder="Tìm tên, mã NV, email..." class="form-control" style="flex:1; max-width:250px;">
+                <select id="filterRole" class="form-control" style="flex:1; max-width:150px;">
+                    <option value="">Tất cả vai trò</option>
+                    <option value="doctor">Bác sĩ</option>
+                    <option value="doctor_head">Bác sĩ trưởng</option>
+                    <option value="technician">Kỹ thuật viên</option>
+                    <option value="admin">Admin</option>
+                </select>
+                <select id="filterDept" class="form-control" style="flex:1; max-width:150px;">
+                    <option value="">Tất cả khoa</option>
+                    <option value="noi">Khoa nội</option>
+                    <option value="ngoai">Khoa ngoại</option>
+                    <option value="san">Khoa sản</option>
+                </select>
+                <button class="btn btn-add-account"><i class="bi bi-plus"></i> Thêm tài khoản</button>
+                <button class="btn btn-delete-bulk"><i class="bi bi-trash"></i> Xóa hàng loạt</button>
+            </div>
+
+            <!-- Table Container -->
+            <div class="table-container">
+                <div class="table-responsive">
+                    <table class="table table-borderless account-table">
+                        <thead>
+                            <tr style="background:#f3f4f6;">
+                                <th style="width:40px;"><input type="checkbox" class="form-check-input"></th>
+                                <th>Mã định danh</th>
+                                <th>Tên đăng nhập</th>
+                                <th>Email</th>
+                                <th>Vai trò hệ thống</th>
+                                <th>Trạng thái</th>
+                                <th>Tác vụ</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td><input type="checkbox" class="form-check-input"></td>
+                                <td><strong>ACC-002</strong></td>
+                                <td>nguyenvanb.oii</td>
+                                <td>vanb.nguyen@oii.hospital.vn</td>
+                                <td>Bác sĩ trưởng</td>
+                                <td><span class="status-active">Hoạt động</span></td>
+                                <td>
+                                    <button class="btn-edit me-2" data-code="ACC-002" data-username="nguyenvanb.oii" data-email="vanb.nguyen@oii.hospital.vn" data-role="doctor_head" data-status="active"><i class="bi bi-pencil"></i> Chỉnh sửa</button>
+                                    <button class="btn-action"><i class="bi bi-three-dots"></i></button>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td><input type="checkbox" class="form-check-input"></td>
+                                <td><strong>ACC-003</strong></td>
+                                <td>tranthic.oii</td>
+                                <td>thic.tran@oii.hospital.vn</td>
+                                <td>Bác sĩ</td>
+                                <td><span class="status-active">Hoạt động</span></td>
+                                <td>
+                                    <button class="btn-edit me-2" data-code="ACC-003" data-username="tranthic.oii" data-email="thic.tran@oii.hospital.vn" data-role="doctor" data-status="active"><i class="bi bi-pencil"></i> Chỉnh sửa</button>
+                                    <button class="btn-action"><i class="bi bi-three-dots"></i></button>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td><input type="checkbox" class="form-check-input"></td>
+                                <td><strong>ACC-006</strong></td>
+                                <td>levant.oii</td>
+                                <td>levant@oii.hospital.vn</td>
+                                <td>Kỹ thuật viên</td>
+                                <td><span class="status-blocked">Tạm khóa</span></td>
+                                <td>
+                                    <button class="btn-edit me-2" data-code="ACC-006" data-username="levant.oii" data-email="levant@oii.hospital.vn" data-role="technician" data-status="blocked"><i class="bi bi-pencil"></i> Chỉnh sửa</button>
+                                    <button class="btn-action"><i class="bi bi-three-dots"></i></button>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+
+                <div id="actionPopup" class="action-popup" style="display:none;">
+                    <button type="button" class="action-popup-item" data-action="view">
+                        <i class="bi bi-eye"></i> Xem chi tiết
+                    </button>
+                    <button type="button" class="action-popup-item" data-action="password">
+                        <i class="bi bi-key"></i> Đổi mật khẩu
+                    </button>
+                    <button type="button" class="action-popup-item action-popup-item-delete" data-action="delete">
+                        <i class="bi bi-trash"></i> Xóa tài khoản
+                    </button>
+                </div>
+
+                <div class="modal fade" id="bulkDeleteModal" tabindex="-1" aria-hidden="true" style="background:rgba(0,0,0,0.5)">
+                    <div class="modal-dialog modal-dialog-centered" style="max-width:420px;">
+                        <div class="modal-content" style="border:0; border-radius:16px;">
+                            <div class="modal-header-custom">
+                                <div class="modal-title-icon">
+                                    <span class="icon-box delete"><i class="bi bi-exclamation-circle-fill"></i></span>
+                                    <h5>Xác nhận xóa hàng loạt?</h5>
+                                </div>
+                            </div>
+                            <div class="modal-body-custom">
+                                <p class="confirm-text">Bạn đang chọn xóa vĩnh viễn <strong id="bulkDeleteCount">0</strong> tài khoản đã chọn.</p>
+                                <p class="confirm-text">Toàn bộ quyền truy cập và dữ liệu liên quan sẽ bị gỡ bỏ.</p>
+                                <p class="confirm-warning">Hành động này không thể hoàn tác.</p>
+                            </div>
+                            <div class="modal-footer-custom">
+                                <button type="button" class="btn-cancel" data-bs-dismiss="modal">Hủy bỏ</button>
+                                <button type="button" class="btn-delete-confirm" id="confirmBulkDeleteBtn">Đồng ý xóa</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Pagination -->
+                <div class="pagination-container">
+                    <button>‹</button>
+                    <button class="active">1</button>
+                    <button>2</button>
+                    <button>›</button>
+                </div>
+            </div>
+        </main>
+    </div>
+</div>
+
+<!-- Modal Thêm Tài Khoản -->
+<div class="modal fade" id="addAccountModal" tabindex="-1" aria-hidden="true" style="background:rgba(0,0,0,0.5)">
+    <div class="modal-dialog modal-dialog-centered" style="max-width:420px;">
+        <div class="modal-content" style="border:0; border-radius:12px;">
+            <div class="modal-header-custom">
+                <div class="modal-title-icon">
+                    <span class="icon-box view"><i class="bi bi-person-plus-fill"></i></span>
+                    <h5>Thêm tài khoản hệ thống mới</h5>
+                </div>
+            </div>
+            <div class="modal-body-custom">
+                <form id="addAccountForm">
+                    <div class="form-group">
+                        <label>Mã định danh</label>
+                        <input type="text" id="accountCode" placeholder="Hệ thống tự động cấp (ACC-XXX)" disabled style="background:#f3f4f6; cursor:not-allowed;">
+                    </div>
+
+                    <div class="form-group">
+                        <label>Tên đăng nhập <span class="required">*</span></label>
+                        <input type="text" id="username" placeholder="Ví dụ: namnguyễn.oii" required>
+                        <div class="form-error" id="usernameError">Tên đăng nhập không được để trống</div>
+                    </div>
+
+                    <div class="form-group">
+                        <label>Email hệ thống <span class="required">*</span></label>
+                        <input type="email" id="email" placeholder="username@oii.hospital.vn" required>
+                        <div class="form-error" id="emailError">Email không hợp lệ</div>
+                    </div>
+
+                    <div class="form-group">
+                        <label>Mật khẩu khởi tạo <span class="required">*</span></label>
+                        <div class="password-group">
+                            <input type="password" id="password" placeholder="Nhập mật khẩu bạn đầu" required>
+                            <i class="bi bi-eye toggle-password" onclick="togglePassword()"></i>
+                        </div>
+                        <div class="form-error" id="passwordError">Mật khẩu phải có ít nhất 8 ký tự</div>
+                    </div>
+
+                    <div class="form-group">
+                        <label>Phân quyền vai trò <span class="required">*</span></label>
+                        <select id="role" required>
+                            <option value="">-- Chọn vai trò hệ thống --</option>
+                            <option value="doctor">Bác sĩ</option>
+                            <option value="doctor_head">Bác sĩ trưởng</option>
+                            <option value="technician">Kỹ thuật viên</option>
+                            <option value="admin">Admin</option>
+                        </select>
+                        <div class="form-error" id="roleError">Vui lòng chọn vai trò</div>
+                    </div>
+                </form>
+            </div>
+            <div class="modal-footer-custom">
+                <button type="button" class="btn-cancel" data-bs-dismiss="modal">Hủy bỏ</button>
+                <button type="button" class="btn-submit" id="submitBtn" onclick="validateAndSubmit()">Lưu tài</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Modal Chỉnh sửa Tài Khoản -->
+<div class="modal fade" id="editAccountModal" tabindex="-1" aria-hidden="true" style="background:rgba(0,0,0,0.5)">
+    <div class="modal-dialog modal-dialog-centered" style="max-width:420px;">
+        <div class="modal-content" style="border:0; border-radius:12px;">
+            <div class="modal-header-custom">
+                <div class="modal-title-icon">
+                    <span class="icon-box view"><i class="bi bi-pencil-square"></i></span>
+                    <h5>Cập nhật thông tin tài khoản</h5>
+                </div>
+            </div>
+            <div class="modal-body-custom">
+                <form id="editAccountForm">
+                    <div class="form-group">
+                        <label>Mã định danh (Không thể sửa)</label>
+                        <input type="text" id="editAccountCode" disabled style="background:#f3f4f6; cursor:not-allowed;">
+                    </div>
+
+                    <div class="form-group">
+                        <label>Tên đăng nhập (Không thể sửa)</label>
+                        <input type="text" id="editUsername" disabled style="background:#f3f4f6; cursor:not-allowed;">
+                    </div>
+
+                    <div class="form-group">
+                        <label>Email hệ thống <span class="required">*</span></label>
+                        <input type="email" id="editEmail" required>
+                        <div class="form-error" id="editEmailError">Email không hợp lệ</div>
+                    </div>
+
+                    <div class="form-group">
+                        <label>Vai trò hệ thống <span class="required">*</span></label>
+                        <select id="editRole" required>
+                            <option value="">-- Chọn vai trò hệ thống --</option>
+                            <option value="doctor">Bác sĩ</option>
+                            <option value="doctor_head">Bác sĩ trưởng</option>
+                            <option value="technician">Kỹ thuật viên</option>
+                            <option value="admin">Admin</option>
+                        </select>
+                        <div class="form-error" id="editRoleError">Vui lòng chọn vai trò</div>
+                    </div>
+
+                    <div class="form-group">
+                        <label>Trạng thái hoạt động <span class="required">*</span></label>
+                        <select id="editStatus" required>
+                            <option value="">-- Chọn trạng thái --</option>
+                            <option value="active">Hoạt động</option>
+                            <option value="blocked">Tạm khóa</option>
+                        </select>
+                        <div class="form-error" id="editStatusError">Vui lòng chọn trạng thái</div>
+                    </div>
+                </form>
+            </div>
+            <div class="modal-footer-custom">
+                <button type="button" class="btn-cancel" data-bs-dismiss="modal">Hủy bỏ</button>
+                <button type="button" class="btn-submit" id="updateBtn">Cập nhật</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Modal Xem chi tiết tài khoản -->
+<div class="modal fade" id="viewAccountModal" tabindex="-1" aria-hidden="true" style="background:rgba(0,0,0,0.5)">
+    <div class="modal-dialog modal-dialog-centered" style="max-width:520px;">
+        <div class="modal-content" style="border:0; border-radius:16px;">
+            <div class="modal-header-custom">
+                <div class="modal-title-icon">
+                    <span class="icon-box view"><i class="bi bi-info-circle-fill"></i></span>
+                    <h5>Chi tiết tài khoản hệ thống</h5>
+                </div>
+            </div>
+            <div class="modal-body-custom">
+                <div class="detail-item">
+                    <span class="detail-label">Mã định danh</span>
+                    <div class="detail-value" id="viewAccountCode">ACC-002</div>
+                </div>
+                <div class="detail-item">
+                    <span class="detail-label">Trạng thái hệ thống</span>
+                    <span class="badge-status badge-status-active" id="viewAccountStatus">Hoạt động</span>
+                </div>
+                <div class="detail-item">
+                    <span class="detail-label">Tên đăng nhập (Username)</span>
+                    <div class="detail-value" id="viewAccountUsername">nguyenvanb.oii</div>
+                </div>
+                <div class="detail-item">
+                    <span class="detail-label">Email cơ quan</span>
+                    <div class="detail-value" id="viewAccountEmail">vanb.nguyen@oii.hospital.vn</div>
+                </div>
+                <div class="detail-item">
+                    <span class="detail-label">Vai trò & Quyền hạn</span>
+                    <span class="badge-role" id="viewAccountRole">Bác sĩ trưởng</span>
+                </div>
+                <div class="row gx-3 mt-3">
+                    <div class="col-6 detail-mini">
+                        <span class="detail-label">Ngày khởi tạo hệ thống</span>
+                        <div class="detail-value detail-mini-value" id="viewAccountCreated">14:20 - 10/05/2026</div>
+                    </div>
+                    <div class="col-6 detail-mini">
+                        <span class="detail-label">Người phê duyệt tạo</span>
+                        <div class="detail-value detail-mini-value" id="viewAccountApprover">admin.super</div>
+                    </div>
+                    <div class="col-12 detail-mini mt-3">
+                        <span class="detail-label">Đăng nhập gần nhất</span>
+                        <div class="detail-value detail-mini-value" id="viewAccountLastLogin">08:05 - Hôm nay (09/06/2026)</div>
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer-custom">
+                <button type="button" class="btn-cancel" data-bs-dismiss="modal">Đóng lại</button>
+                <button type="button" class="btn-submit" id="viewEditBtn">Chỉnh sửa</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Modal Đổi mật khẩu -->
+<div class="modal fade" id="changePasswordModal" tabindex="-1" aria-hidden="true" style="background:rgba(0,0,0,0.5)">
+    <div class="modal-dialog modal-dialog-centered" style="max-width:420px;">
+        <div class="modal-content" style="border:0; border-radius:16px;">
+            <div class="modal-header-custom">
+                <div class="modal-title-icon">
+                    <span class="icon-box password"><i class="bi bi-key-fill"></i></span>
+                    <h5>Đổi mật khẩu tài khoản</h5>
+                </div>
+            </div>
+            <div class="modal-body-custom">
+                <div class="detail-item">
+                    <span class="detail-label">Tài khoản</span>
+                    <div class="detail-value" id="changePasswordAccount">nguyenvanb.oii</div>
+                </div>
+                <form id="changePasswordForm">
+                    <div class="form-group">
+                        <label>Mật khẩu mới <span class="required">*</span></label>
+                        <div class="password-group">
+                            <input type="password" id="newPassword" placeholder="Nhập mật khẩu mới" required>
+                            <i class="bi bi-eye toggle-password" onclick="togglePasswordField('newPassword', this)"></i>
+                        </div>
+                        <div class="form-error" id="newPasswordError">Mật khẩu phải có ít nhất 8 ký tự</div>
+                    </div>
+                    <div class="form-group">
+                        <label>Xác nhận mật khẩu mới <span class="required">*</span></label>
+                        <div class="password-group">
+                            <input type="password" id="confirmNewPassword" placeholder="Nhập lại mật khẩu mới" required>
+                            <i class="bi bi-eye toggle-password" onclick="togglePasswordField('confirmNewPassword', this)"></i>
+                        </div>
+                        <div class="form-error" id="confirmNewPasswordError">Mật khẩu xác nhận không khớp</div>
+                    </div>
+                    <div class="modal-note">Mật khẩu cần tối thiểu 8 ký tự bao gồm chữ và số.</div>
+                </form>
+            </div>
+            <div class="modal-footer-custom">
+                <button type="button" class="btn-cancel" data-bs-dismiss="modal">Hủy bỏ</button>
+                <button type="button" class="btn-submit" id="confirmPasswordBtn">Xác nhận</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Modal Xóa tài khoản -->
+<div class="modal fade" id="deleteAccountModal" tabindex="-1" aria-hidden="true" style="background:rgba(0,0,0,0.5)">
+    <div class="modal-dialog modal-dialog-centered" style="max-width:420px;">
+        <div class="modal-content" style="border:0; border-radius:16px;">
+            <div class="modal-header-custom">
+                <div class="modal-title-icon">
+                    <span class="icon-box delete"><i class="bi bi-exclamation-circle-fill"></i></span>
+                    <h5>Xóa tài khoản hệ thống?</h5>
+                </div>
+            </div>
+            <div class="modal-body-custom">
+                <div class="detail-item">
+                    <span class="detail-label">Mã định danh</span>
+                    <div class="detail-value" id="deleteAccountCode">ACC-002</div>
+                </div>
+                <p class="confirm-text">Bạn có chắc chắn muốn xóa tài khoản <strong id="deleteAccountUsername">nguyenvanb.oii</strong>? Toàn bộ quyền truy cập và dữ liệu liên quan sẽ bị gỡ bỏ.</p>
+                <p class="confirm-warning">Hành động này không thể hoàn tác.</p>
+            </div>
+            <div class="modal-footer-custom">
+                <button type="button" class="btn-cancel" data-bs-dismiss="modal">Hủy thao tác</button>
+                <button type="button" class="btn-submit btn-delete-confirm" id="confirmDeleteBtn">Xác nhận xóa</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+<script>
+    // Tính năng checkbox select all
+    const selectAllCheckbox = document.querySelector('thead .form-check-input');
+    const bulkDeleteBtn = document.querySelector('.btn-delete-bulk');
+
+    function updateBulkDeleteButton() {
+        const anySelected = Array.from(document.querySelectorAll('tbody .form-check-input')).some(cb => cb.checked);
+        bulkDeleteBtn.disabled = !anySelected;
+        bulkDeleteBtn.classList.toggle('enabled', anySelected);
+    }
+
+    selectAllCheckbox.addEventListener('change', function() {
+        document.querySelectorAll('tbody .form-check-input').forEach(cb => {
+            cb.checked = this.checked;
+        });
+        updateBulkDeleteButton();
+    });
+
+    document.querySelectorAll('tbody .form-check-input').forEach(cb => {
+        cb.addEventListener('change', updateBulkDeleteButton);
+    });
+
+    bulkDeleteBtn.addEventListener('click', function() {
+        if (bulkDeleteBtn.disabled) return;
+        const selectedCount = Array.from(document.querySelectorAll('tbody .form-check-input')).filter(cb => cb.checked).length;
+        document.getElementById('bulkDeleteCount').textContent = selectedCount;
+        const modal = new bootstrap.Modal(document.getElementById('bulkDeleteModal'));
+        modal.show();
+    });
+
+    document.getElementById('confirmBulkDeleteBtn').addEventListener('click', function() {
+        const rows = Array.from(document.querySelectorAll('tbody tr'));
+        rows.forEach(row => {
+            const checkbox = row.querySelector('.form-check-input');
+            if (checkbox && checkbox.checked) {
+                row.remove();
+            }
+        });
+        const modal = bootstrap.Modal.getInstance(document.getElementById('bulkDeleteModal'));
+        modal.hide();
+        updateBulkDeleteButton();
+        selectAllCheckbox.checked = false;
+        showSuccessNotification('Xóa hàng loạt thành công!');
+    });
+
+    // Tính năng nút action
+    const actionPopup = document.getElementById('actionPopup');
+    let currentActionRow = null;
+
+    document.querySelectorAll('.btn-action').forEach(btn => {
+        btn.addEventListener('click', function(e) {
+            e.stopPropagation();
+            const row = this.closest('tr');
+            currentActionRow = row;
+
+            const rect = this.getBoundingClientRect();
+            const bodyRect = document.body.getBoundingClientRect();
+            const top = rect.bottom + window.scrollY + 8;
+            const left = rect.left + window.scrollX;
+
+            actionPopup.style.top = top + 'px';
+            actionPopup.style.left = left + 'px';
+            actionPopup.style.display = 'block';
+        });
+    });
+
+    document.addEventListener('click', function(event) {
+        if (!actionPopup.contains(event.target) && !event.target.closest('.btn-action')) {
+            actionPopup.style.display = 'none';
+        }
+    });
+
+    actionPopup.addEventListener('click', function(event) {
+        const actionButton = event.target.closest('.action-popup-item');
+        if (!actionButton || !currentActionRow) return;
+        const action = actionButton.dataset.action;
+        actionPopup.style.display = 'none';
+
+        if (action === 'view') {
+            openViewModal(currentActionRow);
+        } else if (action === 'password') {
+            openChangePasswordModal(currentActionRow);
+        } else if (action === 'delete') {
+            openDeleteModal(currentActionRow);
+        }
+    });
+
+    // Tính năng nút chỉnh sửa - mở modal chỉnh sửa và prefill
+    document.querySelectorAll('.btn-edit').forEach(btn => {
+        btn.addEventListener('click', function() {
+            const code = this.getAttribute('data-code');
+            const username = this.getAttribute('data-username');
+            const email = this.getAttribute('data-email');
+            const role = this.getAttribute('data-role');
+            const status = this.getAttribute('data-status');
+
+            // Prefill modal fields
+            document.getElementById('editAccountCode').value = code;
+            document.getElementById('editUsername').value = username;
+            document.getElementById('editEmail').value = email;
+            document.getElementById('editRole').value = role;
+            document.getElementById('editStatus').value = status;
+
+            // Store reference to the source row for updating after save
+            document.getElementById('editAccountModal').dataset.sourceButton = JSON.stringify({code, username});
+
+            // Clear previous errors
+            hideError('editEmailError');
+            hideError('editRoleError');
+            hideError('editStatusError');
+
+            const modal = new bootstrap.Modal(document.getElementById('editAccountModal'));
+            modal.show();
+        });
+    });
+
+    // Tính năng thêm tài khoản - mở modal
+    document.querySelector('.btn-add-account').addEventListener('click', function() {
+        generateAccountCode();
+        resetForm();
+        const modal = new bootstrap.Modal(document.getElementById('addAccountModal'));
+        modal.show();
+    });
+
+    // Auto-generate mã định danh
+    function generateAccountCode() {
+        const lastCode = 6; // Lấy từ bảng, ở đây mình hardcode
+        const newCode = 'ACC-' + String(parseInt(lastCode) + 1).padStart(3, '0');
+        document.getElementById('accountCode').value = newCode;
+    }
+
+    // Reset form
+    function resetForm() {
+        document.getElementById('addAccountForm').reset();
+        document.querySelectorAll('.form-error').forEach(el => {
+            el.classList.remove('show');
+        });
+    }
+
+    // Toggle hiển thị mật khẩu
+    function togglePassword() {
+        const input = document.getElementById('password');
+        const icon = document.querySelector('.toggle-password');
+        if (input.type === 'password') {
+            input.type = 'text';
+            icon.classList.remove('bi-eye');
+            icon.classList.add('bi-eye-slash');
+        } else {
+            input.type = 'password';
+            icon.classList.remove('bi-eye-slash');
+            icon.classList.add('bi-eye');
+        }
+    }
+
+    function togglePasswordField(fieldId, icon) {
+        const input = document.getElementById(fieldId);
+        if (!input) return;
+        if (input.type === 'password') {
+            input.type = 'text';
+            icon.classList.remove('bi-eye');
+            icon.classList.add('bi-eye-slash');
+        } else {
+            input.type = 'password';
+            icon.classList.remove('bi-eye-slash');
+            icon.classList.add('bi-eye');
+        }
+    }
+
+    function openViewModal(row) {
+        const cells = row.querySelectorAll('td');
+        const code = cells[1]?.textContent.trim() || '';
+        const username = cells[2]?.textContent.trim() || '';
+        const email = cells[3]?.textContent.trim() || '';
+        const role = cells[4]?.textContent.trim() || '';
+        const status = cells[5]?.textContent.trim() || '';
+
+        document.getElementById('viewAccountCode').textContent = code;
+        document.getElementById('viewAccountUsername').textContent = username;
+        document.getElementById('viewAccountEmail').textContent = email;
+        document.getElementById('viewAccountRole').textContent = role;
+        document.getElementById('viewAccountStatus').textContent = status;
+
+        const modal = new bootstrap.Modal(document.getElementById('viewAccountModal'));
+        modal.show();
+    }
+
+    function openChangePasswordModal(row) {
+        const username = row.querySelectorAll('td')[2]?.textContent.trim() || '';
+        document.getElementById('changePasswordAccount').textContent = username;
+        document.getElementById('changePasswordForm').reset();
+        hideError('newPasswordError');
+        hideError('confirmNewPasswordError');
+        currentActionRow = row;
+        const modal = new bootstrap.Modal(document.getElementById('changePasswordModal'));
+        modal.show();
+    }
+
+    function openDeleteModal(row) {
+        const code = row.querySelectorAll('td')[1]?.textContent.trim() || '';
+        const username = row.querySelectorAll('td')[2]?.textContent.trim() || '';
+        document.getElementById('deleteAccountCode').textContent = code;
+        document.getElementById('deleteAccountUsername').textContent = username;
+        currentActionRow = row;
+        const modal = new bootstrap.Modal(document.getElementById('deleteAccountModal'));
+        modal.show();
+    }
+
+    document.getElementById('confirmPasswordBtn').addEventListener('click', function() {
+        let valid = true;
+        const password = document.getElementById('newPassword').value;
+        const confirm = document.getElementById('confirmNewPassword').value;
+
+        if (!password) {
+            showError('newPasswordError', 'Mật khẩu mới không được để trống');
+            valid = false;
+        } else if (password.length < 8) {
+            showError('newPasswordError', 'Mật khẩu phải có ít nhất 8 ký tự');
+            valid = false;
+        } else {
+            hideError('newPasswordError');
+        }
+
+        if (!confirm) {
+            showError('confirmNewPasswordError', 'Xác nhận mật khẩu không được để trống');
+            valid = false;
+        } else if (confirm !== password) {
+            showError('confirmNewPasswordError', 'Mật khẩu xác nhận không khớp');
+            valid = false;
+        } else {
+            hideError('confirmNewPasswordError');
+        }
+
+        if (!valid) return;
+
+        const modal = bootstrap.Modal.getInstance(document.getElementById('changePasswordModal'));
+        modal.hide();
+        showSuccessNotification('Đổi mật khẩu thành công!');
+    });
+
+    document.getElementById('confirmDeleteBtn').addEventListener('click', function() {
+        const modal = bootstrap.Modal.getInstance(document.getElementById('deleteAccountModal'));
+        modal.hide();
+        if (currentActionRow) {
+            currentActionRow.remove();
+            showSuccessNotification('Xóa tài khoản thành công!');
+        }
+    });
+
+    // Validate và submit form
+    function validateAndSubmit() {
+        let isValid = true;
+
+        // Validate tên đăng nhập
+        const username = document.getElementById('username').value.trim();
+        if (!username) {
+            showError('usernameError', 'Tên đăng nhập không được để trống');
+            isValid = false;
+        } else if (username.length < 3) {
+            showError('usernameError', 'Tên đăng nhập phải có ít nhất 3 ký tự');
+            isValid = false;
+        } else {
+            hideError('usernameError');
+        }
+
+        // Validate email
+        const email = document.getElementById('email').value.trim();
+        const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+        if (!email) {
+            showError('emailError', 'Email không được để trống');
+            isValid = false;
+        } else if (!emailRegex.test(email)) {
+            showError('emailError', 'Email không hợp lệ');
+            isValid = false;
+        } else {
+            hideError('emailError');
+        }
+
+        // Validate mật khẩu
+        const password = document.getElementById('password').value;
+        if (!password) {
+            showError('passwordError', 'Mật khẩu không được để trống');
+            isValid = false;
+        } else if (password.length < 8) {
+            showError('passwordError', 'Mật khẩu phải có ít nhất 8 ký tự');
+            isValid = false;
+        } else {
+            hideError('passwordError');
+        }
+
+        // Validate vai trò
+        const role = document.getElementById('role').value;
+        if (!role) {
+            showError('roleError', 'Vui lòng chọn vai trò');
+            isValid = false;
+        } else {
+            hideError('roleError');
+        }
+
+        if (isValid) {
+            // Tất cả validation thành công
+            const modal = bootstrap.Modal.getInstance(document.getElementById('addAccountModal'));
+            modal.hide();
+            showSuccessNotification('Thêm tài khoản thành công!');
+        }
+    }
+
+    // Hàm hiển thị lỗi
+    function showError(elementId, message) {
+        const errorEl = document.getElementById(elementId);
+        errorEl.textContent = message;
+        errorEl.classList.add('show');
+    }
+
+    // Hàm ẩn lỗi
+    function hideError(elementId) {
+        const errorEl = document.getElementById(elementId);
+        errorEl.classList.remove('show');
+    }
+
+    // Real-time validation
+    document.getElementById('username').addEventListener('blur', function() {
+        if (this.value.trim()) {
+            if (this.value.length < 3) {
+                showError('usernameError', 'Tên đăng nhập phải có ít nhất 3 ký tự');
+            } else {
+                hideError('usernameError');
+            }
+        }
+    });
+
+    document.getElementById('email').addEventListener('blur', function() {
+        const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+        if (this.value.trim() && !emailRegex.test(this.value)) {
+            showError('emailError', 'Email không hợp lệ');
+        } else {
+            hideError('emailError');
+        }
+    });
+
+    document.getElementById('password').addEventListener('blur', function() {
+        if (this.value && this.value.length < 8) {
+            showError('passwordError', 'Mật khẩu phải có ít nhất 8 ký tự');
+        } else if (this.value) {
+            hideError('passwordError');
+        }
+    });
+
+    // Hàm lọc bảng theo tìm kiếm, vai trò, khoa
+    function filterTable() {
+        const q = document.getElementById('searchInput').value.trim().toLowerCase();
+        const roleFilter = document.getElementById('filterRole').value;
+        const deptFilter = document.getElementById('filterDept').value;
+
+        const rows = document.querySelectorAll('table.account-table tbody tr');
+        rows.forEach(row => {
+            const cells = row.querySelectorAll('td');
+            const code = (cells[1]?.textContent || '').toLowerCase();
+            const username = (cells[2]?.textContent || '').toLowerCase();
+            const email = (cells[3]?.textContent || '').toLowerCase();
+            const roleText = (cells[4]?.textContent || '').toLowerCase();
+            // nếu có thông tin khoa lưu trong data-dept
+            const deptVal = row.dataset.dept || '';
+
+            let visible = true;
+
+            // Tìm kiếm chung (code, username, email)
+            if (q) {
+                if (!(code.includes(q) || username.includes(q) || email.includes(q))) {
+                    visible = false;
+                }
+            }
+
+            // Lọc theo vai trò (khớp data-role trên nút chỉnh sửa nếu có, fallback roleText)
+            if (visible && roleFilter) {
+                const editBtn = row.querySelector('.btn-edit');
+                const rowRole = (editBtn && editBtn.dataset.role) ? editBtn.dataset.role : '';
+                if (rowRole) {
+                    if (rowRole !== roleFilter) visible = false;
+                } else {
+                    // so sánh text
+                    const map = { 'bác sĩ': 'doctor', 'bác sĩ trưởng': 'doctor_head', 'kỹ thuật viên': 'technician', 'admin': 'admin' };
+                    const mapped = map[roleText] || '';
+                    if (mapped !== roleFilter) visible = false;
+                }
+            }
+
+            // Lọc theo khoa nếu có (nếu dữ liệu dept có giá trị)
+            if (visible && deptFilter) {
+                if (deptVal !== deptFilter) visible = false;
+            }
+
+            row.style.display = visible ? '' : 'none';
+        });
+    }
+
+    // Bắt sự kiện cho input và selects
+    document.getElementById('searchInput').addEventListener('input', filterTable);
+    document.getElementById('searchInput').addEventListener('keydown', function(e){ if (e.key === 'Enter') filterTable(); });
+    document.getElementById('filterRole').addEventListener('change', filterTable);
+    document.getElementById('filterDept').addEventListener('change', filterTable);
+
+    // Validate và cập nhật thông tin từ modal chỉnh sửa
+    document.getElementById('updateBtn').addEventListener('click', function() {
+        let valid = true;
+        const email = document.getElementById('editEmail').value.trim();
+        const role = document.getElementById('editRole').value;
+        const status = document.getElementById('editStatus').value;
+        const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+
+        if (!email) {
+            showError('editEmailError', 'Email không được để trống');
+            valid = false;
+        } else if (!emailRegex.test(email)) {
+            showError('editEmailError', 'Email không hợp lệ');
+            valid = false;
+        } else {
+            hideError('editEmailError');
+        }
+
+        if (!role) {
+            showError('editRoleError', 'Vui lòng chọn vai trò');
+            valid = false;
+        } else {
+            hideError('editRoleError');
+        }
+
+        if (!status) {
+            showError('editStatusError', 'Vui lòng chọn trạng thái');
+            valid = false;
+        } else {
+            hideError('editStatusError');
+        }
+
+        if (!valid) return;
+
+        // Tìm dòng tương ứng theo mã
+        const code = document.getElementById('editAccountCode').value;
+        const rows = document.querySelectorAll('table.account-table tbody tr');
+        for (const row of rows) {
+            const codeCell = row.querySelectorAll('td')[1];
+            if (codeCell && codeCell.textContent.trim() === code) {
+                // Cập nhật email
+                row.querySelectorAll('td')[3].textContent = email;
+                // Cập nhật vai trò (hiển thị text)
+                const roleTextMap = { doctor: 'Bác sĩ', doctor_head: 'Bác sĩ trưởng', technician: 'Kỹ thuật viên', admin: 'Admin' };
+                row.querySelectorAll('td')[4].textContent = roleTextMap[role] || role;
+                // Cập nhật trạng thái badge
+                const statusCell = row.querySelectorAll('td')[5];
+                if (status === 'active') {
+                    statusCell.innerHTML = '<span class="status-active">Hoạt động</span>';
+                } else {
+                    statusCell.innerHTML = '<span class="status-blocked">Tạm khóa</span>';
+                }
+
+                // Cập nhật data-* trên nút chỉnh sửa
+                const editBtn = row.querySelector('.btn-edit');
+                if (editBtn) {
+                    editBtn.setAttribute('data-email', email);
+                    editBtn.setAttribute('data-role', role);
+                    editBtn.setAttribute('data-status', status);
+                }
+
+                break;
+            }
+        }
+
+        // Đóng modal và hiển thị thông báo
+        const modal = bootstrap.Modal.getInstance(document.getElementById('editAccountModal'));
+        modal.hide();
+        showSuccessNotification('Chỉnh sửa tài khoản thành công!');
+    });
+
+    // Hàm hiển thị thông báo thành công
+    function showSuccessNotification(message) {
+        const notification = document.createElement('div');
+        notification.className = 'toast-success';
+        notification.textContent = message;
+        document.body.appendChild(notification);
+
+        // Tự động xóa sau 3 giây
+        setTimeout(function() {
+            notification.style.animation = 'slideIn 0.3s ease-out reverse';
+            setTimeout(function() {
+                notification.remove();
+            }, 300);
+        }, 3000);
+    }
+</script>
+</body>
+</html>

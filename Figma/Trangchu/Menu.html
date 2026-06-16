@@ -1,0 +1,179 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>HOSPITAL-ÔII - Hệ thống y tế tích hợp</title>
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200" />
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+    <aside>
+        <div>
+            <div class="logo-area">
+                <div class="logo-title">HOSPITAL-ÔII</div>
+                <div class="logo-sub">Hệ thống y tế tích hợp</div>
+            </div>
+            <ul class="menu-list">
+                <li class="menu-item active">
+                    <a href="#"><span class="material-symbols-outlined">home</span>Trang chủ</a>
+                </li>
+                <li class="menu-item">
+                    <a href="#"><span class="material-symbols-outlined">calendar_month</span>Quản lý đặt lịch</a>
+                </li>
+                <ul class="sub-menu">
+                    <li><a href="#">• Đặt lịch khám</a></li>
+                    <li><a href="#">• Lịch hẹn của tôi</a></li>
+                </ul>
+                <li class="menu-item">
+                    <a href="#"><span class="material-symbols-outlined">person</span>Danh sách bác sĩ</a>
+                </li>
+                <li class="menu-item">
+                    <a href="#"><span class="material-symbols-outlined">local_hospital</span>Khoa phòng điều trị</a>
+                </li>
+                <li class="menu-item">
+                    <a href="#"><span class="material-symbols-outlined">settings</span>Cài đặt</a>
+                </li>
+            </ul>
+        </div>
+        <button class="btn-logout">
+            <span class="material-symbols-outlined">logout</span> ĐĂNG XUẤT
+        </button>
+    </aside>
+
+    <main>
+        <header>
+            <div class="search-box">
+                <span class="material-symbols-outlined">search</span>
+                <input type="text" placeholder="Tìm bác sĩ, chuyên khoa...">
+            </div>
+            <div class="header-right">
+                <div class="header-icons">
+                    <span class="material-symbols-outlined">notifications</span>
+                    <span class="material-symbols-outlined">help</span>
+                </div>
+                <div class="user-info">
+                    <div class="user-role">Bệnh nhân</div>
+                    <div class="user-name">Nguyễn Văn C</div>
+                </div>
+            </div>
+        </header>
+
+        <div class="container">
+            
+            <div class="banner-hero">
+                <h2>Chăm sóc bằng cả trái tim</h2>
+                <p>Hệ thống đặt lịch khám chủ động trực tuyến giúp điều phối và tiết kiệm thời gian chờ của bệnh nhân.</p>
+                <button class="btn-primary">ĐẶT LỊCH KHÁM NGAY</button>
+            </div>
+
+            <h3 class="section-title">Tra cứu nhanh khoa phòng điều trị</h3>
+            <div class="dept-grid">
+                <div class="dept-card">
+                    <div class="dept-icon icon-blue">
+                        <span class="material-symbols-outlined">medical_services</span>
+                    </div>
+                    <div class="dept-info">
+                        <h4>Khoa Nội tiêu hóa</h4>
+                        <p>12 Bác sĩ chuyên khoa</p>
+                    </div>
+                </div>
+                <div class="dept-card">
+                    <div class="dept-icon icon-red">
+                        <span class="material-symbols-outlined">child_care</span>
+                    </div>
+                    <div class="dept-info">
+                        <h4>Khoa Nhi nhi đồng</h4>
+                        <p>8 Bác sĩ chuyên khoa</p>
+                    </div>
+                </div>
+                <div class="dept-card">
+                    <div class="dept-icon icon-green">
+                        <span class="material-symbols-outlined">cardiology</span>
+                    </div>
+                    <div class="dept-info">
+                        <h4>Khoa Tim mạch</h4>
+                        <p>15 Bác sĩ đầu ngành</p>
+                    </div>
+                </div>
+                <div class="dept-card">
+                    <div class="dept-icon icon-orange">
+                        <span class="material-symbols-outlined">hearing</span>
+                    </div>
+                    <div class="dept-info">
+                        <h4>Khoa Tai Mũi Họng</h4>
+                        <p>10 Bác sĩ chuyên khoa</p>
+                    </div>
+                </div>
+            </div>
+
+            <h3 class="section-title">Bác sĩ chuyên khoa tiêu hóa nổi bật</h3>
+            <div class="doctor-grid">
+                <div class="doctor-card">
+                    <img class="doctor-img" src="https://png.pngtree.com/png-clipart/20240303/original/pngtree-portrait-of-friendly-middle-aged-european-male-doctor-in-workwear-with-png-image_14482767.png">
+                    <div class="doctor-details">
+                        <div class="doc-title">ThS.BS Nguyễn Văn A</div>
+                        <div class="doc-spec">Khoa Tiêu hóa • Kinh nghiệm: 20 năm</div>
+                        <div class="doc-rating">
+                            <span class="material-symbols-outlined">star</span> 4.9 <span class="text-review">(312 lượt đánh giá tích cực)</span>
+                        </div>
+                        <div class="doc-desc">Chuyên nội soi tiêu hóa can thiệp, tầm soát ung thư dạ dày sớm.</div>
+                        <span class="tag-status tag-heavy">• ĐÔNG</span>
+                    </div>
+                    <button class="btn-detail">Xem chi tiết ></button>
+                </div>
+
+                <div class="doctor-card">
+                    <img class="doctor-img" src="https://bvtrungvuong.vn/_next/static/images/image-4-71344fd64b664ba9779b8306ce9a116d.png">
+                    <div class="doctor-details">
+                        <div class="doc-title">PGS.TS Lê Thị B</div>
+                        <div class="doc-spec">Khoa Nhi tiêu hóa • Kinh nghiệm: 15 năm</div>
+                        <div class="doc-rating">
+                            <span class="material-symbols-outlined">star</span> 5.0 <span class="text-review">(240 lượt đánh giá xuất sắc)</span>
+                        </div>
+                        <div class="doc-desc">Chuyên gia đầu ngành điều trị bệnh lý trào ngược, rối loạn hấp thu ở trẻ.</div>
+                        <span class="tag-status tag-medium">• VỪA PHẢI</span>
+                    </div>
+                    <button class="btn-detail">Xem chi tiết ></button>
+                </div>
+            </div>
+
+            <div class="bottom-sections">
+                <div class="info-box">
+                    <h3 class="section-title">Thông tin dịch vụ</h3>
+                    <ul class="info-list">
+                        <li>Miễn phí gửi xe cho bệnh nhân đặt lịch khám trước qua hệ thống quản lý.</li>
+                        <li>Hỗ trợ làm thủ tục bảo hiểm y tế đúng tuyến & trái tuyến linh hoạt.</li>
+                    </ul>
+                </div>
+
+                <div class="info-box">
+                    <h3 class="section-title">Tin tức & Sự kiện bệnh viện</h3>
+                    <div class="news-item">
+                        <div class="news-icon-box"><span class="material-symbols-outlined">expand_less</span></div>
+                        <div class="news-content">
+                            <h5>1. Thông báo triển khai cổng phân luồng giảm tải phòng khám</h5>
+                            <p>Hệ thống tự động điều phối công suất thời gian thực chính thức vận hành...</p>
+                        </div>
+                    </div>
+                    <div class="news-item">
+                        <div class="news-icon-box"><span class="material-symbols-outlined">expand_less</span></div>
+                        <div class="news-content">
+                            <h5>2. Lịch làm việc tăng cường của các chuyên gia đầu ngành tuần này</h5>
+                            <p>Danh sách các phó giáo sư, tiến sĩ trực tiếp tại phòng khám yêu cầu...</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+
+        <footer>
+            <div>Hệ thống Website Bệnh viện Ba Tơ - Số 175 Tây Sơn, Đống Đa, Hà Nội</div>
+            <div>© 2026 Bản quyền thuộc về Nhóm 1</div>
+        </footer>
+    </main>
+
+</body>
+</html>
