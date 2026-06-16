@@ -13,10 +13,14 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
         body { font-family: 'Inter', sans-serif; }
-        .sidebar-active { background: linear-gradient(90deg, #2ae09a 0%, #3bf0b0 100%); color: #0d4834; font-weight: 600; }
+        .sidebar-link { transition: background .2s ease, color .2s ease; }
+        .sidebar-link.active, .sidebar-link:hover { background: #eef6ff; color: #1755d1; }
+        .sidebar-link.active i, .sidebar-link:hover i { color: #1755d1; }
+        .sidebar-subitem { transition: color .2s ease; }
+        .sidebar-subitem:hover { color: #0f172a; }
     </style>
 </head>
-<body class="bg-[#f0f4f9] text-gray-800 min-h-screen flex select-none">
+<body class="bg-[#eef5ff] text-gray-800 min-h-screen flex select-none">
 
     <!-- MAIN APP WRAPPER -->
     <div class="flex flex-1">
@@ -31,43 +35,39 @@
                 </div>
                 <!-- Navigation Links -->
                 <nav class="p-4 space-y-3">
-                    <button onclick="showMainDashboard()" class="w-full rounded-2xl bg-slate-100 border border-slate-200 text-slate-900 text-sm font-semibold px-4 py-3 flex items-center gap-3 justify-start">
-                        <i class="fa-solid fa-house text-base"></i>
-                        <span>Tổng quan</span>
+                    <button onclick="showMainDashboard()" data-menu="home" class="sidebar-link w-full rounded-3xl border border-slate-200 text-left px-4 py-3 text-sm font-semibold text-slate-900 flex items-center gap-3 active">
+                        <i class="fa-solid fa-house text-base text-blue-600"></i>
+                        <span>Trang chủ</span>
                     </button>
-                    <button onclick="showPatientManagement()" class="w-full rounded-2xl text-left px-4 py-3 text-sm text-slate-700 hover:bg-slate-100 flex items-center gap-3">
-                        <i class="fa-solid fa-user-doctor text-base"></i>
+                    <div class="rounded-3xl border border-slate-200 bg-slate-50 overflow-hidden">
+                        <button class="w-full px-4 py-3 text-sm font-semibold text-slate-900 flex items-center justify-between gap-3">
+                            <span class="flex items-center gap-3"><i class="fa-solid fa-calendar-days text-base text-blue-600"></i> <span>Quản lý đặt lịch</span></span>
+                            <i class="fa-solid fa-chevron-down text-xs text-slate-400"></i>
+                        </button>
+                        <div class="px-6 py-3 space-y-2 border-t border-slate-200">
+                            <button class="sidebar-subitem w-full text-left text-xs text-slate-600 hover:text-slate-900">Đặt lịch khám</button>
+                            <button class="sidebar-subitem w-full text-left text-xs text-slate-600 hover:text-slate-900">Lịch hẹn của tôi</button>
+                        </div>
+                    </div>
+                    <button onclick="showPatientManagement()" data-menu="patients" class="sidebar-link w-full rounded-3xl text-left px-4 py-3 text-sm text-slate-700 flex items-center gap-3">
+                        <i class="fa-solid fa-user-doctor text-base text-slate-500"></i>
                         <span>Quản lý hồ sơ bệnh nhân</span>
                     </button>
-                    <div class="rounded-2xl border border-slate-200 bg-slate-50 overflow-hidden">
-                        <button class="w-full px-4 py-3 text-sm font-semibold text-slate-900 flex items-center justify-between gap-3">
-                            <span class="flex items-center gap-3"><i class="fa-solid fa-calendar-days text-base"></i> <span>Quản lý đặt lịch</span></span>
-                            <i class="fa-solid fa-chevron-down text-xs text-slate-400"></i>
-                        </button>
-                        <div class="px-6 py-3 space-y-2 border-t border-slate-200">
-                            <button class="w-full text-left text-xs text-slate-600 hover:text-slate-900">Đặt lịch khám</button>
-                            <button class="w-full text-left text-xs text-slate-600 hover:text-slate-900">Lịch hẹn của tôi</button>
-                        </div>
-                    </div>
-                    <div class="rounded-2xl border border-slate-200 bg-slate-50 overflow-hidden">
-                        <button class="w-full px-4 py-3 text-sm font-semibold text-slate-900 flex items-center justify-between gap-3">
-                            <span class="flex items-center gap-3"><i class="fa-solid fa-shield-halved text-base"></i> <span>Phân quyền người dùng</span></span>
-                            <i class="fa-solid fa-chevron-down text-xs text-slate-400"></i>
-                        </button>
-                        <div class="px-6 py-3 space-y-2 border-t border-slate-200">
-                            <button class="w-full text-left text-xs text-slate-600 hover:text-slate-900">Tài khoản</button>
-                            <button class="w-full text-left text-xs text-slate-600 hover:text-slate-900">Vai trò ở Phân quyền</button>
-                        </div>
-                    </div>
-                    <button class="w-full text-left rounded-2xl px-4 py-3 text-sm text-slate-700 hover:bg-slate-100 flex items-center gap-3">
-                        <i class="fa-solid fa-triangle-exclamation text-base"></i>
-                        <span>Xử lý sự cố</span>
+                    <button class="sidebar-link w-full rounded-3xl text-left px-4 py-3 text-sm text-slate-700 flex items-center gap-3">
+                        <i class="fa-solid fa-hospital text-base text-slate-500"></i>
+                        <span>Khoa phòng điều trị</span>
                     </button>
-                    <button class="w-full text-left rounded-2xl px-4 py-3 text-sm text-slate-700 hover:bg-slate-100 flex items-center gap-3">
-                        <i class="fa-solid fa-gear text-base"></i>
+                    <button class="sidebar-link w-full rounded-3xl text-left px-4 py-3 text-sm text-slate-700 flex items-center gap-3">
+                        <i class="fa-solid fa-gear text-base text-slate-500"></i>
                         <span>Cài đặt</span>
                     </button>
                 </nav>
+            </div>
+            <div class="p-4 border-t border-slate-200">
+                <button class="w-full rounded-3xl bg-blue-600 text-white text-sm font-semibold px-4 py-3 flex items-center justify-center gap-2 hover:bg-blue-700">
+                    <i class="fa-solid fa-right-from-bracket"></i>
+                    <span>Đăng xuất</span>
+                </button>
             </div>
         </aside>
 
@@ -93,7 +93,7 @@
             </header>
 
             <!-- VIEW CONTAINER WITH ROUTING DYNAMIC STATES -->
-            <main class="flex-1 py-6 px-8 overflow-y-auto bg-[#f5f8fc]">
+            <main class="flex-1 py-6 px-8 overflow-y-auto bg-[#f7fbff]">
                 <div class="max-w-7xl mx-auto space-y-6">
 
                 <!-- 1. VIEW MAIN: DASHBOARD WITH PATIENT SUMMARY -->
@@ -156,14 +156,22 @@
 
                 <!-- 2. VIEW PATIENT MANAGEMENT: full add/edit/delete list -->
                 <div id="view-patients" class="hidden max-w-7xl mx-auto animate-fadeIn bg-white rounded-3xl border border-gray-200 shadow-sm p-6">
-                    <div class="flex flex-col md:flex-row md:items-center md:justify-between gap-6 mb-6">
-                        <div>
-                            <h2 class="text-xl font-bold text-gray-900">Quản lý hồ sơ bệnh nhân</h2>
-                            <p class="text-xs text-gray-500">Tạo mới, sửa, xóa và xem chi tiết hồ sơ bệnh nhân.</p>
+                    <div class="flex flex-col lg:flex-row lg:items-center lg:justify-between gap-4 mb-6">
+                        <div class="space-y-2">
+                            <div class="flex items-center gap-2 text-sm text-slate-600">
+                                <button onclick="showMainDashboard()" class="inline-flex items-center gap-2 text-blue-700 hover:text-blue-900">
+                                    <i class="fa-solid fa-arrow-left"></i>
+                                    <span>Về trang chủ</span>
+                                </button>
+                            </div>
+                            <div>
+                                <h2 class="text-xl font-bold text-gray-900">Quản lý hồ sơ bệnh nhân</h2>
+                                <p class="text-xs text-gray-500">Tạo mới, sửa, xóa và xem chi tiết hồ sơ bệnh nhân.</p>
+                            </div>
                         </div>
-                        <div class="flex items-center gap-3">
+                        <div class="flex flex-col sm:flex-row sm:items-center gap-3 w-full sm:w-auto">
                             <input id="input-search-patient" type="text" placeholder="Tìm kiếm hồ sơ..." oninput="updatePatientSearch(event)" class="w-full md:w-80 border border-slate-300 rounded-2xl px-4 py-3 text-sm outline-none focus:border-blue-500 focus:ring-2 focus:ring-blue-100">
-                            <button onclick="switchView('view-create')" class="bg-emerald-700 text-white text-xs font-semibold px-4 py-2 rounded-lg hover:bg-emerald-800">Thêm hồ sơ mới</button>
+                            <button onclick="switchView('view-create')" class="bg-blue-600 text-white text-xs font-semibold px-4 py-2 rounded-lg hover:bg-blue-700">Thêm hồ sơ mới</button>
                         </div>
                     </div>
                     <div id="patients-management-list" class="space-y-3 min-h-[220px]"></div>
@@ -279,7 +287,7 @@
                         <!-- Action Trigger Control Buttons Form Footer -->
                         <div class="flex justify-between items-center mt-6 pt-4 border-t">
                             <button onclick="openModal('modal-cancel')" class="border border-gray-300 text-gray-700 font-medium px-5 py-2 rounded text-sm hover:bg-gray-50 cursor-pointer">HỦY BỎ</button>
-                            <button onclick="validateEditAndOpenSaveModal()" class="bg-[#0f172a] hover:bg-slate-800 text-white font-medium px-6 py-2 rounded text-sm flex items-center space-x-2 shadow cursor-pointer">
+                            <button onclick="validateEditAndOpenSaveModal()" class="bg-blue-600 hover:bg-blue-700 text-white font-medium px-6 py-2 rounded text-sm flex items-center space-x-2 shadow cursor-pointer">
                                 <i class="fa-solid fa-floppy-disk"></i> <span>LƯU & CẬP NHẬT BIẾN ĐỘNG HỒ SƠ (Ctrl+S)</span>
                             </button>
                         </div>
@@ -371,7 +379,7 @@
                                 <textarea id="input-history-note" placeholder="Mô tả chi tiết lịch sử bệnh án..." class="w-full border border-gray-300 rounded p-2 text-xs text-gray-800 outline-none min-h-[90px] resize-none"></textarea>
                                 <div class="flex justify-end gap-3">
                                     <button onclick="toggleHistoryForm(false)" class="text-xs px-3 py-2 rounded border border-slate-300 text-slate-700 hover:bg-slate-100">Hủy</button>
-                                    <button onclick="saveHistoryRecord()" class="text-xs px-3 py-2 rounded bg-emerald-600 text-white hover:bg-emerald-700">Lưu lịch sử</button>
+                                    <button onclick="saveHistoryRecord()" class="text-xs px-3 py-2 rounded bg-blue-600 text-white hover:bg-blue-700">Lưu lịch sử</button>
                                 </div>
                             </div>
                             <div id="detail-history-list" class="space-y-3"></div>
@@ -460,7 +468,7 @@
                                 <i class="fa-solid fa-xmark"></i> <span>HỦY BỎ</span>
                             </button>
                             <!-- Click simulation logic triggers duplicate text match check -->
-                            <button onclick="triggerSubmitCreationCheck()" class="bg-[#0f172a] hover:bg-slate-800 text-white text-xs font-bold px-4 py-2 rounded flex items-center space-x-1 shadow cursor-pointer">
+                            <button onclick="triggerSubmitCreationCheck()" class="bg-blue-600 hover:bg-blue-700 text-white text-xs font-bold px-4 py-2 rounded flex items-center space-x-1 shadow cursor-pointer">
                                 <i class="fa-solid fa-floppy-disk"></i> <span>LƯU HỒ SƠ MỚI (Ctrl+S)</span>
                             </button>
                         </div>
@@ -536,7 +544,7 @@
             </div>
             <div class="p-4 bg-gray-50 border-t flex justify-end space-x-2">
                 <button onclick="closeModal()" class="border px-4 py-2 rounded text-xs font-semibold bg-white hover:bg-gray-50 text-gray-700">Hủy bỏ</button>
-                <button onclick="saveEditAndConfirm()" class="bg-emerald-700 hover:bg-emerald-800 text-white px-4 py-2 rounded text-xs font-bold">Đồng ý lưu</button>
+                <button onclick="saveEditAndConfirm()" class="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded text-xs font-bold">Đồng ý lưu</button>
             </div>
         </div>
 
@@ -583,6 +591,12 @@
             
             // Unhide targeting active dashboard window view element
             document.getElementById(viewId).classList.remove('hidden');
+        }
+
+        function setSidebarActive(menuKey) {
+            document.querySelectorAll('.sidebar-link').forEach(el => el.classList.remove('active'));
+            const selected = document.querySelector(`.sidebar-link[data-menu="${menuKey}"]`);
+            if (selected) selected.classList.add('active');
         }
 
         // Generic Modular Modal Opening Handler Logic
@@ -738,6 +752,7 @@
 
         function showMainDashboard() {
             renderDashboardOverview();
+            setSidebarActive('home');
             switchView('view-main');
         }
 
@@ -746,6 +761,7 @@
             const searchInput = document.getElementById('input-search-patient');
             if (searchInput) searchInput.value = '';
             renderPatientManagementList();
+            setSidebarActive('patients');
             switchView('view-patients');
         }
 
@@ -856,7 +872,7 @@
                 container.innerHTML = `
                     <div class="p-6 text-center text-sm text-gray-500">
                         <p class="mb-3">Chưa có hồ sơ nào. Tạo hồ sơ mới để bắt đầu.</p>
-                        <button onclick="switchView('view-create')" class="bg-emerald-700 text-white px-4 py-2 rounded">Tạo hồ sơ mới</button>
+                        <button onclick="switchView('view-create')" class="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded">Tạo hồ sơ mới</button>
                     </div>`;
                 return;
             }
